@@ -16,7 +16,7 @@ export function AlphaBanner() {
           deployed on Alephium. We did not author or deploy the contracts. Use
           at your own risk.{" "}
           <Link
-            href="https://github.com/openabx/openabx/blob/main/RELEASE-CANDIDATE.md"
+            href="https://github.com/openABX/openABX-frontend/blob/main/docs/05-security.md"
             target="_blank"
             rel="noopener noreferrer"
             className="font-medium underline underline-offset-2 hover:opacity-80"

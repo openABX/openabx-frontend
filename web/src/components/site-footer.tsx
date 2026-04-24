@@ -30,7 +30,7 @@ export function SiteFooter() {
           title="Resources"
           links={[
             {
-              href: "https://github.com/openabx/openabx/blob/main/docs/00-protocol-spec.md",
+              href: "https://github.com/openABX/openABX-frontend/blob/main/docs/00-protocol-spec.md",
               label: "Protocol spec",
               external: true,
             },
@@ -51,27 +51,22 @@ export function SiteFooter() {
           title="OpenABX"
           links={[
             {
-              href: "https://github.com/openabx/openabx",
+              href: "https://github.com/openABX/openABX-frontend",
               label: "Source on GitHub",
               external: true,
             },
             {
-              href: "https://github.com/openabx/openabx/issues/new",
+              href: "https://github.com/openABX/openABX-frontend/issues/new",
               label: "Report a bug",
               external: true,
             },
             {
-              href: "https://github.com/openabx/openabx/security/advisories/new",
+              href: "https://github.com/openABX/openABX-frontend/security/advisories/new",
               label: "Security disclosure",
               external: true,
             },
             {
-              href: "https://github.com/openabx/openabx/blob/main/RELEASE-CANDIDATE.md",
-              label: "Release notes",
-              external: true,
-            },
-            {
-              href: "https://github.com/openabx/openabx/blob/main/docs/05-security.md",
+              href: "https://github.com/openABX/openABX-frontend/blob/main/docs/05-security.md",
               label: "Incident response",
               external: true,
             },

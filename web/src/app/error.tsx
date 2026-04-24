@@ -54,7 +54,7 @@ export default function GlobalError({
           {error.digest ? `\n\ndigest: ${error.digest}` : ""}
         </pre>
         <a
-          href="https://github.com/openabx/openabx/issues/new"
+          href="https://github.com/openABX/openABX-frontend/issues/new"
           target="_blank"
           rel="noopener noreferrer"
           className="mt-3 inline-block text-xs text-primary underline-offset-4 hover:underline"
