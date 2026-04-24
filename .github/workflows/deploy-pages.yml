@@ -61,6 +61,11 @@ jobs:
           # Optional — wallet connect uses this; empty falls back to the
           # public-project-id path at runtime.
           NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
+          # Umami analytics — read from a repo Actions variable (not a
+          # secret: the website id is public, baked into the served HTML).
+          # Set via Settings → Secrets and variables → Actions → Variables
+          # → UMAMI_WEBSITE_ID. Absent on forks → no analytics injected.
+          NEXT_PUBLIC_UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID }}
         run: pnpm -C web build
       - name: Verify CNAME file copied
         run: test -f web/out/CNAME && cat web/out/CNAME

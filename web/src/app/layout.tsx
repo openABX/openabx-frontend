@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import { Providers } from "./providers";
 import { NETWORK } from "@/lib/env";
 import { AlphaBanner } from "@/components/alpha-banner";
@@ -21,6 +22,13 @@ const DESCRIPTION =
   "Independent, open-source interface to the ABD stablecoin protocol on Alephium. Borrow ABD against ALPH, earn from auction pools, and stake ABX for protocol fees. MIT licensed, community built, pre-audit beta.";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://openabx.com";
+// Umami analytics — privacy-friendly, no cookies. Gated on env so local
+// dev, forks, and community mirrors don't write into the OpenABX account;
+// the official openabx.com Pages build sets UMAMI_WEBSITE_ID in the deploy
+// workflow.
+const UMAMI_WEBSITE_ID = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID || "";
+const UMAMI_SRC =
+  process.env.NEXT_PUBLIC_UMAMI_SRC || "https://cloud.umami.is/script.js";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -99,6 +107,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </main>
           <SiteFooter />
         </Providers>
+        {UMAMI_WEBSITE_ID && (
+          <Script
+            src={UMAMI_SRC}
+            data-website-id={UMAMI_WEBSITE_ID}
+            strategy="afterInteractive"
+          />
+        )}
       </body>
     </html>
   );
