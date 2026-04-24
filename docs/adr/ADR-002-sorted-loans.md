@@ -12,7 +12,7 @@ Ralph / the sUTXO model has no built-in iteration primitive. Its `Map[K, V]` typ
 Options for implementing the sorted structure:
 
 - **A. On-chain linked list, discovery-based.** Each loan subcontract stores `prevId`/`nextId`. Any insertion walks the list on-chain to find the correct insert point. Redemption walks the list on-chain from the head. Simple; expensive.
-- **B. On-chain linked list, hint-verified.** Same links, but callers pass `(prevId, nextId)` hints for insertion; the contract only *verifies* the hint (checks that the new loan's key falls between `prev.key` and `next.key`). Redemption similarly takes a hint on the starting node. Cheap on-chain; pushes discovery to an off-chain indexer.
+- **B. On-chain linked list, hint-verified.** Same links, but callers pass `(prevId, nextId)` hints for insertion; the contract only _verifies_ the hint (checks that the new loan's key falls between `prev.key` and `next.key`). Redemption similarly takes a hint on the starting node. Cheap on-chain; pushes discovery to an off-chain indexer.
 - **C. Off-chain sort, on-chain batch.** Redeemer computes the full traversal off-chain, sends the list of loan IDs + amounts in the tx. Contract applies them in order, verifying each is still redeemable. Compact; fragile (any intervening state change invalidates the batch).
 - **D. Tree (red-black / AVL) with on-chain self-balancing.** Stronger worst-case guarantees. Dramatically more complex; no Ralph reference implementation exists.
 

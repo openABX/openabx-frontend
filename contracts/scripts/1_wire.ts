@@ -1,10 +1,6 @@
-import {
-  Deployer,
-  DeployFunction,
-  Network,
-} from '@alephium/cli'
-import { web3 } from '@alephium/web3'
-import { PrivateKeyWallet } from '@alephium/web3-wallet'
+import { Deployer, DeployFunction, Network } from "@alephium/cli";
+import { web3 } from "@alephium/web3";
+import { PrivateKeyWallet } from "@alephium/web3-wallet";
 import {
   AbdToken,
   AuctionFarming,
@@ -12,7 +8,7 @@ import {
   AuctionPool,
   LoanManager,
   Vesting,
-} from '../artifacts/ts'
+} from "../artifacts/ts";
 
 /**
  * Post-deploy wiring executor (audit fixes D-01, D-02, D-03, A-01, A-04,
@@ -49,73 +45,77 @@ import {
  *       (or :devnet, :mainnet — controlled by alephium.config.ts env).
  */
 
-type SignerSource = { signer: PrivateKeyWallet }
+type SignerSource = { signer: PrivateKeyWallet };
 
 function buildSigner(network: Network<unknown>): SignerSource {
-  const { privateKeys, nodeUrl } = network
-  web3.setCurrentNodeProvider(nodeUrl, undefined, fetch)
-  const pk = Array.isArray(privateKeys) ? privateKeys[0] : privateKeys
+  const { privateKeys, nodeUrl } = network;
+  web3.setCurrentNodeProvider(nodeUrl, undefined, fetch);
+  const pk = Array.isArray(privateKeys) ? privateKeys[0] : privateKeys;
   if (!pk || pk.length === 0) {
     throw new Error(
-      'wire: network.privateKeys is empty — set TESTNET_PRIVATE_KEYS (or equivalent) in your env.',
-    )
+      "wire: network.privateKeys is empty — set TESTNET_PRIVATE_KEYS (or equivalent) in your env.",
+    );
   }
   const signer = new PrivateKeyWallet({
     privateKey: pk,
     nodeProvider: web3.getCurrentNodeProvider(),
-  })
-  return { signer }
+  });
+  return { signer };
 }
 
 interface Step {
-  name: string
+  name: string;
   /** Reads the current value. */
-  read: () => Promise<string>
+  read: () => Promise<string>;
   /** Desired target (contractId for ByteVec setters, address for Address setters). */
-  target: string
+  target: string;
   /** Executes the setter when current !== target. */
-  execute: (signer: PrivateKeyWallet) => Promise<string>
+  execute: (signer: PrivateKeyWallet) => Promise<string>;
 }
 
 const wire: DeployFunction<Network<unknown>> = async (
   deployer: Deployer,
   network: Network<unknown>,
 ): Promise<void> => {
-  const abd = deployer.getDeployContractResult('AbdToken')
-  const loanManager = deployer.getDeployContractResult('LoanManager')
-  const borrowerOps = deployer.getDeployContractResult('BorrowerOperations')
-  const auctionManager = deployer.getDeployContractResult('AuctionManager')
-  const vesting = deployer.getDeployContractResult('Vesting')
-  const auctionFarming = deployer.getDeployContractResult('AuctionFarming')
-  const pool5 = deployer.getDeployContractResult('AuctionPool:0')
-  const pool10 = deployer.getDeployContractResult('AuctionPool:1')
-  const pool15 = deployer.getDeployContractResult('AuctionPool:2')
-  const pool20 = deployer.getDeployContractResult('AuctionPool:3')
+  const abd = deployer.getDeployContractResult("AbdToken");
+  const loanManager = deployer.getDeployContractResult("LoanManager");
+  const borrowerOps = deployer.getDeployContractResult("BorrowerOperations");
+  const auctionManager = deployer.getDeployContractResult("AuctionManager");
+  const vesting = deployer.getDeployContractResult("Vesting");
+  const auctionFarming = deployer.getDeployContractResult("AuctionFarming");
+  const pool5 = deployer.getDeployContractResult("AuctionPool:0");
+  const pool10 = deployer.getDeployContractResult("AuctionPool:1");
+  const pool15 = deployer.getDeployContractResult("AuctionPool:2");
+  const pool20 = deployer.getDeployContractResult("AuctionPool:3");
 
-  const { signer } = buildSigner(network)
+  const { signer } = buildSigner(network);
 
-  const steps: Step[] = []
+  const steps: Step[] = [];
 
   // Steps 1-4: AuctionPool[i].setOwner → AuctionManager.contractId.
   for (const [idx, pool] of [pool5, pool10, pool15, pool20].entries()) {
-    const inst = AuctionPool.at(pool.contractInstance.address)
-    const target = auctionManager.contractInstance.contractId
+    const inst = AuctionPool.at(pool.contractInstance.address);
+    const target = auctionManager.contractInstance.contractId;
     steps.push({
       name: `AuctionPool[${idx}].setOwner`,
       target,
       read: async () => (await inst.view.getOwner()).returns,
       execute: async (s) =>
-        (await inst.transact.setOwner({ signer: s, args: { newOwner: target } }))
-          .txId,
-    })
+        (
+          await inst.transact.setOwner({
+            signer: s,
+            args: { newOwner: target },
+          })
+        ).txId,
+    });
   }
 
   // Step 5: LoanManager.borrowerOperations → BorrowerOperations.contractId.
   {
-    const inst = LoanManager.at(loanManager.contractInstance.address)
-    const target = borrowerOps.contractInstance.contractId
+    const inst = LoanManager.at(loanManager.contractInstance.address);
+    const target = borrowerOps.contractInstance.contractId;
     steps.push({
-      name: 'LoanManager.setBorrowerOperations',
+      name: "LoanManager.setBorrowerOperations",
       target,
       read: async () => (await inst.view.getBorrowerOperations()).returns,
       execute: async (s) =>
@@ -125,15 +125,15 @@ const wire: DeployFunction<Network<unknown>> = async (
             args: { newRef: target },
           })
         ).txId,
-    })
+    });
   }
 
   // Step 6: AbdToken.transferMintAuthority → LoanManager.address.
   {
-    const inst = AbdToken.at(abd.contractInstance.address)
-    const target = loanManager.contractInstance.address
+    const inst = AbdToken.at(abd.contractInstance.address);
+    const target = loanManager.contractInstance.address;
     steps.push({
-      name: 'AbdToken.transferMintAuthority',
+      name: "AbdToken.transferMintAuthority",
       target,
       read: async () => (await inst.view.getMintAuthority()).returns,
       execute: async (s) =>
@@ -143,15 +143,15 @@ const wire: DeployFunction<Network<unknown>> = async (
             args: { newAuthority: target },
           })
         ).txId,
-    })
+    });
   }
 
   // Step 7: AuctionManager.setLoanManager → LoanManager.contractId.
   {
-    const inst = AuctionManager.at(auctionManager.contractInstance.address)
-    const target = loanManager.contractInstance.contractId
+    const inst = AuctionManager.at(auctionManager.contractInstance.address);
+    const target = loanManager.contractInstance.contractId;
     steps.push({
-      name: 'AuctionManager.setLoanManager',
+      name: "AuctionManager.setLoanManager",
       target,
       read: async () => (await inst.view.getLoanManager()).returns,
       execute: async (s) =>
@@ -161,15 +161,15 @@ const wire: DeployFunction<Network<unknown>> = async (
             args: { newRef: target },
           })
         ).txId,
-    })
+    });
   }
 
   // Step 8: Vesting.setCreator → AuctionFarming.address.
   {
-    const inst = Vesting.at(vesting.contractInstance.address)
-    const target = auctionFarming.contractInstance.address
+    const inst = Vesting.at(vesting.contractInstance.address);
+    const target = auctionFarming.contractInstance.address;
     steps.push({
-      name: 'Vesting.setCreator',
+      name: "Vesting.setCreator",
       target,
       read: async () => (await inst.view.getCreator()).returns,
       execute: async (s) =>
@@ -179,16 +179,16 @@ const wire: DeployFunction<Network<unknown>> = async (
             args: { newCreator: target },
           })
         ).txId,
-    })
+    });
   }
 
   // Step 9: AuctionFarming.notifier → AuctionManager.contractId (idempotent
   // verify; constructor value should already match).
   {
-    const inst = AuctionFarming.at(auctionFarming.contractInstance.address)
-    const target = auctionManager.contractInstance.contractId
+    const inst = AuctionFarming.at(auctionFarming.contractInstance.address);
+    const target = auctionManager.contractInstance.contractId;
     steps.push({
-      name: 'AuctionFarming.setNotifier',
+      name: "AuctionFarming.setNotifier",
       target,
       read: async () => (await inst.view.getNotifier()).returns,
       execute: async (s) =>
@@ -198,51 +198,57 @@ const wire: DeployFunction<Network<unknown>> = async (
             args: { newRef: target },
           })
         ).txId,
-    })
+    });
   }
 
-  console.log(`\n=== OpenABX wiring ===\nnetwork: ${network.networkId ?? 'unknown'}\n`)
+  console.log(
+    `\n=== OpenABX wiring ===\nnetwork: ${network.networkId ?? "unknown"}\n`,
+  );
 
-  let applied = 0
+  let applied = 0;
   for (const step of steps) {
-    const current = await step.read()
+    const current = await step.read();
     if (current === step.target) {
-      console.log(`✓ ${step.name} — already correct`)
-      continue
+      console.log(`✓ ${step.name} — already correct`);
+      continue;
     }
-    console.log(`→ ${step.name} ...`)
-    const txId = await step.execute(signer)
-    console.log(`  tx: ${txId}`)
-    applied += 1
+    console.log(`→ ${step.name} ...`);
+    const txId = await step.execute(signer);
+    console.log(`  tx: ${txId}`);
+    applied += 1;
   }
 
   // Final verification: re-read every field and refuse to exit cleanly if
   // any setter silently failed to update state (e.g., node ordering or
   // dropped tx). This is the hard guard against "the script printed 'done'
   // but the chain did not accept one of the txs".
-  const failures: string[] = []
+  const failures: string[] = [];
   for (const step of steps) {
-    const current = await step.read()
+    const current = await step.read();
     if (current !== step.target) {
       failures.push(
         `${step.name}: current="${current}", expected="${step.target}"`,
-      )
+      );
     }
   }
 
   if (failures.length > 0) {
-    console.error(`\n❌ Wiring verification FAILED for ${failures.length} step(s):`)
-    for (const f of failures) console.error(`   - ${f}`)
-    throw new Error('Post-wire verification failed — system is NOT safe to use.')
+    console.error(
+      `\n❌ Wiring verification FAILED for ${failures.length} step(s):`,
+    );
+    for (const f of failures) console.error(`   - ${f}`);
+    throw new Error(
+      "Post-wire verification failed — system is NOT safe to use.",
+    );
   }
 
   console.log(
     `\n✅ ${applied} step(s) applied, ${steps.length - applied} already correct; all ${steps.length} verified.`,
-  )
+  );
   console.log(
     `   Next: run scripts/verify-mainnet-addresses.ts daily in CI (.github/workflows/verify-mainnet.yml),`,
-  )
-  console.log(`   and the contract test suite on every PR.`)
-}
+  );
+  console.log(`   and the contract test suite on every PR.`);
+};
 
-export default wire
+export default wire;

@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { AlertTriangle } from 'lucide-react'
-import Link from 'next/link'
+import { AlertTriangle } from "lucide-react";
+import Link from "next/link";
 
 export function AlphaBanner() {
   return (
@@ -13,8 +13,8 @@ export function AlphaBanner() {
         <AlertTriangle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
         <p>
           Independent open-source interface to the ABD stablecoin protocol
-          deployed on Alephium. We did not author or deploy the contracts.
-          Use at your own risk.{' '}
+          deployed on Alephium. We did not author or deploy the contracts. Use
+          at your own risk.{" "}
           <Link
             href="https://github.com/openabx/openabx/blob/main/RELEASE-CANDIDATE.md"
             target="_blank"
@@ -26,5 +26,5 @@ export function AlphaBanner() {
         </p>
       </div>
     </div>
-  )
+  );
 }

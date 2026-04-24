@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
-import { AlertTriangle, RefreshCw } from 'lucide-react'
+import { useEffect } from "react";
+import { AlertTriangle, RefreshCw } from "lucide-react";
 
 // Next.js App Router error boundary. Wraps the page tree; if a render
 // throws, we show this instead of a blank screen. Keeps the Providers
@@ -10,13 +10,13 @@ export default function GlobalError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
     // eslint-disable-next-line no-console
-    console.error('OpenABX render error:', error)
-  }, [error])
+    console.error("OpenABX render error:", error);
+  }, [error]);
 
   return (
     <div className="flex flex-col items-start gap-6 py-16">
@@ -30,9 +30,9 @@ export default function GlobalError({
           We hit an error rendering this page.
         </h1>
         <p className="max-w-2xl text-base text-muted-foreground">
-          Your wallet is still connected — the problem is confined to this
-          view. Try reloading the section; if it happens again, file a bug
-          with the message below.
+          Your wallet is still connected — the problem is confined to this view.
+          Try reloading the section; if it happens again, file a bug with the
+          message below.
         </p>
       </div>
 
@@ -51,7 +51,7 @@ export default function GlobalError({
         </summary>
         <pre className="mt-3 overflow-x-auto whitespace-pre-wrap text-[11px] text-muted-foreground">
           {error.message}
-          {error.digest ? `\n\ndigest: ${error.digest}` : ''}
+          {error.digest ? `\n\ndigest: ${error.digest}` : ""}
         </pre>
         <a
           href="https://github.com/openabx/openabx/issues/new"
@@ -63,5 +63,5 @@ export default function GlobalError({
         </a>
       </details>
     </div>
-  )
+  );
 }

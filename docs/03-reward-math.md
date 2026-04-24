@@ -6,12 +6,12 @@ output.
 
 All amounts are raw atto-units. Scales used throughout:
 
-| Symbol | Units | Decimals |
-|---|---|---|
-| `PRECISION` | 1e18 | 18 — canonical for prices, rates, CR, P/S factors |
-| `ABD_SCALE` | 1e9 | 9 — ABD (and any other 9-decimal token) |
-| `ALPH` atto | 1e18 | 18 — native Alephium token |
-| `BPS_SCALE` | 1e4 | 4 — basis points (100 bps = 1 %) |
+| Symbol      | Units | Decimals                                          |
+| ----------- | ----- | ------------------------------------------------- |
+| `PRECISION` | 1e18  | 18 — canonical for prices, rates, CR, P/S factors |
+| `ABD_SCALE` | 1e9   | 9 — ABD (and any other 9-decimal token)           |
+| `ALPH` atto | 1e18  | 18 — native Alephium token                        |
+| `BPS_SCALE` | 1e4   | 4 — basis points (100 bps = 1 %)                  |
 
 The `ABX_SCALE` equals `ABD_SCALE` since ABX and ABD are both 9-decimal
 tokens.
@@ -29,11 +29,11 @@ CR_1e18 = collateral × price / (ABD_SCALE × debt)
 
 Pinned test vectors:
 
-| collateral | debt | price | CR_1e18 | Human |
-|---|---|---|---|---|
-| `1000 ALPH` | `25 ABD` | `$0.05 / ALPH` | `2 × 10¹⁸` | 200 % (at MCR) |
-| `2000 ALPH` | `25 ABD` | `$0.05 / ALPH` | `4 × 10¹⁸` | 400 % (Conservative) |
-| `n × collateral` | `0 ABD` | any price | `u256Max!()` | ∞ (treated as safe) |
+| collateral       | debt     | price          | CR_1e18      | Human                |
+| ---------------- | -------- | -------------- | ------------ | -------------------- |
+| `1000 ALPH`      | `25 ABD` | `$0.05 / ALPH` | `2 × 10¹⁸`   | 200 % (at MCR)       |
+| `2000 ALPH`      | `25 ABD` | `$0.05 / ALPH` | `4 × 10¹⁸`   | 400 % (Conservative) |
+| `n × collateral` | `0 ABD`  | any price      | `u256Max!()` | ∞ (treated as safe)  |
 
 ## 2. Minting fee
 
@@ -63,11 +63,11 @@ Where `YEAR_MS = 31_536_000_000` and `SIX_HOURS_MS = 21_600_000`.
 
 Pinned vectors:
 
-| debt | ir | elapsedMs | price | Result |
-|---|---|---|---|---|
-| `1000 ABD` | `5 %` | `< 6 h` | any | `0` (quantised out) |
-| `1000 ABD` | `5 %` | exactly `6 h` | `$0.05` | between 0.6 and 0.7 ALPH |
-| `1000 ABD` | `5 %` | `365 d` | `$0.05` | between 999 and 1000 ALPH |
+| debt       | ir    | elapsedMs     | price   | Result                    |
+| ---------- | ----- | ------------- | ------- | ------------------------- |
+| `1000 ABD` | `5 %` | `< 6 h`       | any     | `0` (quantised out)       |
+| `1000 ABD` | `5 %` | exactly `6 h` | `$0.05` | between 0.6 and 0.7 ALPH  |
+| `1000 ABD` | `5 %` | `365 d`       | `$0.05` | between 999 and 1000 ALPH |
 
 The one-year convergence is tight: ~ $50 owed / $0.05 per ALPH = 1000 ALPH
 exactly. Quantisation drops the remainder to the next 6-hour window, so we
@@ -99,6 +99,7 @@ prior-liquidation ALPH is still claimable via unchanged `S`.
 
 Pinned vector: pool with 1000 ABD, absorb 200, gain 50 ALPH at 0.5 % bid
 fee:
+
 - `netAlph = 49.75` ALPH
 - `P_new = PRECISION × 800/1000 = 8 × 10¹⁷`
 - `S_new = 0 + 49.75 × PRECISION / (1000 × ABD_SCALE) = 4.975 × 10¹⁶`

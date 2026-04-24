@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { AlephiumConnectButton, useWallet } from '@alephium/web3-react'
-import { AlertCircle } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { AlephiumConnectButton, useWallet } from "@alephium/web3-react";
+import { AlertCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 /**
  * Thin wrapper around @alephium/web3-react's prebuilt connect button.
@@ -20,13 +20,13 @@ import { useEffect, useState } from 'react'
  * mismatch, so we defer it to the first client effect.
  */
 export function WalletButton() {
-  const wallet = useWallet()
-  const isConnected = wallet.connectionStatus === 'connected'
-  const [showHelp, setShowHelp] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const wallet = useWallet();
+  const isConnected = wallet.connectionStatus === "connected";
+  const [showHelp, setShowHelp] = useState(false);
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
   if (!mounted) {
     // Fixed-size placeholder so the header doesn't shift when the real
     // button mounts. Matches the connect button's rough footprint.
@@ -37,7 +37,7 @@ export function WalletButton() {
       >
         …
       </div>
-    )
+    );
   }
   return (
     <div className="flex items-center gap-2">
@@ -59,16 +59,16 @@ export function WalletButton() {
                 WalletConnect &quot;no required chains&quot;?
               </p>
               <p className="mt-1 text-muted-foreground">
-                Upstream bug in{' '}
+                Upstream bug in{" "}
                 <span className="font-mono">
                   @alephium/walletconnect-provider@3.0.3
-                </span>{' '}
-                — its proposals omit <span className="font-mono">requiredNamespaces</span>,
-                which newer wallets reject.
+                </span>{" "}
+                — its proposals omit{" "}
+                <span className="font-mono">requiredNamespaces</span>, which
+                newer wallets reject.
               </p>
               <p className="mt-2 text-muted-foreground">
-                <span className="text-foreground">Workaround:</span> install
-                the{' '}
+                <span className="text-foreground">Workaround:</span> install the{" "}
                 <a
                   href="https://chromewebstore.google.com/detail/alephium-extension-wallet/gdokollfhmnbfckbobkdbakhilldkhcj"
                   target="_blank"
@@ -76,8 +76,8 @@ export function WalletButton() {
                   className="text-primary underline-offset-4 hover:underline"
                 >
                   Alephium Extension Wallet
-                </a>{' '}
-                or{' '}
+                </a>{" "}
+                or{" "}
                 <a
                   href="https://alephium.org/#wallets"
                   target="_blank"
@@ -100,5 +100,5 @@ export function WalletButton() {
         </div>
       )}
     </div>
-  )
+  );
 }

@@ -33,14 +33,14 @@ Two artefacts:
 
 ## Mainnet status
 
-| Operation | Status |
-|---|---|
-| Borrow / repay / close / add+withdraw collateral | ✅ wired, simulation-gated |
-| Redeem (unified with closeLoan, mi=19) | ✅ wired |
-| Stake / unstake / claim rewards | ✅ wired |
-| Auction pool deposit / withdraw / claim | ✅ wired |
-| Liquidate | ⏳ keeper-only — no live sample tx to template from yet |
-| Vesting claim | ⏳ AlphBanX hasn't activated Vesting on mainnet |
+| Operation                                        | Status                                                  |
+| ------------------------------------------------ | ------------------------------------------------------- |
+| Borrow / repay / close / add+withdraw collateral | ✅ wired, simulation-gated                              |
+| Redeem (unified with closeLoan, mi=19)           | ✅ wired                                                |
+| Stake / unstake / claim rewards                  | ✅ wired                                                |
+| Auction pool deposit / withdraw / claim          | ✅ wired                                                |
+| Liquidate                                        | ⏳ keeper-only — no live sample tx to template from yet |
+| Vesting claim                                    | ⏳ AlphBanX hasn't activated Vesting on mainnet         |
 
 13 of 14 operations are live, simulation-verified end-to-end. A daily GitHub Actions cron re-hashes every AlphBanX mainnet contract and auto-opens an incident issue on drift.
 
@@ -119,7 +119,7 @@ For security issues in **AlphBanX's mainnet contracts**: not our contracts. Repo
 
 ## Acknowledgements
 
-- Zahnentferner, *"BanX: A Hybrid Crypto-Backed and Crypto-Collateralized Stablecoin Protocol"* (Nov 2024) — foundational design.
+- Zahnentferner, _"BanX: A Hybrid Crypto-Backed and Crypto-Collateralized Stablecoin Protocol"_ (Nov 2024) — foundational design.
 - AlphBanX team — for the live mainnet deployment and public GitBook.
 - Inference AG — the public audit that gave us the canonical decomposition.
 - Liquity Labs — the v1 Stability Pool + SortedTroves patterns.

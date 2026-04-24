@@ -2,9 +2,9 @@
 // helpers with typed inputs; helpers return `{bytecode, tokens,
 // attoAlphAmount}` ready to pass into a SignerProvider.
 
-import { isValidAddress, isAssetAddress, groupOfAddress } from '@alephium/web3'
+import { isValidAddress, isAssetAddress, groupOfAddress } from "@alephium/web3";
 
-import { applyTemplate, type TemplateFile } from './template'
+import { applyTemplate, type TemplateFile } from "./template";
 
 // Shared address guard (audit fix H3). Every user-supplied address passed
 // into `replaceSignerAddress` MUST pass this before reaching
@@ -13,52 +13,52 @@ import { applyTemplate, type TemplateFile } from './template'
 // produce a bytecode that routes tokens to the wrong destination.
 export function assertValidAssetAddress(
   address: string,
-  label = 'address',
+  label = "address",
 ): void {
-  if (typeof address !== 'string' || address.length === 0) {
-    throw new Error(`${label} is empty`)
+  if (typeof address !== "string" || address.length === 0) {
+    throw new Error(`${label} is empty`);
   }
   if (!isValidAddress(address)) {
-    throw new Error(`${label} is not a valid Alephium address: "${address}"`)
+    throw new Error(`${label} is not a valid Alephium address: "${address}"`);
   }
   if (!isAssetAddress(address)) {
     throw new Error(
       `${label} is a contract address, not an asset address: "${address}"`,
-    )
+    );
   }
   // AlphBanX mainnet contracts live in group 0. Any target-address group
   // other than 0 is a cross-group transfer which these script templates
   // cannot execute.
-  const group = groupOfAddress(address)
+  const group = groupOfAddress(address);
   if (group !== 0) {
     throw new Error(
       `${label} is in group ${group}; mainnet AlphBanX flow requires group 0.`,
-    )
+    );
   }
 }
 
-import claimRewards from '../../../references/alphbanx-operation-templates/claimRewards.json'
-import stake from '../../../references/alphbanx-operation-templates/stake.json'
-import requestUnstake from '../../../references/alphbanx-operation-templates/requestUnstake.json'
-import claimUnstake from '../../../references/alphbanx-operation-templates/claimUnstake.json'
-import poolDeposit from '../../../references/alphbanx-operation-templates/poolDeposit.json'
-import poolWithdraw from '../../../references/alphbanx-operation-templates/poolWithdraw.json'
-import poolClaim40 from '../../../references/alphbanx-operation-templates/poolClaim40.json'
-import poolClaim42 from '../../../references/alphbanx-operation-templates/poolClaim42.json'
-import openLoan11 from '../../../references/alphbanx-operation-templates/openLoan11.json'
-import openLoan12 from '../../../references/alphbanx-operation-templates/openLoan12.json'
-import repay from '../../../references/alphbanx-operation-templates/repay.json'
-import addCollateral from '../../../references/alphbanx-operation-templates/addCollateral.json'
-import borrowMoreOrAdd7 from '../../../references/alphbanx-operation-templates/borrowMoreOrAdd7.json'
-import closeLoan from '../../../references/alphbanx-operation-templates/closeLoan.json'
-import withdrawCollateral from '../../../references/alphbanx-operation-templates/withdrawCollateral.json'
+import claimRewards from "../../../references/alphbanx-operation-templates/claimRewards.json";
+import stake from "../../../references/alphbanx-operation-templates/stake.json";
+import requestUnstake from "../../../references/alphbanx-operation-templates/requestUnstake.json";
+import claimUnstake from "../../../references/alphbanx-operation-templates/claimUnstake.json";
+import poolDeposit from "../../../references/alphbanx-operation-templates/poolDeposit.json";
+import poolWithdraw from "../../../references/alphbanx-operation-templates/poolWithdraw.json";
+import poolClaim40 from "../../../references/alphbanx-operation-templates/poolClaim40.json";
+import poolClaim42 from "../../../references/alphbanx-operation-templates/poolClaim42.json";
+import openLoan11 from "../../../references/alphbanx-operation-templates/openLoan11.json";
+import openLoan12 from "../../../references/alphbanx-operation-templates/openLoan12.json";
+import repay from "../../../references/alphbanx-operation-templates/repay.json";
+import addCollateral from "../../../references/alphbanx-operation-templates/addCollateral.json";
+import borrowMoreOrAdd7 from "../../../references/alphbanx-operation-templates/borrowMoreOrAdd7.json";
+import closeLoan from "../../../references/alphbanx-operation-templates/closeLoan.json";
+import withdrawCollateral from "../../../references/alphbanx-operation-templates/withdrawCollateral.json";
 
 export interface PreparedTx {
-  bytecode: string
-  attoAlphAmount: bigint
-  tokens: Array<{ id: string; amount: bigint }>
+  bytecode: string;
+  attoAlphAmount: bigint;
+  tokens: Array<{ id: string; amount: bigint }>;
   /** Human-readable label of what this tx does. */
-  label: string
+  label: string;
 }
 
 // AlphBanX mainnet token ids (hex — contract-id form).
@@ -67,9 +67,9 @@ export interface PreparedTx {
 //   abxToken @ 258k9T6WqezTLdfGvHixXzK1yLATeSPuyhtcxzQ3V2pqV → 9b3070a9…
 // Verified 2026-04-23 against on-chain token metadata (imm[0] = "ABD"/"ABX").
 const ABD_TOKEN_ID =
-  'c7d1dab489ee40ca4e6554efc64a64e73a9f0ddfdec9e544c82c1c6742ccc500'
+  "c7d1dab489ee40ca4e6554efc64a64e73a9f0ddfdec9e544c82c1c6742ccc500";
 const ABX_TOKEN_ID =
-  '9b3070a93fd5127d8c39561870432fdbc79f598ca8dbf2a3398fc100dfd45f00'
+  "9b3070a93fd5127d8c39561870432fdbc79f598ca8dbf2a3398fc100dfd45f00";
 
 // Baked-amount slots per template — used as the "from" side of the U256
 // substitution so we know exactly which U256Const in the template is the
@@ -99,21 +99,21 @@ const T = {
   withdrawCollateralAlph: 200000000000000000000000n,
   borrowMoreAbd: null, // TBD from borrowMoreOrAdd7 template
   closeLoanDebtAbd: 138645636605n,
-} as const
+} as const;
 
 // -- helpers ----------------------------------------------------------------
 
-const t = <TT>(j: unknown): TT => j as TT
+const t = <TT>(j: unknown): TT => j as TT;
 
 function tokenApproval(
   tokenIdHex: string,
   amount: bigint,
 ): Array<{ id: string; amount: bigint }> {
-  return amount > 0n ? [{ id: tokenIdHex, amount }] : []
+  return amount > 0n ? [{ id: tokenIdHex, amount }] : [];
 }
 
-const ONE_ALPH = 1_000_000_000_000_000_000n
-const DUST = 100_000_000_000_000_000n // 0.1 ALPH
+const ONE_ALPH = 1_000_000_000_000_000_000n;
+const DUST = 100_000_000_000_000_000n; // 0.1 ALPH
 
 // =============================================================================
 // StakeManager operations — verified 2026-04-23 via /contracts/call-tx-script.
@@ -124,16 +124,16 @@ const DUST = 100_000_000_000_000_000n // 0.1 ALPH
  * Verified against live simulation: gasUsed ≈ 153k, emits stake event.
  */
 export function buildStake(amountAbxAtto: bigint): PreparedTx {
-  const tmpl = t<TemplateFile>(stake)
+  const tmpl = t<TemplateFile>(stake);
   const bytecode = applyTemplate(tmpl, {
     replaceU256: [{ from: T.stakeAbx, to: amountAbxAtto }],
-  })
+  });
   return {
     bytecode,
     attoAlphAmount: ONE_ALPH, // covers MinimalContractDeposit for first-time stakers
     tokens: tokenApproval(ABX_TOKEN_ID, amountAbxAtto),
     label: `Stake ${amountAbxAtto} atto-ABX`,
-  }
+  };
 }
 
 /**
@@ -141,17 +141,17 @@ export function buildStake(amountAbxAtto: bigint): PreparedTx {
  * ≈ 122k, returns 5.386 ALPH to caller in the sample.
  */
 export function buildClaimRewards(signerAddress: string): PreparedTx {
-  assertValidAssetAddress(signerAddress, 'signerAddress')
-  const tmpl = t<TemplateFile>(claimRewards)
+  assertValidAssetAddress(signerAddress, "signerAddress");
+  const tmpl = t<TemplateFile>(claimRewards);
   const bytecode = applyTemplate(tmpl, {
     replaceSignerAddress: signerAddress,
-  })
+  });
   return {
     bytecode,
     attoAlphAmount: DUST,
     tokens: [],
-    label: 'Claim staking rewards',
-  }
+    label: "Claim staking rewards",
+  };
 }
 
 /**
@@ -159,33 +159,33 @@ export function buildClaimRewards(signerAddress: string): PreparedTx {
  * The template's U256 is the amount; we substitute the user's value.
  */
 export function buildRequestUnstake(amountAbxAtto: bigint): PreparedTx {
-  const tmpl = t<TemplateFile>(requestUnstake)
+  const tmpl = t<TemplateFile>(requestUnstake);
   const bytecode = applyTemplate(tmpl, {
     replaceU256: [{ from: T.requestUnstakeAbx, to: amountAbxAtto }],
-  })
+  });
   return {
     bytecode,
     attoAlphAmount: DUST,
     tokens: [],
     label: `Request unstake of ${amountAbxAtto} atto-ABX`,
-  }
+  };
 }
 
 /**
  * Claim unstaked ABX after the cooldown period has elapsed.
  */
 export function buildClaimUnstake(signerAddress: string): PreparedTx {
-  assertValidAssetAddress(signerAddress, 'signerAddress')
-  const tmpl = t<TemplateFile>(claimUnstake)
+  assertValidAssetAddress(signerAddress, "signerAddress");
+  const tmpl = t<TemplateFile>(claimUnstake);
   const bytecode = applyTemplate(tmpl, {
     replaceSignerAddress: signerAddress,
-  })
+  });
   return {
     bytecode,
     attoAlphAmount: DUST,
     tokens: [],
-    label: 'Claim matured unstake',
-  }
+    label: "Claim matured unstake",
+  };
 }
 
 // =============================================================================
@@ -201,13 +201,13 @@ export function buildClaimUnstake(signerAddress: string): PreparedTx {
 function poolTierArg(tierBps: 500 | 1000 | 1500 | 2000): bigint {
   switch (tierBps) {
     case 500:
-      return 5n
+      return 5n;
     case 1000:
-      return 10n
+      return 10n;
     case 1500:
-      return 15n
+      return 15n;
     case 2000:
-      return 20n
+      return 20n;
   }
 }
 
@@ -215,19 +215,19 @@ export function buildPoolDeposit(
   tierBps: 500 | 1000 | 1500 | 2000,
   amountAbdAtto: bigint,
 ): PreparedTx {
-  const tmpl = t<TemplateFile>(poolDeposit)
+  const tmpl = t<TemplateFile>(poolDeposit);
   const bytecode = applyTemplate(tmpl, {
     replaceU256: [
       { from: T.poolDepositAbd, to: amountAbdAtto }, // appears twice → replaceU256 substitutes all
       { from: 15n, to: poolTierArg(tierBps) }, // pool tier (baked 15% → user's tier)
     ],
-  })
+  });
   return {
     bytecode,
     attoAlphAmount: 2n * ONE_ALPH, // covers 2× MinimalContractDeposit in the script
     tokens: tokenApproval(ABD_TOKEN_ID, amountAbdAtto),
     label: `Deposit ${amountAbdAtto} atto-ABD into ${tierBps / 100}% pool`,
-  }
+  };
 }
 
 export function buildPoolWithdraw(
@@ -235,21 +235,21 @@ export function buildPoolWithdraw(
   amountAbdAtto: bigint,
   signerAddress: string,
 ): PreparedTx {
-  assertValidAssetAddress(signerAddress, 'signerAddress')
-  const tmpl = t<TemplateFile>(poolWithdraw)
+  assertValidAssetAddress(signerAddress, "signerAddress");
+  const tmpl = t<TemplateFile>(poolWithdraw);
   const bytecode = applyTemplate(tmpl, {
     replaceU256: [
       { from: T.poolWithdrawAbd, to: amountAbdAtto },
       { from: 15n, to: poolTierArg(tierBps) },
     ],
     replaceSignerAddress: signerAddress,
-  })
+  });
   return {
     bytecode,
     attoAlphAmount: DUST,
     tokens: [],
     label: `Withdraw ${amountAbdAtto} atto-ABD from ${tierBps / 100}% pool`,
-  }
+  };
 }
 
 export function buildPoolClaim(
@@ -263,19 +263,19 @@ export function buildPoolClaim(
   // underflow inside the pool contract, passing smaller just leaves some
   // unclaimed. The web layer's usePoolPositions hook should fetch the
   // current claimable and pass it here.
-  assertValidAssetAddress(signerAddress, 'signerAddress')
-  const tmpl = t<TemplateFile>(poolClaim42)
+  assertValidAssetAddress(signerAddress, "signerAddress");
+  const tmpl = t<TemplateFile>(poolClaim42);
   const bytecode = applyTemplate(tmpl, {
     replaceU256: [{ from: 1321402644729719000000n, to: amountAlphAtto }],
     replaceSignerAddress: signerAddress,
-  })
-  void tierBps
+  });
+  void tierBps;
   return {
     bytecode,
     attoAlphAmount: DUST,
     tokens: [],
     label: `Claim ${amountAlphAtto} atto-ALPH from ${tierBps / 100}% pool`,
-  }
+  };
 }
 
 // =============================================================================
@@ -298,60 +298,60 @@ export function buildOpenLoan(
   borrowAbdAtto: bigint,
   _interestRate1e18: bigint,
 ): PreparedTx {
-  const tmpl = t<TemplateFile>(openLoan11)
+  const tmpl = t<TemplateFile>(openLoan11);
   const bytecode = applyTemplate(tmpl, {
     replaceU256: [{ from: T.openLoan11BorrowAbd, to: borrowAbdAtto }],
-  })
+  });
   return {
     bytecode,
     attoAlphAmount: collateralAlphAtto + ONE_ALPH, // collateral + referrer-fee buffer
     tokens: [],
     label: `Open loan: collateral ${collateralAlphAtto}, borrow ${borrowAbdAtto}`,
-  }
+  };
 }
 
 export function buildRepay(amountAbdAtto: bigint): PreparedTx {
-  const tmpl = t<TemplateFile>(repay)
+  const tmpl = t<TemplateFile>(repay);
   const bytecode = applyTemplate(tmpl, {
     replaceU256: [{ from: T.repayAbd, to: amountAbdAtto }],
-  })
+  });
   return {
     bytecode,
     attoAlphAmount: DUST,
     tokens: tokenApproval(ABD_TOKEN_ID, amountAbdAtto),
     label: `Repay ${amountAbdAtto} atto-ABD`,
-  }
+  };
 }
 
 export function buildAddCollateral(amountAlphAtto: bigint): PreparedTx {
-  const tmpl = t<TemplateFile>(addCollateral)
+  const tmpl = t<TemplateFile>(addCollateral);
   const bytecode = applyTemplate(tmpl, {
     replaceU256: [{ from: T.addCollateralAlph, to: amountAlphAtto }],
-  })
+  });
   return {
     bytecode,
     attoAlphAmount: amountAlphAtto + DUST,
     tokens: [],
     label: `Add ${amountAlphAtto} atto-ALPH collateral`,
-  }
+  };
 }
 
 export function buildWithdrawCollateral(
   amountAlphAtto: bigint,
   signerAddress: string,
 ): PreparedTx {
-  assertValidAssetAddress(signerAddress, 'signerAddress')
-  const tmpl = t<TemplateFile>(withdrawCollateral)
+  assertValidAssetAddress(signerAddress, "signerAddress");
+  const tmpl = t<TemplateFile>(withdrawCollateral);
   const bytecode = applyTemplate(tmpl, {
     replaceU256: [{ from: T.withdrawCollateralAlph, to: amountAlphAtto }],
     replaceSignerAddress: signerAddress,
-  })
+  });
   return {
     bytecode,
     attoAlphAmount: DUST,
     tokens: [],
     label: `Withdraw ${amountAlphAtto} atto-ALPH collateral`,
-  }
+  };
 }
 
 export function buildCloseLoan(
@@ -361,18 +361,18 @@ export function buildCloseLoan(
   // mi=19 is a UNIFIED redeem/close method. Redeeming against the signer's
   // own address is effectively a "close my loan for remaining debt in ABD"
   // semantic. Redeeming against another user's address is a true redeem.
-  assertValidAssetAddress(signerAddress, 'signerAddress')
-  const tmpl = t<TemplateFile>(closeLoan)
+  assertValidAssetAddress(signerAddress, "signerAddress");
+  const tmpl = t<TemplateFile>(closeLoan);
   const bytecode = applyTemplate(tmpl, {
     replaceU256: [{ from: T.closeLoanDebtAbd, to: remainingDebtAbdAtto }],
     replaceSignerAddress: signerAddress,
-  })
+  });
   return {
     bytecode,
     attoAlphAmount: DUST,
     tokens: tokenApproval(ABD_TOKEN_ID, remainingDebtAbdAtto),
     label: `Close loan (burning ${remainingDebtAbdAtto} atto-ABD)`,
-  }
+  };
 }
 
 /**
@@ -385,18 +385,18 @@ export function buildRedeemMainnet(
   targetOwnerAddress: string,
   amountAbdAtto: bigint,
 ): PreparedTx {
-  assertValidAssetAddress(targetOwnerAddress, 'targetOwnerAddress')
-  const tmpl = t<TemplateFile>(closeLoan)
+  assertValidAssetAddress(targetOwnerAddress, "targetOwnerAddress");
+  const tmpl = t<TemplateFile>(closeLoan);
   const bytecode = applyTemplate(tmpl, {
     replaceU256: [{ from: T.closeLoanDebtAbd, to: amountAbdAtto }],
     replaceSignerAddress: targetOwnerAddress,
-  })
+  });
   return {
     bytecode,
     attoAlphAmount: DUST,
     tokens: tokenApproval(ABD_TOKEN_ID, amountAbdAtto),
     label: `Redeem ${amountAbdAtto} atto-ABD against ${targetOwnerAddress.slice(0, 14)}…`,
-  }
+  };
 }
 
 // =============================================================================
@@ -407,19 +407,19 @@ export function buildRedeemMainnet(
 // =============================================================================
 
 export type MainnetOperation =
-  | 'stake'
-  | 'claimRewards'
-  | 'requestUnstake'
-  | 'claimUnstake'
-  | 'poolDeposit'
-  | 'poolWithdraw'
-  | 'poolClaim'
-  | 'openLoan'
-  | 'repay'
-  | 'addCollateral'
-  | 'withdrawCollateral'
-  | 'closeLoan'
-  | 'redeem'
+  | "stake"
+  | "claimRewards"
+  | "requestUnstake"
+  | "claimUnstake"
+  | "poolDeposit"
+  | "poolWithdraw"
+  | "poolClaim"
+  | "openLoan"
+  | "repay"
+  | "addCollateral"
+  | "withdrawCollateral"
+  | "closeLoan"
+  | "redeem";
 
 /**
  * Operations that have been live-simulated successfully via
@@ -450,34 +450,34 @@ export type MainnetOperation =
  * That's correct behaviour — we surface the error, no funds at risk.
  */
 const VERIFIED_OPS = new Set<string>([
-  'stake',
-  'claimRewards',
-  'requestUnstake',
-  'claimUnstake',
-  'poolDeposit',
-  'poolWithdraw',
-  'poolClaim',
-  'openLoan',
-  'repay',
-  'addCollateral',
-  'withdrawCollateral',
-  'closeLoan',
+  "stake",
+  "claimRewards",
+  "requestUnstake",
+  "claimUnstake",
+  "poolDeposit",
+  "poolWithdraw",
+  "poolClaim",
+  "openLoan",
+  "repay",
+  "addCollateral",
+  "withdrawCollateral",
+  "closeLoan",
   // redeem enabled 2026-04-24 after discovering mi=19 is a unified
   // redeem/close method (target AddressConst = self for close, other for
   // redeem). Sample tx 90a6c019… confirms the pattern.
-  'redeem',
-])
+  "redeem",
+]);
 
 /** Minimum pool deposit inferred from live testing. Under this value the
  * contract asserts with error code 3010. Enforce client-side to give users
  * a clear error instead of an opaque VM assertion. */
-export const POOL_DEPOSIT_MIN_ATTO_ABD = 50_000_000_000n
+export const POOL_DEPOSIT_MIN_ATTO_ABD = 50_000_000_000n;
 
 export function canMainnetWrite(op: string): op is MainnetOperation {
-  return VERIFIED_OPS.has(op)
+  return VERIFIED_OPS.has(op);
 }
 
 // Keep template imports alive for downstream tree-shakers / watchers.
-void openLoan12
-void borrowMoreOrAdd7
-void poolClaim40
+void openLoan12;
+void borrowMoreOrAdd7;
+void poolClaim40;

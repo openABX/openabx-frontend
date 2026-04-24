@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from "next/link";
 
 export function SiteFooter() {
   return (
@@ -9,20 +9,20 @@ export function SiteFooter() {
             open<span className="text-primary">ABX</span>
           </p>
           <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-            Independent, open-source interface to the ABD stablecoin protocol
-            on Alephium. MIT licensed. We did not author or deploy the
-            contracts, operate no backend, and never custody your funds.
+            Independent, open-source interface to the ABD stablecoin protocol on
+            Alephium. MIT licensed. We did not author or deploy the contracts,
+            operate no backend, and never custody your funds.
           </p>
         </div>
 
         <FooterCol
           title="Protocol"
           links={[
-            { href: '/borrow', label: 'Borrow' },
-            { href: '/auction', label: 'Auction pools' },
-            { href: '/stake', label: 'Stake ABX' },
-            { href: '/redeem', label: 'Redeem' },
-            { href: '/liquidate', label: 'Liquidate' },
+            { href: "/borrow", label: "Borrow" },
+            { href: "/auction", label: "Auction pools" },
+            { href: "/stake", label: "Stake ABX" },
+            { href: "/redeem", label: "Redeem" },
+            { href: "/liquidate", label: "Liquidate" },
           ]}
         />
 
@@ -30,18 +30,18 @@ export function SiteFooter() {
           title="Resources"
           links={[
             {
-              href: 'https://github.com/openabx/openabx/blob/main/docs/00-protocol-spec.md',
-              label: 'Protocol spec',
+              href: "https://github.com/openabx/openabx/blob/main/docs/00-protocol-spec.md",
+              label: "Protocol spec",
               external: true,
             },
             {
-              href: 'https://docs.alephium.org/',
-              label: 'Alephium docs',
+              href: "https://docs.alephium.org/",
+              label: "Alephium docs",
               external: true,
             },
             {
-              href: 'https://explorer.alephium.org/',
-              label: 'Alephium explorer',
+              href: "https://explorer.alephium.org/",
+              label: "Alephium explorer",
               external: true,
             },
           ]}
@@ -51,28 +51,28 @@ export function SiteFooter() {
           title="OpenABX"
           links={[
             {
-              href: 'https://github.com/openabx/openabx',
-              label: 'Source on GitHub',
+              href: "https://github.com/openabx/openabx",
+              label: "Source on GitHub",
               external: true,
             },
             {
-              href: 'https://github.com/openabx/openabx/issues/new',
-              label: 'Report a bug',
+              href: "https://github.com/openabx/openabx/issues/new",
+              label: "Report a bug",
               external: true,
             },
             {
-              href: 'https://github.com/openabx/openabx/security/advisories/new',
-              label: 'Security disclosure',
+              href: "https://github.com/openabx/openabx/security/advisories/new",
+              label: "Security disclosure",
               external: true,
             },
             {
-              href: 'https://github.com/openabx/openabx/blob/main/RELEASE-CANDIDATE.md',
-              label: 'Release notes',
+              href: "https://github.com/openabx/openabx/blob/main/RELEASE-CANDIDATE.md",
+              label: "Release notes",
               external: true,
             },
             {
-              href: 'https://github.com/openabx/openabx/blob/main/docs/05-security.md',
-              label: 'Incident response',
+              href: "https://github.com/openabx/openabx/blob/main/docs/05-security.md",
+              label: "Incident response",
               external: true,
             },
           ]}
@@ -87,7 +87,7 @@ export function SiteFooter() {
             contract authors
           </span>
           <span>
-            Built on{' '}
+            Built on{" "}
             <Link
               href="https://alephium.org"
               className="text-foreground hover:text-primary"
@@ -100,15 +100,15 @@ export function SiteFooter() {
         </div>
       </div>
     </footer>
-  )
+  );
 }
 
 function FooterCol({
   title,
   links,
 }: {
-  title: string
-  links: Array<{ href: string; label: string; external?: boolean }>
+  title: string;
+  links: Array<{ href: string; label: string; external?: boolean }>;
 }) {
   return (
     <div>
@@ -120,8 +120,8 @@ function FooterCol({
           <li key={l.label}>
             <Link
               href={l.href}
-              target={l.external ? '_blank' : undefined}
-              rel={l.external ? 'noreferrer' : undefined}
+              target={l.external ? "_blank" : undefined}
+              rel={l.external ? "noreferrer" : undefined}
               className="text-muted-foreground hover:text-primary"
             >
               {l.label}
@@ -130,5 +130,5 @@ function FooterCol({
         ))}
       </ul>
     </div>
-  )
+  );
 }

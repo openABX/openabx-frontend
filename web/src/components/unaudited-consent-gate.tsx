@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 // Gate any mainnet signed-tx behind an explicit "I understand this is
 // unaudited alpha" consent the first time per browser session. Consent is
@@ -6,7 +6,7 @@
 // the same modal, and confirming once applies to all subsequent actions
 // until the tab closes.
 
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle } from "lucide-react";
 import {
   createContext,
   useCallback,
@@ -15,71 +15,71 @@ import {
   useRef,
   useState,
   type ReactNode,
-} from 'react'
+} from "react";
 
-const STORAGE_KEY = 'openabx:unaudited-consent-granted'
+const STORAGE_KEY = "openabx:unaudited-consent-granted";
 
 function readConsent(): boolean {
-  if (typeof window === 'undefined') return false
+  if (typeof window === "undefined") return false;
   try {
-    return sessionStorage.getItem(STORAGE_KEY) === '1'
+    return sessionStorage.getItem(STORAGE_KEY) === "1";
   } catch {
-    return false
+    return false;
   }
 }
 function writeConsent(): void {
   try {
-    sessionStorage.setItem(STORAGE_KEY, '1')
+    sessionStorage.setItem(STORAGE_KEY, "1");
   } catch {
     /* ignore */
   }
 }
 
 export interface ConsentApi {
-  granted: boolean
-  withConsent: (action: () => void | Promise<void>) => void
-  isOpen: boolean
-  confirm: () => void
-  cancel: () => void
+  granted: boolean;
+  withConsent: (action: () => void | Promise<void>) => void;
+  isOpen: boolean;
+  confirm: () => void;
+  cancel: () => void;
 }
 
-const ConsentContext = createContext<ConsentApi | null>(null)
+const ConsentContext = createContext<ConsentApi | null>(null);
 
 export function ConsentProvider({ children }: { children: ReactNode }) {
-  const [granted, setGranted] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
-  const queuedActionRef = useRef<null | (() => void | Promise<void>)>(null)
+  const [granted, setGranted] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const queuedActionRef = useRef<null | (() => void | Promise<void>)>(null);
 
   useEffect(() => {
-    setGranted(readConsent())
-  }, [])
+    setGranted(readConsent());
+  }, []);
 
   const confirm = useCallback(() => {
-    writeConsent()
-    setGranted(true)
-    setIsOpen(false)
-    const action = queuedActionRef.current
-    queuedActionRef.current = null
-    if (action) void action()
-  }, [])
+    writeConsent();
+    setGranted(true);
+    setIsOpen(false);
+    const action = queuedActionRef.current;
+    queuedActionRef.current = null;
+    if (action) void action();
+  }, []);
 
   const cancel = useCallback(() => {
-    setIsOpen(false)
-    queuedActionRef.current = null
-  }, [])
+    setIsOpen(false);
+    queuedActionRef.current = null;
+  }, []);
 
   const withConsent = useCallback(
     (action: () => void | Promise<void>) => {
       if (granted || readConsent()) {
-        setGranted(true)
-        void action()
-        return
+        setGranted(true);
+        void action();
+        return;
       }
-      queuedActionRef.current = action
-      setIsOpen(true)
+      queuedActionRef.current = action;
+      setIsOpen(true);
     },
     [granted],
-  )
+  );
 
   const api: ConsentApi = {
     granted,
@@ -87,29 +87,31 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
     isOpen,
     confirm,
     cancel,
-  }
+  };
   return (
     <ConsentContext.Provider value={api}>
       {children}
       <ConsentModal isOpen={isOpen} confirm={confirm} cancel={cancel} />
     </ConsentContext.Provider>
-  )
+  );
 }
 
 export function useUnauditedConsent(): ConsentApi {
-  const ctx = useContext(ConsentContext)
+  const ctx = useContext(ConsentContext);
   if (!ctx) {
-    throw new Error('useUnauditedConsent must be used inside <ConsentProvider>')
+    throw new Error(
+      "useUnauditedConsent must be used inside <ConsentProvider>",
+    );
   }
-  return ctx
+  return ctx;
 }
 
 function ConsentModal({
   isOpen,
   confirm,
   cancel,
-}: Pick<ConsentApi, 'isOpen' | 'confirm' | 'cancel'>) {
-  if (!isOpen) return null
+}: Pick<ConsentApi, "isOpen" | "confirm" | "cancel">) {
+  if (!isOpen) return null;
   return (
     <div
       role="dialog"
@@ -129,26 +131,25 @@ function ConsentModal({
         </div>
         <div className="space-y-3 text-sm">
           <p>
-            OpenABX is an{' '}
-            <span className="font-semibold">independent open-source interface</span>{' '}
-            to the ABD stablecoin protocol on Alephium. We did not author
-            or deploy the underlying contracts and cannot protect you from
-            bugs in them.
+            OpenABX is an{" "}
+            <span className="font-semibold">
+              independent open-source interface
+            </span>{" "}
+            to the ABD stablecoin protocol on Alephium. We did not author or
+            deploy the underlying contracts and cannot protect you from bugs in
+            them.
           </p>
           <p>
-            The bytecode we submit is built by{' '}
-            <strong>re-encoding templates</strong> derived from public
-            on-chain activity. Each click is simulated against a public
-            Alephium node via{' '}
-            <span className="font-mono text-xs">
-              /contracts/call-tx-script
-            </span>{' '}
-            before the wallet prompt — but simulation only catches reverts,
-            not logic bugs in the underlying contracts.
+            The bytecode we submit is built by{" "}
+            <strong>re-encoding templates</strong> derived from public on-chain
+            activity. Each click is simulated against a public Alephium node via{" "}
+            <span className="font-mono text-xs">/contracts/call-tx-script</span>{" "}
+            before the wallet prompt — but simulation only catches reverts, not
+            logic bugs in the underlying contracts.
           </p>
           <p>
-            OpenABX itself is <strong>pre-audit alpha</strong>. Start with
-            small amounts; never commit more than you can afford to lose.
+            OpenABX itself is <strong>pre-audit alpha</strong>. Start with small
+            amounts; never commit more than you can afford to lose.
           </p>
         </div>
         <div className="mt-6 flex items-center justify-end gap-2">
@@ -169,5 +170,5 @@ function ConsentModal({
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,23 +1,23 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { NetworkBadge } from '@/components/network-badge'
-import { WalletButton } from '@/components/wallet-button'
-import { cn } from '@/lib/utils'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { NetworkBadge } from "@/components/network-badge";
+import { WalletButton } from "@/components/wallet-button";
+import { cn } from "@/lib/utils";
 
 const SECTIONS: Array<{ href: string; label: string }> = [
-  { href: '/', label: 'Dashboard' },
-  { href: '/borrow', label: 'Borrow' },
-  { href: '/auction', label: 'Auction' },
-  { href: '/stake', label: 'Stake' },
-  { href: '/redeem', label: 'Redeem' },
-  { href: '/liquidate', label: 'Liquidate' },
-  { href: '/vesting', label: 'Vesting' },
-]
+  { href: "/", label: "Dashboard" },
+  { href: "/borrow", label: "Borrow" },
+  { href: "/auction", label: "Auction" },
+  { href: "/stake", label: "Stake" },
+  { href: "/redeem", label: "Redeem" },
+  { href: "/liquidate", label: "Liquidate" },
+  { href: "/vesting", label: "Vesting" },
+];
 
 export function TopNav() {
-  const pathname = usePathname()
+  const pathname = usePathname();
   return (
     <header className="sticky top-0 z-30 border-b border-border/60 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center gap-6 px-6 py-3">
@@ -34,21 +34,21 @@ export function TopNav() {
         <nav className="hidden items-center gap-1 md:flex">
           {SECTIONS.map((s) => {
             const active =
-              s.href === '/' ? pathname === '/' : pathname.startsWith(s.href)
+              s.href === "/" ? pathname === "/" : pathname.startsWith(s.href);
             return (
               <Link
                 key={s.href}
                 href={s.href}
                 className={cn(
-                  'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+                  "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
                   active
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
                 )}
               >
                 {s.label}
               </Link>
-            )
+            );
           })}
         </nav>
 
@@ -62,25 +62,25 @@ export function TopNav() {
       <nav className="flex gap-1 overflow-x-auto border-t border-border/40 px-4 py-2 md:hidden">
         {SECTIONS.map((s) => {
           const active =
-            s.href === '/' ? pathname === '/' : pathname.startsWith(s.href)
+            s.href === "/" ? pathname === "/" : pathname.startsWith(s.href);
           return (
             <Link
               key={s.href}
               href={s.href}
               className={cn(
-                'shrink-0 rounded-md px-3 py-1.5 text-xs font-medium',
+                "shrink-0 rounded-md px-3 py-1.5 text-xs font-medium",
                 active
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-muted-foreground hover:text-foreground',
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               {s.label}
             </Link>
-          )
+          );
         })}
       </nav>
     </header>
-  )
+  );
 }
 
 function Logo() {
@@ -116,5 +116,5 @@ function Logo() {
         fill="none"
       />
     </svg>
-  )
+  );
 }

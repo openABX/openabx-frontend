@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { useWallet } from '@alephium/web3-react'
+import Link from "next/link";
+import { useWallet } from "@alephium/web3-react";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -12,7 +12,7 @@ import {
   Target,
   Vault,
   Wallet,
-} from 'lucide-react'
+} from "lucide-react";
 import {
   useLoanPosition,
   usePoolPositions,
@@ -20,82 +20,83 @@ import {
   useStakePosition,
   useVestingPosition,
   useWalletBalances,
-} from '@/lib/hooks'
-import { usePoolsTvl } from '@/lib/hooks/use-pools-tvl'
-import { usePriceHistory } from '@/lib/hooks/use-price-history'
+} from "@/lib/hooks";
+import { usePoolsTvl } from "@/lib/hooks/use-pools-tvl";
+import { usePriceHistory } from "@/lib/hooks/use-price-history";
 import {
   useRecentActivity,
   type ActivityEntry,
   type ActivityKind,
-} from '@/lib/hooks/use-recent-activity'
-import { explorerTxUrl } from '@/lib/validation'
-import { bigintToNumber, formatAmount, formatUsd } from '@/lib/format'
-import { Sparkline } from '@/components/sparkline'
-import { cn } from '@/lib/utils'
+} from "@/lib/hooks/use-recent-activity";
+import { explorerTxUrl } from "@/lib/validation";
+import { bigintToNumber, formatAmount, formatUsd } from "@/lib/format";
+import { Sparkline } from "@/components/sparkline";
+import { cn } from "@/lib/utils";
 
 export function Dashboard() {
-  const wallet = useWallet()
-  const isConnected = wallet.connectionStatus === 'connected'
+  const wallet = useWallet();
+  const isConnected = wallet.connectionStatus === "connected";
 
-  const { data: globals } = useProtocolGlobals()
-  const { data: balances } = useWalletBalances()
-  const { data: loan } = useLoanPosition()
-  const { data: pools } = usePoolPositions()
-  const { data: stake } = useStakePosition()
-  const { data: vesting } = useVestingPosition()
-  const { data: poolsTvl } = usePoolsTvl()
-  const { data: activity } = useRecentActivity()
-  const priceHist = usePriceHistory()
+  const { data: globals } = useProtocolGlobals();
+  const { data: balances } = useWalletBalances();
+  const { data: loan } = useLoanPosition();
+  const { data: pools } = usePoolPositions();
+  const { data: stake } = useStakePosition();
+  const { data: vesting } = useVestingPosition();
+  const { data: poolsTvl } = usePoolsTvl();
+  const { data: activity } = useRecentActivity();
+  const priceHist = usePriceHistory();
 
-  const priceUsd = priceHist.latest ?? null
-  const priceSeries = priceHist.samples.map((s) => s.p)
+  const priceUsd = priceHist.latest ?? null;
+  const priceSeries = priceHist.samples.map((s) => s.p);
 
   // Protocol stats
   const abdSupply = globals?.abdTotalSupply
     ? bigintToNumber(globals.abdTotalSupply, 9)
-    : null
+    : null;
   const abxSupply = globals?.abxTotalSupply
     ? bigintToNumber(globals.abxTotalSupply, 9)
-    : null
+    : null;
   const tvlAlph = globals?.totalCollateralAlph
     ? bigintToNumber(globals.totalCollateralAlph, 18)
-    : null
-  const tvlUsd = tvlAlph != null && priceUsd != null ? tvlAlph * priceUsd : null
+    : null;
+  const tvlUsd =
+    tvlAlph != null && priceUsd != null ? tvlAlph * priceUsd : null;
   const poolTvlAbd = globals?.totalPoolAbd
     ? bigintToNumber(globals.totalPoolAbd, 9)
-    : null
+    : null;
   const protocolCrPct =
     tvlAlph != null &&
     globals?.totalDebtAbd != null &&
     globals.totalDebtAbd > 0n &&
     priceUsd != null
       ? ((tvlAlph * priceUsd) / bigintToNumber(globals.totalDebtAbd, 9)) * 100
-      : null
+      : null;
 
   // User-side totals
   const loanCollUsd =
     loan?.exists && priceUsd != null
       ? bigintToNumber(loan.collateralAtto, 18) * priceUsd
-      : null
-  const loanDebtAbd = loan?.exists ? bigintToNumber(loan.debtAtto, 9) : null
+      : null;
+  const loanDebtAbd = loan?.exists ? bigintToNumber(loan.debtAtto, 9) : null;
   const loanCrPct =
     loanCollUsd != null && loanDebtAbd != null && loanDebtAbd > 0
       ? (loanCollUsd / loanDebtAbd) * 100
-      : null
+      : null;
   const loanLiqPrice =
     loan?.exists && loanDebtAbd != null && loan.collateralAtto > 0n
       ? (loanDebtAbd * 2) / bigintToNumber(loan.collateralAtto, 18)
-      : null
+      : null;
 
-  const activePools = (pools ?? []).filter((p) => p.abdAtto > 0n)
+  const activePools = (pools ?? []).filter((p) => p.abdAtto > 0n);
   const totalPoolDeposit = activePools.reduce(
     (sum, p) => sum + bigintToNumber(p.abdAtto, 9),
     0,
-  )
+  );
   const totalPoolClaim = activePools.reduce(
     (sum, p) => sum + bigintToNumber(p.claimableAlphAtto, 18),
     0,
-  )
+  );
 
   return (
     <div className="space-y-12">
@@ -110,17 +111,17 @@ export function Dashboard() {
               Live · Alephium mainnet · independent UI
             </p>
             <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-              Borrow ABD,{' '}
+              Borrow ABD,{" "}
               <span className="bg-gradient-to-r from-primary via-primary to-blue-400 bg-clip-text text-transparent">
                 earn on every liquidation
               </span>
               .
             </h1>
             <p className="mt-4 max-w-xl text-base text-muted-foreground">
-              Mint ABD against ALPH at 1–30% interest, deposit ABD into
-              auction pools to absorb discounted collateral, or stake ABX to
-              earn protocol fees. Every read is live from Alephium mainnet —
-              no private backend, no custody, no intermediaries.
+              Mint ABD against ALPH at 1–30% interest, deposit ABD into auction
+              pools to absorb discounted collateral, or stake ABX to earn
+              protocol fees. Every read is live from Alephium mainnet — no
+              private backend, no custody, no intermediaries.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link href="/borrow" className="btn-primary">
@@ -140,16 +141,16 @@ export function Dashboard() {
                   ALPH / USD
                 </p>
                 <p className="mt-1 stat-value text-4xl font-semibold tabular-nums">
-                  {priceUsd != null ? `$${priceUsd.toFixed(6)}` : '—'}
+                  {priceUsd != null ? `$${priceUsd.toFixed(6)}` : "—"}
                 </p>
               </div>
               {priceHist.change24h != null && (
                 <span
                   className={cn(
-                    'inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium',
+                    "inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium",
                     priceHist.change24h >= 0
-                      ? 'bg-primary/10 text-primary'
-                      : 'bg-destructive/10 text-destructive',
+                      ? "bg-primary/10 text-primary"
+                      : "bg-destructive/10 text-destructive",
                   )}
                 >
                   {priceHist.change24h >= 0 ? (
@@ -173,7 +174,7 @@ export function Dashboard() {
             <p className="mt-2 text-xs text-muted-foreground">
               {priceSeries.length >= 2
                 ? `${priceSeries.length} samples over the last 24 h · DIA xMarket oracle`
-                : 'Tracking DIA oracle — samples accumulate as you stay on the page.'}
+                : "Tracking DIA oracle — samples accumulate as you stay on the page."}
             </p>
           </div>
         </div>
@@ -188,7 +189,7 @@ export function Dashboard() {
           <MetricCard
             icon={Vault}
             label="Total value locked"
-            primary={tvlUsd != null ? `$${formatUsd(tvlUsd, 0)}` : '—'}
+            primary={tvlUsd != null ? `$${formatUsd(tvlUsd, 0)}` : "—"}
             secondary={
               tvlAlph != null
                 ? `${formatAmount(globals!.totalCollateralAlph!, 18, 0)} ALPH`
@@ -201,7 +202,7 @@ export function Dashboard() {
             primary={
               abdSupply != null
                 ? formatAmount(globals!.abdTotalSupply!, 9, 0)
-                : '—'
+                : "—"
             }
             secondary={
               protocolCrPct != null
@@ -215,7 +216,7 @@ export function Dashboard() {
             primary={
               poolTvlAbd != null
                 ? formatAmount(globals!.totalPoolAbd!, 9, 0)
-                : '—'
+                : "—"
             }
             secondary="awaits a liquidation"
           />
@@ -225,7 +226,7 @@ export function Dashboard() {
             primary={
               abxSupply != null
                 ? formatAmount(globals!.abxTotalSupply!, 9, 0)
-                : '—'
+                : "—"
             }
             secondary="governance + fee share"
           />
@@ -316,24 +317,20 @@ export function Dashboard() {
                 />
                 <MiniStat
                   label="CR"
-                  value={
-                    loanCrPct != null ? `${loanCrPct.toFixed(1)}%` : '—'
-                  }
+                  value={loanCrPct != null ? `${loanCrPct.toFixed(1)}%` : "—"}
                   tone={
                     loanCrPct != null && loanCrPct < 230
-                      ? 'danger'
+                      ? "danger"
                       : loanCrPct != null && loanCrPct < 280
-                      ? 'warning'
-                      : 'primary'
+                        ? "warning"
+                        : "primary"
                   }
                   sub="liquidates < 200%"
                 />
                 <MiniStat
                   label="Liq. price"
                   value={
-                    loanLiqPrice != null
-                      ? `$${loanLiqPrice.toFixed(6)}`
-                      : '—'
+                    loanLiqPrice != null ? `$${loanLiqPrice.toFixed(6)}` : "—"
                   }
                   sub="per ALPH"
                 />
@@ -341,7 +338,7 @@ export function Dashboard() {
             ) : (
               <EmptyState
                 message="No open loan."
-                cta={{ href: '/borrow', label: 'Open a loan' }}
+                cta={{ href: "/borrow", label: "Open a loan" }}
               />
             )}
           </div>
@@ -363,30 +360,30 @@ export function Dashboard() {
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Deposited</span>
                     <span className="font-mono">
-                      {totalPoolDeposit.toLocaleString('en-US', {
+                      {totalPoolDeposit.toLocaleString("en-US", {
                         maximumFractionDigits: 2,
-                      })}{' '}
+                      })}{" "}
                       ABD
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Claimable</span>
                     <span className="font-mono text-primary">
-                      {totalPoolClaim.toLocaleString('en-US', {
+                      {totalPoolClaim.toLocaleString("en-US", {
                         maximumFractionDigits: 4,
-                      })}{' '}
+                      })}{" "}
                       ALPH
                     </span>
                   </div>
                   <div className="border-t border-border/60 pt-2 text-xs text-muted-foreground">
-                    Across {activePools.length} active{' '}
-                    {activePools.length === 1 ? 'tier' : 'tiers'}
+                    Across {activePools.length} active{" "}
+                    {activePools.length === 1 ? "tier" : "tiers"}
                   </div>
                 </div>
               ) : (
                 <EmptyState
                   message="No pool deposits."
-                  cta={{ href: '/auction', label: 'Deposit ABD' }}
+                  cta={{ href: "/auction", label: "Deposit ABD" }}
                 />
               )}
             </div>
@@ -427,7 +424,7 @@ export function Dashboard() {
               ) : (
                 <EmptyState
                   message="Not staked."
-                  cta={{ href: '/stake', label: 'Stake ABX' }}
+                  cta={{ href: "/stake", label: "Stake ABX" }}
                 />
               )}
             </div>
@@ -526,7 +523,7 @@ export function Dashboard() {
         </div>
       </section>
     </div>
-  )
+  );
 }
 
 /* ───── sub-components ───── */
@@ -537,10 +534,10 @@ function MetricCard({
   primary,
   secondary,
 }: {
-  icon: React.ComponentType<{ className?: string }>
-  label: string
-  primary: string
-  secondary: string | null
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  primary: string;
+  secondary: string | null;
 }) {
   return (
     <div className="card p-5">
@@ -555,7 +552,7 @@ function MetricCard({
         <p className="mt-1 text-xs text-muted-foreground">{secondary}</p>
       )}
     </div>
-  )
+  );
 }
 
 function PositionCard({
@@ -564,10 +561,10 @@ function PositionCard({
   value,
   usd,
 }: {
-  icon: React.ComponentType<{ className?: string }>
-  label: string
-  value: string
-  usd: number | null
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: string;
+  usd: number | null;
 }) {
   return (
     <div className="card p-5">
@@ -584,7 +581,7 @@ function PositionCard({
         </p>
       )}
     </div>
-  )
+  );
 }
 
 function MiniStat({
@@ -593,17 +590,17 @@ function MiniStat({
   sub,
   tone,
 }: {
-  label: string
-  value: string
-  sub?: string | null
-  tone?: 'primary' | 'warning' | 'danger'
+  label: string;
+  value: string;
+  sub?: string | null;
+  tone?: "primary" | "warning" | "danger";
 }) {
   const toneClass =
-    tone === 'danger'
-      ? 'text-destructive'
-      : tone === 'warning'
-      ? 'text-warning'
-      : ''
+    tone === "danger"
+      ? "text-destructive"
+      : tone === "warning"
+        ? "text-warning"
+        : "";
   return (
     <div>
       <p className="text-xs uppercase tracking-wider text-muted-foreground">
@@ -611,7 +608,7 @@ function MiniStat({
       </p>
       <p
         className={cn(
-          'mt-1 stat-value font-mono text-lg font-semibold tabular-nums',
+          "mt-1 stat-value font-mono text-lg font-semibold tabular-nums",
           toneClass,
         )}
       >
@@ -619,15 +616,15 @@ function MiniStat({
       </p>
       {sub && <p className="mt-0.5 text-xs text-muted-foreground">{sub}</p>}
     </div>
-  )
+  );
 }
 
 function EmptyState({
   message,
   cta,
 }: {
-  message: string
-  cta?: { href: string; label: string }
+  message: string;
+  cta?: { href: string; label: string };
 }) {
   return (
     <div className="flex flex-col items-start gap-2 rounded-lg border border-dashed border-border bg-background/40 p-4 text-sm text-muted-foreground">
@@ -641,46 +638,46 @@ function EmptyState({
         </Link>
       )}
     </div>
-  )
+  );
 }
 
 function PoolBars({
   data,
 }: {
-  data: Array<{ tierBps: number; totalAbdAtto: bigint }>
+  data: Array<{ tierBps: number; totalAbdAtto: bigint }>;
 }) {
   const numeric = data.map((d) => ({
     tier: d.tierBps / 100,
     abd: Number(d.totalAbdAtto) / 1e9,
-  }))
-  const max = Math.max(...numeric.map((n) => n.abd), 1)
+  }));
+  const max = Math.max(...numeric.map((n) => n.abd), 1);
   const badgeColor: Record<number, string> = {
-    5: 'text-primary',
-    10: 'text-primary',
-    15: 'text-warning',
-    20: 'text-destructive',
-  }
+    5: "text-primary",
+    10: "text-primary",
+    15: "text-warning",
+    20: "text-destructive",
+  };
   return (
     <div className="space-y-3">
       {numeric.map((n) => (
         <div key={n.tier} className="space-y-1">
           <div className="flex items-baseline justify-between text-sm">
-            <span className={cn('font-medium', badgeColor[n.tier] ?? '')}>
+            <span className={cn("font-medium", badgeColor[n.tier] ?? "")}>
               {n.tier}% pool
             </span>
             <span className="font-mono text-xs text-muted-foreground">
-              {n.abd.toLocaleString('en-US', { maximumFractionDigits: 0 })} ABD
+              {n.abd.toLocaleString("en-US", { maximumFractionDigits: 0 })} ABD
             </span>
           </div>
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
             <div
               className={cn(
-                'h-full rounded-full transition-all',
+                "h-full rounded-full transition-all",
                 n.tier === 20
-                  ? 'bg-destructive'
+                  ? "bg-destructive"
                   : n.tier === 15
-                  ? 'bg-warning'
-                  : 'bg-primary',
+                    ? "bg-warning"
+                    : "bg-primary",
               )}
               style={{ width: `${Math.max(2, (n.abd / max) * 100)}%` }}
             />
@@ -688,7 +685,7 @@ function PoolBars({
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 function ConnectPromo() {
@@ -699,9 +696,9 @@ function ConnectPromo() {
         <div>
           <h2 className="text-xl font-semibold">Connect a wallet</h2>
           <p className="mt-1 max-w-md text-sm text-muted-foreground">
-            See your open loan, pool deposits, staked ABX, and vesting
-            schedule. Every click is pre-flighted via on-chain simulation
-            before we ask you to sign.
+            See your open loan, pool deposits, staked ABX, and vesting schedule.
+            Every click is pre-flighted via on-chain simulation before we ask
+            you to sign.
           </p>
         </div>
         <p className="rounded-md border border-primary/30 bg-primary/5 px-3 py-2 text-xs text-primary">
@@ -709,7 +706,7 @@ function ConnectPromo() {
         </p>
       </div>
     </section>
-  )
+  );
 }
 
 function ActionCard({
@@ -719,67 +716,71 @@ function ActionCard({
   href,
   accent,
 }: {
-  icon: React.ComponentType<{ className?: string }>
-  title: string
-  desc: string
-  href: string
-  accent: 'primary' | 'amber' | 'blue' | 'red'
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  desc: string;
+  href: string;
+  accent: "primary" | "amber" | "blue" | "red";
 }) {
   const bgClass = {
-    primary: 'from-primary/10 via-transparent',
-    amber: 'from-amber-500/10 via-transparent',
-    blue: 'from-blue-500/10 via-transparent',
-    red: 'from-destructive/10 via-transparent',
-  }[accent]
+    primary: "from-primary/10 via-transparent",
+    amber: "from-amber-500/10 via-transparent",
+    blue: "from-blue-500/10 via-transparent",
+    red: "from-destructive/10 via-transparent",
+  }[accent];
   const iconClass = {
-    primary: 'text-primary',
-    amber: 'text-warning',
-    blue: 'text-blue-400',
-    red: 'text-destructive',
-  }[accent]
+    primary: "text-primary",
+    amber: "text-warning",
+    blue: "text-blue-400",
+    red: "text-destructive",
+  }[accent];
   return (
     <Link
       href={href}
       className={cn(
-        'group card relative overflow-hidden bg-gradient-to-br p-6 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_20px_40px_-20px_hsl(var(--primary)/0.25)]',
+        "group card relative overflow-hidden bg-gradient-to-br p-6 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_20px_40px_-20px_hsl(var(--primary)/0.25)]",
         bgClass,
       )}
     >
-      <Icon className={cn('mb-3 h-5 w-5', iconClass)} />
+      <Icon className={cn("mb-3 h-5 w-5", iconClass)} />
       <p className="text-base font-semibold">{title}</p>
       <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
       <span className="mt-4 inline-flex text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
         Enter →
       </span>
     </Link>
-  )
+  );
 }
 
 const KIND_LABEL: Record<ActivityKind, string> = {
-  openLoan: 'Open loan',
-  repay: 'Repay',
-  addCollateral: 'Add collateral',
-  withdrawCollateral: 'Withdraw collateral',
-  closeLoan: 'Close loan',
-  redeem: 'Redeem',
-  stake: 'Stake',
-  unstake: 'Unstake',
-  claim: 'Claim',
-  poolDeposit: 'Pool deposit',
-  poolWithdraw: 'Pool withdraw',
-  poolClaim: 'Pool claim',
-  other: 'Other',
-}
+  openLoan: "Open loan",
+  repay: "Repay",
+  addCollateral: "Add collateral",
+  withdrawCollateral: "Withdraw collateral",
+  closeLoan: "Close loan",
+  redeem: "Redeem",
+  stake: "Stake",
+  unstake: "Unstake",
+  claim: "Claim",
+  poolDeposit: "Pool deposit",
+  poolWithdraw: "Pool withdraw",
+  poolClaim: "Pool claim",
+  other: "Other",
+};
 
-function formatDelta(attoValue: bigint, decimals: number, fractionDigits = 2): string {
-  const sign = attoValue < 0n ? '-' : '+'
-  const abs = attoValue < 0n ? -attoValue : attoValue
-  const divisor = 10n ** BigInt(decimals)
-  const whole = Number(abs / divisor)
-  const frac = Number(abs % divisor) / Number(divisor)
-  return `${sign}${(whole + frac).toLocaleString('en-US', {
+function formatDelta(
+  attoValue: bigint,
+  decimals: number,
+  fractionDigits = 2,
+): string {
+  const sign = attoValue < 0n ? "-" : "+";
+  const abs = attoValue < 0n ? -attoValue : attoValue;
+  const divisor = 10n ** BigInt(decimals);
+  const whole = Number(abs / divisor);
+  const frac = Number(abs % divisor) / Number(divisor);
+  return `${sign}${(whole + frac).toLocaleString("en-US", {
     maximumFractionDigits: fractionDigits,
-  })}`
+  })}`;
 }
 
 function ActivityTable({ entries }: { entries: ActivityEntry[] }) {
@@ -801,11 +802,11 @@ function ActivityTable({ entries }: { entries: ActivityEntry[] }) {
             <div className="flex items-baseline gap-2">
               <span className="font-medium">{KIND_LABEL[e.kind]}</span>
               <span className="text-xs text-muted-foreground">
-                {new Date(e.timestamp).toLocaleString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
+                {new Date(e.timestamp).toLocaleString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
                 })}
               </span>
             </div>
@@ -824,7 +825,7 @@ function ActivityTable({ entries }: { entries: ActivityEntry[] }) {
         ))}
       </ul>
     </div>
-  )
+  );
 }
 
 function DeltaCell({
@@ -832,19 +833,18 @@ function DeltaCell({
   decimals,
   unit,
 }: {
-  value: bigint
-  decimals: number
-  unit: string
+  value: bigint;
+  decimals: number;
+  unit: string;
 }) {
   if (value === 0n) {
-    return <span className="text-xs text-muted-foreground">—</span>
+    return <span className="text-xs text-muted-foreground">—</span>;
   }
-  const tone =
-    value > 0n ? 'text-primary' : 'text-muted-foreground'
+  const tone = value > 0n ? "text-primary" : "text-muted-foreground";
   return (
-    <span className={cn('font-mono text-xs tabular-nums', tone)}>
-      {formatDelta(value, decimals, decimals === 18 ? 4 : 2)}{' '}
+    <span className={cn("font-mono text-xs tabular-nums", tone)}>
+      {formatDelta(value, decimals, decimals === 18 ? 4 : 2)}{" "}
       <span className="text-muted-foreground">{unit}</span>
     </span>
-  )
+  );
 }

@@ -1,24 +1,24 @@
-'use client'
+"use client";
 
-import { AlephiumWalletProvider } from '@alephium/web3-react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { useState, type ReactNode } from 'react'
-import { NETWORK } from '@/lib/env'
-import { patchWalletConnectProvider } from '@/lib/wallet-connect-patch'
-import { fixedWalletConnectors } from '@/lib/wallet-connectors'
-import { ConsentProvider } from '@/components/unaudited-consent-gate'
+import { AlephiumWalletProvider } from "@alephium/web3-react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState, type ReactNode } from "react";
+import { NETWORK } from "@/lib/env";
+import { patchWalletConnectProvider } from "@/lib/wallet-connect-patch";
+import { fixedWalletConnectors } from "@/lib/wallet-connectors";
+import { ConsentProvider } from "@/components/unaudited-consent-gate";
 
 // Apply the WalletConnect namespace-rejection patch at module load, before
 // AlephiumWalletProvider creates any WC connectors. This complements the
 // relay URL override in `fixedWalletConnectors` — the relay override is the
 // primary fix; the namespace patch is defence-in-depth for wallets that
 // validate proposals strictly.
-if (typeof window !== 'undefined') {
-  patchWalletConnectProvider()
+if (typeof window !== "undefined") {
+  patchWalletConnectProvider();
 }
 
 interface ProvidersProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export function Providers({ children }: ProvidersProps) {
@@ -33,7 +33,7 @@ export function Providers({ children }: ProvidersProps) {
           },
         },
       }),
-  )
+  );
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -45,5 +45,5 @@ export function Providers({ children }: ProvidersProps) {
         <ConsentProvider>{children}</ConsentProvider>
       </AlephiumWalletProvider>
     </QueryClientProvider>
-  )
+  );
 }

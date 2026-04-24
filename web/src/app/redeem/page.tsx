@@ -1,5 +1,5 @@
-import { PageStatusBanner } from '@/components/page-status-banner'
-import { RedeemForm } from './redeem-form'
+import { PageStatusBanner } from "@/components/page-status-banner";
+import { RedeemForm } from "./redeem-form";
 
 export default function RedeemPage() {
   return (
@@ -18,5 +18,5 @@ export default function RedeemPage() {
       <PageStatusBanner feature="redeem" />
       <RedeemForm />
     </div>
-  )
+  );
 }

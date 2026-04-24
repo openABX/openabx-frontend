@@ -6,14 +6,14 @@
 //   LoanManager.mi=23(address)       → ByteVec: user's Loan subcontract id
 //   AuctionManager.mi=28(address)    → ByteVec: user's pool-position sub id
 
-import { getNetworkConfig, type Network } from '../networks'
-import { resolveAddress } from '../addresses'
+import { getNetworkConfig, type Network } from "../networks";
+import { resolveAddress } from "../addresses";
 
 interface NodeCallResponse {
-  type: string
-  returns?: Array<{ type: string; value: string }>
-  error?: string
-  gasUsed?: number
+  type: string;
+  returns?: Array<{ type: string; value: string }>;
+  error?: string;
+  gasUsed?: number;
 }
 
 // Audit fix H4: runtime shape validation before `as` casts. A malicious,
@@ -25,22 +25,23 @@ interface NodeCallResponse {
 // present, that each entry matches `{type: string, value: string}` before
 // handing the response back.
 function isNodeCallResponse(x: unknown): x is NodeCallResponse {
-  if (typeof x !== 'object' || x === null) return false
-  const obj = x as Record<string, unknown>
-  if (typeof obj['type'] !== 'string') return false
-  if (obj['returns'] !== undefined) {
-    if (!Array.isArray(obj['returns'])) return false
-    for (const entry of obj['returns']) {
-      if (typeof entry !== 'object' || entry === null) return false
-      const e = entry as Record<string, unknown>
-      if (typeof e['type'] !== 'string') return false
-      if (typeof e['value'] !== 'string') return false
+  if (typeof x !== "object" || x === null) return false;
+  const obj = x as Record<string, unknown>;
+  if (typeof obj["type"] !== "string") return false;
+  if (obj["returns"] !== undefined) {
+    if (!Array.isArray(obj["returns"])) return false;
+    for (const entry of obj["returns"]) {
+      if (typeof entry !== "object" || entry === null) return false;
+      const e = entry as Record<string, unknown>;
+      if (typeof e["type"] !== "string") return false;
+      if (typeof e["value"] !== "string") return false;
     }
   }
-  if (obj['error'] !== undefined && typeof obj['error'] !== 'string') return false
-  if (obj['gasUsed'] !== undefined && typeof obj['gasUsed'] !== 'number')
-    return false
-  return true
+  if (obj["error"] !== undefined && typeof obj["error"] !== "string")
+    return false;
+  if (obj["gasUsed"] !== undefined && typeof obj["gasUsed"] !== "number")
+    return false;
+  return true;
 }
 
 async function call(
@@ -50,34 +51,34 @@ async function call(
   args: Array<{ type: string; value: string }>,
 ): Promise<NodeCallResponse> {
   const res = await fetch(`${nodeUrl}/contracts/call-contract`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ group: 0, address, methodIndex, args }),
-  })
+  });
   if (!res.ok) {
-    return { type: 'HttpError', error: `HTTP ${res.status}` }
+    return { type: "HttpError", error: `HTTP ${res.status}` };
   }
-  const json: unknown = await res.json()
+  const json: unknown = await res.json();
   if (!isNodeCallResponse(json)) {
     return {
-      type: 'MalformedResponse',
+      type: "MalformedResponse",
       error: `node response did not match expected NodeCallResponse shape`,
-    }
+    };
   }
-  return json
+  return json;
 }
 
 // Helper: check that a hex string is lowercase hex of the expected length.
 function isHexOfLen(v: string, len: number): boolean {
-  if (v.length !== len) return false
+  if (v.length !== len) return false;
   for (let i = 0; i < v.length; i++) {
-    const c = v.charCodeAt(i)
-    const digit = c >= 48 && c <= 57
-    const lower = c >= 97 && c <= 102
-    const upper = c >= 65 && c <= 70
-    if (!digit && !lower && !upper) return false
+    const c = v.charCodeAt(i);
+    const digit = c >= 48 && c <= 57;
+    const lower = c >= 97 && c <= 102;
+    const upper = c >= 65 && c <= 70;
+    if (!digit && !lower && !upper) return false;
   }
-  return true
+  return true;
 }
 
 /**
@@ -89,16 +90,16 @@ export async function fetchMainnetLoanId(
   network: Network,
   userAddress: string,
 ): Promise<string | null> {
-  const lm = resolveAddress(network, 'loanManager')
-  if (!lm) return null
-  const nodeUrl = getNetworkConfig(network).nodeUrl
+  const lm = resolveAddress(network, "loanManager");
+  if (!lm) return null;
+  const nodeUrl = getNetworkConfig(network).nodeUrl;
   const res = await call(nodeUrl, lm, 23, [
-    { type: 'Address', value: userAddress },
-  ])
-  if (res.type !== 'CallContractSucceeded' || !res.returns?.[0]) return null
-  const value = res.returns[0]
-  if (value.type !== 'ByteVec' || !isHexOfLen(value.value, 64)) return null
-  return value.value
+    { type: "Address", value: userAddress },
+  ]);
+  if (res.type !== "CallContractSucceeded" || !res.returns?.[0]) return null;
+  const value = res.returns[0];
+  if (value.type !== "ByteVec" || !isHexOfLen(value.value, 64)) return null;
+  return value.value;
 }
 
 /**
@@ -113,16 +114,16 @@ export async function fetchMainnetPoolPositionId(
   network: Network,
   userAddress: string,
 ): Promise<string | null> {
-  const am = resolveAddress(network, 'auctionManager')
-  if (!am) return null
-  const nodeUrl = getNetworkConfig(network).nodeUrl
+  const am = resolveAddress(network, "auctionManager");
+  if (!am) return null;
+  const nodeUrl = getNetworkConfig(network).nodeUrl;
   const res = await call(nodeUrl, am, 28, [
-    { type: 'Address', value: userAddress },
-  ])
-  if (res.type !== 'CallContractSucceeded' || !res.returns?.[0]) return null
-  const value = res.returns[0]
-  if (value.type !== 'ByteVec' || !isHexOfLen(value.value, 64)) return null
-  return value.value
+    { type: "Address", value: userAddress },
+  ]);
+  if (res.type !== "CallContractSucceeded" || !res.returns?.[0]) return null;
+  const value = res.returns[0];
+  if (value.type !== "ByteVec" || !isHexOfLen(value.value, 64)) return null;
+  return value.value;
 }
 
 /**
@@ -133,28 +134,28 @@ export async function hasMainnetLoan(
   network: Network,
   userAddress: string,
 ): Promise<boolean> {
-  const id = await fetchMainnetLoanId(network, userAddress)
-  if (!id) return false
-  const nodeUrl = getNetworkConfig(network).nodeUrl
+  const id = await fetchMainnetLoanId(network, userAddress);
+  if (!id) return false;
+  const nodeUrl = getNetworkConfig(network).nodeUrl;
   try {
-    const res = await fetch(`${nodeUrl}/contracts/${id}/state`)
-    return res.ok
+    const res = await fetch(`${nodeUrl}/contracts/${id}/state`);
+    return res.ok;
   } catch {
-    return false
+    return false;
   }
 }
 
 export interface MainnetStakePosition {
-  stakedAbxAtto: bigint
-  pendingUnstakeAbxAtto: bigint
-  unstakeReadyAtMs: bigint
-  snapshotIndex: bigint
+  stakedAbxAtto: bigint;
+  pendingUnstakeAbxAtto: bigint;
+  unstakeReadyAtMs: bigint;
+  snapshotIndex: bigint;
   /** Approximate pending ALPH rewards. Uses the Liquity-style reward-index
    * formula: `staked * (globalIndex - snapshotIndex) / PRECISION_1e36`. If
    * AlphBanX's exact formula differs (e.g., subtracts an already-claimed
    * counter), this will over-report slightly; simulation-before-sign still
    * prevents any bad tx. */
-  pendingRewardsAlphAtto: bigint
+  pendingRewardsAlphAtto: bigint;
 }
 
 export const EMPTY_MAINNET_STAKE: MainnetStakePosition = {
@@ -163,34 +164,32 @@ export const EMPTY_MAINNET_STAKE: MainnetStakePosition = {
   unstakeReadyAtMs: 0n,
   snapshotIndex: 0n,
   pendingRewardsAlphAtto: 0n,
-}
+};
 
 interface ContractStateResponse {
-  immFields: Array<{ type: string; value: string }>
-  mutFields: Array<{ type: string; value: string }>
+  immFields: Array<{ type: string; value: string }>;
+  mutFields: Array<{ type: string; value: string }>;
 }
 
-function isFieldSlot(
-  x: unknown,
-): x is { type: string; value: string } {
-  if (typeof x !== 'object' || x === null) return false
-  const e = x as Record<string, unknown>
-  return typeof e['type'] === 'string' && typeof e['value'] === 'string'
+function isFieldSlot(x: unknown): x is { type: string; value: string } {
+  if (typeof x !== "object" || x === null) return false;
+  const e = x as Record<string, unknown>;
+  return typeof e["type"] === "string" && typeof e["value"] === "string";
 }
 
 function isContractStateResponse(x: unknown): x is ContractStateResponse {
-  if (typeof x !== 'object' || x === null) return false
-  const obj = x as Record<string, unknown>
-  if (!Array.isArray(obj['immFields']) || !Array.isArray(obj['mutFields'])) {
-    return false
+  if (typeof x !== "object" || x === null) return false;
+  const obj = x as Record<string, unknown>;
+  if (!Array.isArray(obj["immFields"]) || !Array.isArray(obj["mutFields"])) {
+    return false;
   }
-  for (const v of obj['immFields'] as unknown[]) {
-    if (!isFieldSlot(v)) return false
+  for (const v of obj["immFields"] as unknown[]) {
+    if (!isFieldSlot(v)) return false;
   }
-  for (const v of obj['mutFields'] as unknown[]) {
-    if (!isFieldSlot(v)) return false
+  for (const v of obj["mutFields"] as unknown[]) {
+    if (!isFieldSlot(v)) return false;
   }
-  return true
+  return true;
 }
 
 /**
@@ -204,20 +203,18 @@ async function readContractState(
   nodeUrl: string,
   contractAddress: string,
 ): Promise<ContractStateResponse | null> {
-  const res = await fetch(`${nodeUrl}/contracts/${contractAddress}/state`)
-  if (!res.ok) return null
-  const json: unknown = await res.json()
-  return isContractStateResponse(json) ? json : null
+  const res = await fetch(`${nodeUrl}/contracts/${contractAddress}/state`);
+  if (!res.ok) return null;
+  const json: unknown = await res.json();
+  return isContractStateResponse(json) ? json : null;
 }
 
-function decodeU256(
-  slot: { type: string; value: string } | undefined,
-): bigint {
-  if (!slot || slot.type !== 'U256') return 0n
+function decodeU256(slot: { type: string; value: string } | undefined): bigint {
+  if (!slot || slot.type !== "U256") return 0n;
   try {
-    return BigInt(slot.value)
+    return BigInt(slot.value);
   } catch {
-    return 0n
+    return 0n;
   }
 }
 
@@ -237,46 +234,51 @@ export async function fetchMainnetStakePosition(
   network: Network,
   userAddress: string,
 ): Promise<MainnetStakePosition> {
-  const sm = resolveAddress(network, 'stakeManager')
-  if (!sm) return EMPTY_MAINNET_STAKE
-  const nodeUrl = getNetworkConfig(network).nodeUrl
+  const sm = resolveAddress(network, "stakeManager");
+  if (!sm) return EMPTY_MAINNET_STAKE;
+  const nodeUrl = getNetworkConfig(network).nodeUrl;
 
   try {
     // 1. user stake sub id
     const subIdRes = await call(nodeUrl, sm, 28, [
-      { type: 'Address', value: userAddress },
-    ])
+      { type: "Address", value: userAddress },
+    ]);
     const subIdHex =
-      subIdRes.type === 'CallContractSucceeded' && subIdRes.returns?.[0]?.type === 'ByteVec'
+      subIdRes.type === "CallContractSucceeded" &&
+      subIdRes.returns?.[0]?.type === "ByteVec"
         ? subIdRes.returns[0].value
-        : null
-    if (!subIdHex || !isHexOfLen(subIdHex, 64)) return EMPTY_MAINNET_STAKE
+        : null;
+    if (!subIdHex || !isHexOfLen(subIdHex, 64)) return EMPTY_MAINNET_STAKE;
 
     // Convert hex id to contract address
-    const { addressFromContractId } = await import('@alephium/web3')
-    const subAddr = addressFromContractId(subIdHex)
+    const { addressFromContractId } = await import("@alephium/web3");
+    const subAddr = addressFromContractId(subIdHex);
 
     // 2. fetch sub state (shape-validated)
-    const state = await readContractState(nodeUrl, subAddr)
-    if (!state) return EMPTY_MAINNET_STAKE
-    const snapshotIndex = decodeU256(state.mutFields[0])
-    const stakedAbxAtto = decodeU256(state.mutFields[1])
-    const pendingUnstakeAbxAtto = decodeU256(state.mutFields[2])
-    const unstakeReadyAtMs = decodeU256(state.mutFields[3])
+    const state = await readContractState(nodeUrl, subAddr);
+    if (!state) return EMPTY_MAINNET_STAKE;
+    const snapshotIndex = decodeU256(state.mutFields[0]);
+    const stakedAbxAtto = decodeU256(state.mutFields[1]);
+    const pendingUnstakeAbxAtto = decodeU256(state.mutFields[2]);
+    const unstakeReadyAtMs = decodeU256(state.mutFields[3]);
 
     // 3. current global index
-    const globalRes = await call(nodeUrl, sm, 17, [])
+    const globalRes = await call(nodeUrl, sm, 17, []);
     const globalIndex =
-      globalRes.type === 'CallContractSucceeded' && globalRes.returns?.[0]?.type === 'U256'
+      globalRes.type === "CallContractSucceeded" &&
+      globalRes.returns?.[0]?.type === "U256"
         ? BigInt(globalRes.returns[0].value)
-        : 0n
+        : 0n;
 
     // 4. pending rewards. The contract uses a 1e36-scaled reward index
     // (StakeManager.mi=15 returned 1000000000000000000000000000000000000).
-    const PRECISION = 1_000_000_000_000_000_000_000_000_000_000_000_000n
-    const delta = globalIndex > snapshotIndex ? globalIndex - snapshotIndex : 0n
+    const PRECISION = 1_000_000_000_000_000_000_000_000_000_000_000_000n;
+    const delta =
+      globalIndex > snapshotIndex ? globalIndex - snapshotIndex : 0n;
     const pendingRewardsAlphAtto =
-      stakedAbxAtto > 0n && delta > 0n ? (stakedAbxAtto * delta) / PRECISION : 0n
+      stakedAbxAtto > 0n && delta > 0n
+        ? (stakedAbxAtto * delta) / PRECISION
+        : 0n;
 
     return {
       stakedAbxAtto,
@@ -284,23 +286,23 @@ export async function fetchMainnetStakePosition(
       unstakeReadyAtMs,
       snapshotIndex,
       pendingRewardsAlphAtto,
-    }
+    };
   } catch {
-    return EMPTY_MAINNET_STAKE
+    return EMPTY_MAINNET_STAKE;
   }
 }
 
 export interface MainnetPoolPosition {
-  tierBps: 500 | 1000 | 1500 | 2000
-  depositedAbdAtto: bigint
-  claimableAlphAtto: bigint
-  subAddress: string | null
+  tierBps: 500 | 1000 | 1500 | 2000;
+  depositedAbdAtto: bigint;
+  claimableAlphAtto: bigint;
+  subAddress: string | null;
 }
 
 export interface MainnetPoolTvl {
-  tierBps: 500 | 1000 | 1500 | 2000
-  totalAbdAtto: bigint
-  poolAddress: string
+  tierBps: 500 | 1000 | 1500 | 2000;
+  totalAbdAtto: bigint;
+  poolAddress: string;
 }
 
 /**
@@ -311,38 +313,60 @@ export interface MainnetPoolTvl {
 export async function fetchMainnetPoolsTvl(
   network: Network,
 ): Promise<MainnetPoolTvl[]> {
-  const tiers: Array<[500 | 1000 | 1500 | 2000, Parameters<typeof resolveAddress>[1]]> = [
-    [500, 'auctionPool5'],
-    [1000, 'auctionPool10'],
-    [1500, 'auctionPool15'],
-    [2000, 'auctionPool20'],
-  ]
-  const nodeUrl = getNetworkConfig(network).nodeUrl
-  const out: MainnetPoolTvl[] = []
+  const tiers: Array<
+    [500 | 1000 | 1500 | 2000, Parameters<typeof resolveAddress>[1]]
+  > = [
+    [500, "auctionPool5"],
+    [1000, "auctionPool10"],
+    [1500, "auctionPool15"],
+    [2000, "auctionPool20"],
+  ];
+  const nodeUrl = getNetworkConfig(network).nodeUrl;
+  const out: MainnetPoolTvl[] = [];
   for (const [bps, role] of tiers) {
-    const addr = resolveAddress(network, role)
-    if (!addr) continue
+    const addr = resolveAddress(network, role);
+    if (!addr) continue;
     try {
-      const st = await readContractState(nodeUrl, addr)
+      const st = await readContractState(nodeUrl, addr);
       if (!st) {
-        out.push({ tierBps: bps, totalAbdAtto: 0n, poolAddress: addr })
-        continue
+        out.push({ tierBps: bps, totalAbdAtto: 0n, poolAddress: addr });
+        continue;
       }
-      const total = decodeU256(st.mutFields[0])
-      out.push({ tierBps: bps, totalAbdAtto: total, poolAddress: addr })
+      const total = decodeU256(st.mutFields[0]);
+      out.push({ tierBps: bps, totalAbdAtto: total, poolAddress: addr });
     } catch {
-      out.push({ tierBps: bps, totalAbdAtto: 0n, poolAddress: addr })
+      out.push({ tierBps: bps, totalAbdAtto: 0n, poolAddress: addr });
     }
   }
-  return out
+  return out;
 }
 
 export const EMPTY_MAINNET_POOL_POSITIONS: MainnetPoolPosition[] = [
-  { tierBps: 500, depositedAbdAtto: 0n, claimableAlphAtto: 0n, subAddress: null },
-  { tierBps: 1000, depositedAbdAtto: 0n, claimableAlphAtto: 0n, subAddress: null },
-  { tierBps: 1500, depositedAbdAtto: 0n, claimableAlphAtto: 0n, subAddress: null },
-  { tierBps: 2000, depositedAbdAtto: 0n, claimableAlphAtto: 0n, subAddress: null },
-]
+  {
+    tierBps: 500,
+    depositedAbdAtto: 0n,
+    claimableAlphAtto: 0n,
+    subAddress: null,
+  },
+  {
+    tierBps: 1000,
+    depositedAbdAtto: 0n,
+    claimableAlphAtto: 0n,
+    subAddress: null,
+  },
+  {
+    tierBps: 1500,
+    depositedAbdAtto: 0n,
+    claimableAlphAtto: 0n,
+    subAddress: null,
+  },
+  {
+    tierBps: 2000,
+    depositedAbdAtto: 0n,
+    claimableAlphAtto: 0n,
+    subAddress: null,
+  },
+];
 
 /**
  * Reads the user's pool position on AlphBanX mainnet.
@@ -368,38 +392,39 @@ export async function fetchMainnetPoolPositions(
   network: Network,
   userAddress: string,
 ): Promise<MainnetPoolPosition[]> {
-  const am = resolveAddress(network, 'auctionManager')
-  if (!am) return EMPTY_MAINNET_POOL_POSITIONS
-  const nodeUrl = getNetworkConfig(network).nodeUrl
+  const am = resolveAddress(network, "auctionManager");
+  if (!am) return EMPTY_MAINNET_POOL_POSITIONS;
+  const nodeUrl = getNetworkConfig(network).nodeUrl;
   try {
     const subIdRes = await call(nodeUrl, am, 28, [
-      { type: 'Address', value: userAddress },
-    ])
+      { type: "Address", value: userAddress },
+    ]);
     const subIdHex =
-      subIdRes.type === 'CallContractSucceeded' && subIdRes.returns?.[0]?.type === 'ByteVec'
+      subIdRes.type === "CallContractSucceeded" &&
+      subIdRes.returns?.[0]?.type === "ByteVec"
         ? subIdRes.returns[0].value
-        : null
+        : null;
     if (!subIdHex || !isHexOfLen(subIdHex, 64)) {
-      return EMPTY_MAINNET_POOL_POSITIONS
+      return EMPTY_MAINNET_POOL_POSITIONS;
     }
 
-    const { addressFromContractId } = await import('@alephium/web3')
-    const subAddr = addressFromContractId(subIdHex)
+    const { addressFromContractId } = await import("@alephium/web3");
+    const subAddr = addressFromContractId(subIdHex);
 
-    const state = await readContractState(nodeUrl, subAddr)
-    if (!state) return EMPTY_MAINNET_POOL_POSITIONS
+    const state = await readContractState(nodeUrl, subAddr);
+    if (!state) return EMPTY_MAINNET_POOL_POSITIONS;
 
-    const deposited = decodeU256(state.mutFields[2])
+    const deposited = decodeU256(state.mutFields[2]);
 
     // Fetch claimable via sub.mi=6 (observed to return claimable ALPH)
-    let claimable = 0n
+    let claimable = 0n;
     try {
-      const claimRes = await call(nodeUrl, subAddr, 6, [])
+      const claimRes = await call(nodeUrl, subAddr, 6, []);
       if (
-        claimRes.type === 'CallContractSucceeded' &&
-        claimRes.returns?.[0]?.type === 'U256'
+        claimRes.type === "CallContractSucceeded" &&
+        claimRes.returns?.[0]?.type === "U256"
       ) {
-        claimable = BigInt(claimRes.returns[0].value)
+        claimable = BigInt(claimRes.returns[0].value);
       }
     } catch {
       /* ignore — show 0 */
@@ -409,8 +434,8 @@ export async function fetchMainnetPoolPositions(
     // tier; report the deposit under the 15% slot (most popular from
     // observation), leave others at zero. UI on /auction shows a
     // "position" summary that's tier-agnostic.
-    if (deposited === 0n) return EMPTY_MAINNET_POOL_POSITIONS
-    const tiers: Array<500 | 1000 | 1500 | 2000> = [500, 1000, 1500, 2000]
+    if (deposited === 0n) return EMPTY_MAINNET_POOL_POSITIONS;
+    const tiers: Array<500 | 1000 | 1500 | 2000> = [500, 1000, 1500, 2000];
     return tiers.map((tier) => ({
       tierBps: tier,
       // Only report on one tier so we don't quadruple-count. The 15% tier
@@ -419,8 +444,8 @@ export async function fetchMainnetPoolPositions(
       depositedAbdAtto: tier === 1500 ? deposited : 0n,
       claimableAlphAtto: tier === 1500 ? claimable : 0n,
       subAddress: subAddr,
-    }))
+    }));
   } catch {
-    return EMPTY_MAINNET_POOL_POSITIONS
+    return EMPTY_MAINNET_POOL_POSITIONS;
   }
 }

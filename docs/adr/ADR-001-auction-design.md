@@ -36,7 +36,7 @@ The paper's continuous bid-book is explicitly **considered and rejected**.
 ### Negative
 
 - **Capital inefficiency vs bid book.** A user willing to take 17 % discount is forced to the 20 % bucket (overpaid) or the 15 % bucket (risking mismatch). A continuous bid book would let them state 17 % exactly.
-- **Divergence from paper.** OpenABX cannot claim "faithful implementation of the Zahnentferner protocol paper" — it is a faithful implementation of the AlphBanX *product*, which diverges from the paper.
+- **Divergence from paper.** OpenABX cannot claim "faithful implementation of the Zahnentferner protocol paper" — it is a faithful implementation of the AlphBanX _product_, which diverges from the paper.
 - **Discrete discontinuities.** Capital flows will cluster at the 4 tier boundaries; fee revenue is concentrated in whichever tier is currently matched.
 
 ### Mitigations for the negatives

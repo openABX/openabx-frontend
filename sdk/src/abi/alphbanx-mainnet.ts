@@ -11,63 +11,69 @@
 // methods it needs to call.
 
 export interface MainnetMethod {
-  readonly role: string
-  readonly address: string
-  readonly methodIndex: number
-  readonly returnType: string
-  readonly label: string
-  readonly observedAt: string
-  readonly notes?: string
+  readonly role: string;
+  readonly address: string;
+  readonly methodIndex: number;
+  readonly returnType: string;
+  readonly label: string;
+  readonly observedAt: string;
+  readonly notes?: string;
 }
 
 export const ALPHBANX_MAINNET_METHODS: readonly MainnetMethod[] = [
   {
-    role: 'loanManager',
-    address: 'tpxjsWJSaUh5i7XzNAsTWMRtD9QvDTV9zmMNeHHS6jQB',
+    role: "loanManager",
+    address: "tpxjsWJSaUh5i7XzNAsTWMRtD9QvDTV9zmMNeHHS6jQB",
     methodIndex: 0,
-    returnType: 'ByteVec',
-    label: 'getContractName',
-    observedAt: '2026-04-22',
+    returnType: "ByteVec",
+    label: "getContractName",
+    observedAt: "2026-04-22",
     notes: 'Returns hex of "LoanManager".',
   },
   {
-    role: 'auctionManager',
-    address: '29YL53teVrvK2o4P2cVej8aCGN7iQS8mE86bgxA2oFWa3',
+    role: "auctionManager",
+    address: "29YL53teVrvK2o4P2cVej8aCGN7iQS8mE86bgxA2oFWa3",
     methodIndex: 0,
-    returnType: 'ByteVec',
-    label: 'getContractName',
-    observedAt: '2026-04-22',
+    returnType: "ByteVec",
+    label: "getContractName",
+    observedAt: "2026-04-22",
     notes: 'Returns hex of "AuctionManager".',
   },
   {
-    role: 'diaAlphPriceAdapter',
-    address: '2AtjFo5tY8vjxtdni43wyVaq4VczV6WBwBu5Qw9Yaiec7',
+    role: "diaAlphPriceAdapter",
+    address: "2AtjFo5tY8vjxtdni43wyVaq4VczV6WBwBu5Qw9Yaiec7",
     methodIndex: 0,
-    returnType: 'U256',
-    label: 'unknownInverse',
-    observedAt: '2026-04-22',
-    notes: 'Returned 20206236978343157268; scaling TBD.',
+    returnType: "U256",
+    label: "unknownInverse",
+    observedAt: "2026-04-22",
+    notes: "Returned 20206236978343157268; scaling TBD.",
   },
   {
-    role: 'diaAlphPriceAdapter',
-    address: '2AtjFo5tY8vjxtdni43wyVaq4VczV6WBwBu5Qw9Yaiec7',
+    role: "diaAlphPriceAdapter",
+    address: "2AtjFo5tY8vjxtdni43wyVaq4VczV6WBwBu5Qw9Yaiec7",
     methodIndex: 1,
-    returnType: 'U256',
-    label: 'getAlphUsdPrice',
-    observedAt: '2026-04-22',
-    notes: 'Returned 49489670000000000 = $0.04949 at 1e18 scale; matches app dashboard.',
+    returnType: "U256",
+    label: "getAlphUsdPrice",
+    observedAt: "2026-04-22",
+    notes:
+      "Returned 49489670000000000 = $0.04949 at 1e18 scale; matches app dashboard.",
   },
   {
-    role: 'platformSettings',
-    address: '21WqbuxJbLBYHxAQhr99JGJH5QKqX5JqkDnDZy7kautUf',
+    role: "platformSettings",
+    address: "21WqbuxJbLBYHxAQhr99JGJH5QKqX5JqkDnDZy7kautUf",
     methodIndex: 0,
-    returnType: 'Address',
-    label: 'getAdmin',
-    observedAt: '2026-04-22',
-    notes: 'Returned 1Fcq1KfXTVj3EyxncDgTmtrQzDWGWF5sXKojXZYDdxoho.',
+    returnType: "Address",
+    label: "getAdmin",
+    observedAt: "2026-04-22",
+    notes: "Returned 1Fcq1KfXTVj3EyxncDgTmtrQzDWGWF5sXKojXZYDdxoho.",
   },
-]
+];
 
-export function findMainnetMethod(role: string, label: string): MainnetMethod | undefined {
-  return ALPHBANX_MAINNET_METHODS.find((m) => m.role === role && m.label === label)
+export function findMainnetMethod(
+  role: string,
+  label: string,
+): MainnetMethod | undefined {
+  return ALPHBANX_MAINNET_METHODS.find(
+    (m) => m.role === role && m.label === label,
+  );
 }

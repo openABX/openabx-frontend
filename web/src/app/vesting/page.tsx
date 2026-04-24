@@ -1,5 +1,5 @@
-import { PageStatusBanner } from '@/components/page-status-banner'
-import { VestingActions } from './vesting-actions'
+import { PageStatusBanner } from "@/components/page-status-banner";
+import { VestingActions } from "./vesting-actions";
 
 export default function VestingPage() {
   return (
@@ -43,8 +43,8 @@ export default function VestingPage() {
           How the schedule works
         </h3>
         <p className="text-sm">
-          Each time your auction pool absorbs debt, AuctionFarming
-          registers a 12-month linear-unlock schedule. At time{' '}
+          Each time your auction pool absorbs debt, AuctionFarming registers a
+          12-month linear-unlock schedule. At time{" "}
           <span className="font-mono">t</span> after start:
         </p>
         <pre className="mt-3 rounded-md bg-background/60 px-3 py-2 font-mono text-xs">
@@ -54,15 +54,15 @@ export default function VestingPage() {
 
       <VestingActions />
     </div>
-  )
+  );
 }
 
 function Card({
   label,
   children,
 }: {
-  label: string
-  children: React.ReactNode
+  label: string;
+  children: React.ReactNode;
 }) {
   return (
     <div className="card p-5">
@@ -71,5 +71,5 @@ function Card({
       </p>
       <div className="mt-2">{children}</div>
     </div>
-  )
+  );
 }

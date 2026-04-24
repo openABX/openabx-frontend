@@ -70,16 +70,16 @@ manual transactions from the admin wallet via a wallet UI.
 
 The exact sequence of calls:
 
-| # | Target | Method | Args | Why |
-|---|---|---|---|---|
-| 1 | `AbdToken` | `transferMintAuthority` | `newAuthority=LoanManager.address` | Only LoanManager can mint ABD (for borrows) and burn (for repays + redemptions). |
-| 2 | `AuctionManager` | `setLoanManager` | `newRef=LoanManager.contractId` | LoanManager is the only caller permitted to invoke `absorbDebt`. |
-| 3 | `AuctionManager` | `setPools` (if not set at deploy) | `p5, p10, p15, p20` | Ensures the pool refs are wired even if deploy-time init missed them. |
-| 4 | `Vesting` | `setCreator` | `newCreator=AuctionFarming.address` | Earn-pool ABX emissions bypass the admin. |
-| 5 | `StakeManager` | (no wiring needed) | — | Entry points are wallet-facing; notifyRewards is permissionless. |
-| 6 | `PlatformSettings` | `setLoanManager`, `setBorrowerOperations`, `setAuctionManager`, `setStakeManager`, `setVesting` | matching contract ids | Frontend reads all addresses from here. |
-| 7 | `AuctionFarming` | `setNotifier` | `newRef=AuctionManager.contractId` | Only AuctionManager may credit depositors with ABX. |
-| 8 | `AuctionFarming` | `topUp` | `amount=7_000_000 × 10⁹` ABX | Fund the community-reserve pool (requires admin holding ABX). |
+| #   | Target             | Method                                                                                          | Args                                | Why                                                                              |
+| --- | ------------------ | ----------------------------------------------------------------------------------------------- | ----------------------------------- | -------------------------------------------------------------------------------- |
+| 1   | `AbdToken`         | `transferMintAuthority`                                                                         | `newAuthority=LoanManager.address`  | Only LoanManager can mint ABD (for borrows) and burn (for repays + redemptions). |
+| 2   | `AuctionManager`   | `setLoanManager`                                                                                | `newRef=LoanManager.contractId`     | LoanManager is the only caller permitted to invoke `absorbDebt`.                 |
+| 3   | `AuctionManager`   | `setPools` (if not set at deploy)                                                               | `p5, p10, p15, p20`                 | Ensures the pool refs are wired even if deploy-time init missed them.            |
+| 4   | `Vesting`          | `setCreator`                                                                                    | `newCreator=AuctionFarming.address` | Earn-pool ABX emissions bypass the admin.                                        |
+| 5   | `StakeManager`     | (no wiring needed)                                                                              | —                                   | Entry points are wallet-facing; notifyRewards is permissionless.                 |
+| 6   | `PlatformSettings` | `setLoanManager`, `setBorrowerOperations`, `setAuctionManager`, `setStakeManager`, `setVesting` | matching contract ids               | Frontend reads all addresses from here.                                          |
+| 7   | `AuctionFarming`   | `setNotifier`                                                                                   | `newRef=AuctionManager.contractId`  | Only AuctionManager may credit depositors with ABX.                              |
+| 8   | `AuctionFarming`   | `topUp`                                                                                         | `amount=7_000_000 × 10⁹` ABX        | Fund the community-reserve pool (requires admin holding ABX).                    |
 
 Verification after wiring:
 
@@ -96,11 +96,11 @@ Verification after wiring:
 
 At deploy time, ABX issues 100M to the deployer. That needs to flow:
 
-| Allocation | Amount | Destination | Notes |
-|---|---|---|---|
-| Auction-pool yield farming | 7,000,000 ABX | `AuctionFarming.topUp` | Feeds 12-month linear unlocks for earn-pool depositors. |
-| Team / investor / treasury | 68,000,000 ABX | Multisig treasury | **Do NOT deploy these until governance procedure is ratified** (§7 spec item #8). |
-| Circulating (stakers, liquidity, future growth) | 25,000,000 ABX | Deployer wallet | Distribute per governance. |
+| Allocation                                      | Amount         | Destination            | Notes                                                                             |
+| ----------------------------------------------- | -------------- | ---------------------- | --------------------------------------------------------------------------------- |
+| Auction-pool yield farming                      | 7,000,000 ABX  | `AuctionFarming.topUp` | Feeds 12-month linear unlocks for earn-pool depositors.                           |
+| Team / investor / treasury                      | 68,000,000 ABX | Multisig treasury      | **Do NOT deploy these until governance procedure is ratified** (§7 spec item #8). |
+| Circulating (stakers, liquidity, future growth) | 25,000,000 ABX | Deployer wallet        | Distribute per governance.                                                        |
 
 On testnet a single EOA deployer is fine. For mainnet-ready deploy (not
 this release — see `RELEASE-CANDIDATE.md`), replace the deployer with a
@@ -167,7 +167,7 @@ Set up a daily cron in GitHub Actions:
 ```yaml
 on:
   schedule:
-    - cron: '0 6 * * *'  # daily at 06:00 UTC
+    - cron: "0 6 * * *" # daily at 06:00 UTC
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -208,7 +208,7 @@ release.
   remove or actually use the field; don't relax the warning gate.
 - **`cli compile` requires a live node**. Our default uses testnet. For
   air-gapped CI, point at a local devnet instead (`cli compile --network
-  devnet` with a running `cli devnet start`).
+devnet` with a running `cli devnet start`).
 - **Alephium bin name is `cli`**, not `alephium`. Scripts in
   `contracts/package.json` already call `cli`.
 - **Subcontract creation needs ALPH** — 0.1 ALPH per new subcontract.

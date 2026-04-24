@@ -1,80 +1,80 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useWallet } from '@alephium/web3-react'
-import { NETWORK } from '@/lib/env'
+import { useState } from "react";
+import { useWallet } from "@alephium/web3-react";
+import { NETWORK } from "@/lib/env";
 import {
   canTransactOp,
   claimFromPool,
   depositToPool,
   withdrawFromPool,
   type PoolTier,
-} from '@/lib/tx'
-import { usePoolPositions, useWalletBalances } from '@/lib/hooks'
-import { useTxRunner } from '@/lib/hooks/use-tx-runner'
-import { formatAmount, numberToBigint } from '@/lib/format'
-import { TxStatusLine } from '@/components/tx-status-line'
-import { cn } from '@/lib/utils'
+} from "@/lib/tx";
+import { usePoolPositions, useWalletBalances } from "@/lib/hooks";
+import { useTxRunner } from "@/lib/hooks/use-tx-runner";
+import { formatAmount, numberToBigint } from "@/lib/format";
+import { TxStatusLine } from "@/components/tx-status-line";
+import { cn } from "@/lib/utils";
 
 const TIERS: Array<{
-  bps: PoolTier
-  discount: number
-  feeBps: number
-  accent: string
+  bps: PoolTier;
+  discount: number;
+  feeBps: number;
+  accent: string;
 }> = [
-  { bps: 500, discount: 5, feeBps: 50, accent: 'text-green-600' },
-  { bps: 1000, discount: 10, feeBps: 100, accent: 'text-emerald-500' },
-  { bps: 1500, discount: 15, feeBps: 150, accent: 'text-amber-500' },
-  { bps: 2000, discount: 20, feeBps: 200, accent: 'text-orange-500' },
-]
+  { bps: 500, discount: 5, feeBps: 50, accent: "text-green-600" },
+  { bps: 1000, discount: 10, feeBps: 100, accent: "text-emerald-500" },
+  { bps: 1500, discount: 15, feeBps: 150, accent: "text-amber-500" },
+  { bps: 2000, discount: 20, feeBps: 200, accent: "text-orange-500" },
+];
 
-type Action = 'deposit' | 'withdraw'
+type Action = "deposit" | "withdraw";
 
 export function AuctionActions() {
-  const wallet = useWallet()
-  const { data: pools } = usePoolPositions()
-  const { data: balances } = useWalletBalances()
+  const wallet = useWallet();
+  const { data: pools } = usePoolPositions();
+  const { data: balances } = useWalletBalances();
   const [amounts, setAmounts] = useState<Record<PoolTier, string>>({
-    500: '',
-    1000: '',
-    1500: '',
-    2000: '',
-  })
+    500: "",
+    1000: "",
+    1500: "",
+    2000: "",
+  });
   const [modes, setModes] = useState<Record<PoolTier, Action>>({
-    500: 'deposit',
-    1000: 'deposit',
-    1500: 'deposit',
-    2000: 'deposit',
-  })
-  const { state: submit, runTx } = useTxRunner()
+    500: "deposit",
+    1000: "deposit",
+    1500: "deposit",
+    2000: "deposit",
+  });
+  const { state: submit, runTx } = useTxRunner();
 
-  const depositAllowed = canTransactOp(NETWORK, 'poolDeposit')
-  const withdrawAllowed = canTransactOp(NETWORK, 'poolWithdraw')
-  const claimAllowed = canTransactOp(NETWORK, 'poolClaim')
-  const writesAllowed = depositAllowed || withdrawAllowed || claimAllowed
-  const isConnected = wallet.connectionStatus === 'connected'
+  const depositAllowed = canTransactOp(NETWORK, "poolDeposit");
+  const withdrawAllowed = canTransactOp(NETWORK, "poolWithdraw");
+  const claimAllowed = canTransactOp(NETWORK, "poolClaim");
+  const writesAllowed = depositAllowed || withdrawAllowed || claimAllowed;
+  const isConnected = wallet.connectionStatus === "connected";
   const isBusy =
-    submit.kind === 'awaitingSign' ||
-    submit.kind === 'submitted' ||
-    submit.kind === 'confirming'
+    submit.kind === "awaitingSign" ||
+    submit.kind === "submitted" ||
+    submit.kind === "confirming";
 
-  async function runAction(bps: PoolTier, action: Action | 'claim') {
-    if (!isConnected || !wallet.signer) return
-    if (action === 'claim') {
-      const pos = pools?.find((p) => p.discountBps === bps)
-      const claim = pos?.claimableAlphAtto ?? 1n
-      await runTx(() => claimFromPool(NETWORK, wallet.signer!, bps, claim))
-      return
+  async function runAction(bps: PoolTier, action: Action | "claim") {
+    if (!isConnected || !wallet.signer) return;
+    if (action === "claim") {
+      const pos = pools?.find((p) => p.discountBps === bps);
+      const claim = pos?.claimableAlphAtto ?? 1n;
+      await runTx(() => claimFromPool(NETWORK, wallet.signer!, bps, claim));
+      return;
     }
-    const raw = Number(amounts[bps]) || 0
-    if (raw <= 0) return
-    const atto = numberToBigint(raw, 9)
-    if (atto <= 0n) return
+    const raw = Number(amounts[bps]) || 0;
+    if (raw <= 0) return;
+    const atto = numberToBigint(raw, 9);
+    if (atto <= 0n) return;
     await runTx(() =>
-      action === 'deposit'
+      action === "deposit"
         ? depositToPool(NETWORK, wallet.signer!, bps, atto)
         : withdrawFromPool(NETWORK, wallet.signer!, bps, atto),
-    )
+    );
   }
 
   return (
@@ -84,16 +84,13 @@ export function AuctionActions() {
       </h3>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {TIERS.map((tier) => {
-          const pool = pools?.find((p) => p.discountBps === tier.bps)
-          const mode = modes[tier.bps]
+          const pool = pools?.find((p) => p.discountBps === tier.bps);
+          const mode = modes[tier.bps];
 
           return (
-            <div
-              key={tier.bps}
-              className="card flex flex-col gap-3 p-5"
-            >
+            <div key={tier.bps} className="card flex flex-col gap-3 p-5">
               <div className="flex items-center justify-between">
-                <h4 className={cn('text-lg font-semibold', tier.accent)}>
+                <h4 className={cn("text-lg font-semibold", tier.accent)}>
                   {tier.discount}% pool
                 </h4>
                 <span className="text-xs text-muted-foreground">
@@ -123,14 +120,14 @@ export function AuctionActions() {
                       type="button"
                       disabled={!depositAllowed}
                       onClick={() =>
-                        setModes((m) => ({ ...m, [tier.bps]: 'deposit' }))
+                        setModes((m) => ({ ...m, [tier.bps]: "deposit" }))
                       }
                       className={cn(
-                        'flex-1 rounded-md border px-2 py-1 text-xs',
-                        mode === 'deposit'
-                          ? 'border-primary bg-primary text-primary-foreground'
-                          : 'border-border text-muted-foreground hover:border-primary/60',
-                        !depositAllowed && 'cursor-not-allowed opacity-50',
+                        "flex-1 rounded-md border px-2 py-1 text-xs",
+                        mode === "deposit"
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border text-muted-foreground hover:border-primary/60",
+                        !depositAllowed && "cursor-not-allowed opacity-50",
                       )}
                     >
                       Deposit
@@ -140,16 +137,16 @@ export function AuctionActions() {
                       disabled={!withdrawAllowed}
                       onClick={() =>
                         withdrawAllowed &&
-                        setModes((m) => ({ ...m, [tier.bps]: 'withdraw' }))
+                        setModes((m) => ({ ...m, [tier.bps]: "withdraw" }))
                       }
                       className={cn(
-                        'flex-1 rounded-md border px-2 py-1 text-xs',
-                        mode === 'withdraw'
-                          ? 'border-primary bg-primary text-primary-foreground'
-                          : 'border-border text-muted-foreground hover:border-primary/60',
-                        !withdrawAllowed && 'cursor-not-allowed opacity-50',
+                        "flex-1 rounded-md border px-2 py-1 text-xs",
+                        mode === "withdraw"
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border text-muted-foreground hover:border-primary/60",
+                        !withdrawAllowed && "cursor-not-allowed opacity-50",
                       )}
-                      title={!withdrawAllowed ? 'Mainnet withdraw pending' : ''}
+                      title={!withdrawAllowed ? "Mainnet withdraw pending" : ""}
                     >
                       Withdraw
                     </button>
@@ -166,13 +163,13 @@ export function AuctionActions() {
                       }))
                     }
                     placeholder={
-                      mode === 'deposit'
+                      mode === "deposit"
                         ? `ABD (max ${formatAmount(
                             balances?.abdAtto ?? null,
                             9,
                             2,
                           )})`
-                        : 'ABD to withdraw'
+                        : "ABD to withdraw"
                     }
                     className="rounded-md border border-border bg-background px-2 py-1 font-mono text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   />
@@ -181,28 +178,28 @@ export function AuctionActions() {
                     disabled={!isConnected || isBusy}
                     onClick={() => runAction(tier.bps, mode)}
                     className={cn(
-                      'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                      "rounded-md px-3 py-2 text-sm font-medium transition-colors",
                       isConnected && !isBusy
-                        ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                        : 'cursor-not-allowed bg-muted text-muted-foreground',
+                        ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                        : "cursor-not-allowed bg-muted text-muted-foreground",
                     )}
                   >
                     {isBusy
-                      ? 'Signing…'
+                      ? "Signing…"
                       : !isConnected
-                      ? 'Connect wallet'
-                      : mode === 'deposit'
-                      ? 'Deposit'
-                      : 'Withdraw'}
+                        ? "Connect wallet"
+                        : mode === "deposit"
+                          ? "Deposit"
+                          : "Withdraw"}
                   </button>
                   {claimAllowed && (pool?.claimableAlphAtto ?? 0n) > 0n && (
                     <button
                       type="button"
                       disabled={isBusy}
-                      onClick={() => runAction(tier.bps, 'claim')}
+                      onClick={() => runAction(tier.bps, "claim")}
                       className="rounded-md border border-primary/40 bg-primary/10 px-3 py-1 text-xs text-primary hover:bg-primary/15"
                     >
-                      Claim {formatAmount(pool?.claimableAlphAtto ?? 0n, 18, 4)}{' '}
+                      Claim {formatAmount(pool?.claimableAlphAtto ?? 0n, 18, 4)}{" "}
                       ALPH
                     </button>
                   )}
@@ -217,10 +214,10 @@ export function AuctionActions() {
                 </button>
               )}
             </div>
-          )
+          );
         })}
       </div>
       <TxStatusLine state={submit} />
     </section>
-  )
+  );
 }

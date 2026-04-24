@@ -5,5 +5,10 @@
     "outDir": "./dist",
     "types": ["node"]
   },
-  "include": ["alephium.config.ts", "test/**/*.ts", "scripts/**/*.ts", "artifacts/ts/**/*.ts"]
+  "include": [
+    "alephium.config.ts",
+    "test/**/*.ts",
+    "scripts/**/*.ts",
+    "artifacts/ts/**/*.ts"
+  ]
 }

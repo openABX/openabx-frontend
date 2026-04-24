@@ -1,19 +1,18 @@
-import { isValidAddress, isAssetAddress } from '@alephium/web3'
+import { isValidAddress, isAssetAddress } from "@alephium/web3";
 
-const EXPLORER_BASE = 'https://explorer.alephium.org'
+const EXPLORER_BASE = "https://explorer.alephium.org";
 
 export function explorerAddressUrl(addr: string): string {
-  return `${EXPLORER_BASE}/addresses/${encodeURIComponent(addr)}`
+  return `${EXPLORER_BASE}/addresses/${encodeURIComponent(addr)}`;
 }
 
 export function explorerTxUrl(txId: string): string {
-  return `${EXPLORER_BASE}/transactions/${encodeURIComponent(txId)}`
+  return `${EXPLORER_BASE}/transactions/${encodeURIComponent(txId)}`;
 }
-
 
 export type AddressValidation =
   | { ok: true; address: string }
-  | { ok: false; reason: string }
+  | { ok: false; reason: string };
 
 /**
  * Validate a user-supplied Alephium address string. Accepts only asset
@@ -21,18 +20,20 @@ export type AddressValidation =
  * without a group index, not garbage. Call this before any tx builder
  * that would otherwise fail at simulation time with a confusing error.
  */
-export function validateUserAddress(raw: string | null | undefined): AddressValidation {
-  if (!raw) return { ok: false, reason: 'Address required.' }
-  const trimmed = raw.trim()
-  if (!trimmed) return { ok: false, reason: 'Address required.' }
+export function validateUserAddress(
+  raw: string | null | undefined,
+): AddressValidation {
+  if (!raw) return { ok: false, reason: "Address required." };
+  const trimmed = raw.trim();
+  if (!trimmed) return { ok: false, reason: "Address required." };
   if (!isValidAddress(trimmed)) {
-    return { ok: false, reason: 'Not a valid Alephium address.' }
+    return { ok: false, reason: "Not a valid Alephium address." };
   }
   if (!isAssetAddress(trimmed)) {
     return {
       ok: false,
-      reason: 'Contract addresses are not accepted — pass a wallet address.',
-    }
+      reason: "Contract addresses are not accepted — pass a wallet address.",
+    };
   }
-  return { ok: true, address: trimmed }
+  return { ok: true, address: trimmed };
 }

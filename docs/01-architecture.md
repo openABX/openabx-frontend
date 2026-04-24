@@ -3,6 +3,7 @@
 **Audience.** Engineers implementing OpenABX in Phase 1+. Readers who want the "why" behind specific choices should also consult `docs/adr/ADR-001`, `ADR-002`, `ADR-003`.
 
 **Environment baseline (pinned 2026-04-22):**
+
 - Alephium node **v4.5.1** (post-Danube fork, 2025-07-15)
 - `@alephium/web3` + `@alephium/cli` + `@alephium/web3-react` + `@alephium/web3-test` + `@alephium/walletconnect-provider`, all **v3.0.3** (published 2026-04-20)
 - Next.js 14 App Router, TS strict, Tailwind, shadcn/ui
@@ -12,7 +13,7 @@
 
 ## 1. Contract decomposition
 
-We adopt the same file-level decomposition that the AlphBanX team settled on (confirmed by the Inference AG audit's scope section). Using identical role names makes ABI-compat work with mainnet AlphBanX much tractable; using identical *code* is forbidden (clean-room).
+We adopt the same file-level decomposition that the AlphBanX team settled on (confirmed by the Inference AG audit's scope section). Using identical role names makes ABI-compat work with mainnet AlphBanX much tractable; using identical _code_ is forbidden (clean-room).
 
 ```
 contracts/
@@ -50,14 +51,14 @@ Total: **9 top-level contracts + 8 subcontracts**. Match to the audit's scope se
 
 ### 1.1 Differences from original plan
 
-| Plan said | Reality (from audit + live) | We build |
-|---|---|---|
-| `VaultManager` | `LoanManager` | `LoanManager` (AlphBanX's name; required for ABI-compat aspirations) |
-| Single `AuctionPool` with 4 tiers | `AuctionManager` parent + 4× `AuctionPool` children | Parent + 4 children (ADR-001) |
-| `StabilityAccounting` | Folded into `AuctionPool`'s P/S snapshot fields | Inline |
-| `SortedVaults` | `SortedList` + `ListNode`, reused by Vesting | Reused primitive |
-| No `PlatformSettings` | AlphBanX has a `PlatformSettings` admin/wiring contract | We build it. Holds the fee table + references to all other contracts so frontend can read a single on-chain source for addresses. |
-| No `BorrowerOperations` | AlphBanX has it | We build it (BorrowerOperations.ral) |
+| Plan said                         | Reality (from audit + live)                             | We build                                                                                                                          |
+| --------------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `VaultManager`                    | `LoanManager`                                           | `LoanManager` (AlphBanX's name; required for ABI-compat aspirations)                                                              |
+| Single `AuctionPool` with 4 tiers | `AuctionManager` parent + 4× `AuctionPool` children     | Parent + 4 children (ADR-001)                                                                                                     |
+| `StabilityAccounting`             | Folded into `AuctionPool`'s P/S snapshot fields         | Inline                                                                                                                            |
+| `SortedVaults`                    | `SortedList` + `ListNode`, reused by Vesting            | Reused primitive                                                                                                                  |
+| No `PlatformSettings`             | AlphBanX has a `PlatformSettings` admin/wiring contract | We build it. Holds the fee table + references to all other contracts so frontend can read a single on-chain source for addresses. |
+| No `BorrowerOperations`           | AlphBanX has it                                         | We build it (BorrowerOperations.ral)                                                                                              |
 
 ---
 

@@ -11,7 +11,7 @@ OpenABX ships two artefacts:
    reimplementation of AlphBanX. Open to anyone to fork, audit, and
    deploy. We do NOT deploy them to mainnet — AlphBanX's contracts are
    already there.
-2. **Next.js frontend** served on mainnet. A *third-party UI* over
+2. **Next.js frontend** served on mainnet. A _third-party UI_ over
    AlphBanX's deployed contracts. Users' funds are at risk from the
    underlying contracts; the UI's role is to correctly construct
    transactions that the user signs.
@@ -258,12 +258,12 @@ out of scope per `RELEASE-CANDIDATE.md`. The incidents we plan for:
 
 ### Detection
 
-| Signal | Source | Action |
-|---|---|---|
-| `verify-mainnet-addresses` failure | `.github/workflows/verify-mainnet.yml` (daily 07:00 UTC cron) | Auto-opens an `incident` issue; on-call triages within 2 h. |
-| Simulation-revert spike | User reports in issues / Telegram | On-call reproduces against mainnet state; >3 reports in 1 h = P1. |
-| No explorer response | `status.alephium.org` / node logs | Surface read-only banner; no user action possible until recovered. |
-| Unexpected deploy | `Deploy to GitHub Pages` run without matching commit on main | Treat as UI compromise — escalate to P0. |
+| Signal                             | Source                                                        | Action                                                             |
+| ---------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `verify-mainnet-addresses` failure | `.github/workflows/verify-mainnet.yml` (daily 07:00 UTC cron) | Auto-opens an `incident` issue; on-call triages within 2 h.        |
+| Simulation-revert spike            | User reports in issues / Telegram                             | On-call reproduces against mainnet state; >3 reports in 1 h = P1.  |
+| No explorer response               | `status.alephium.org` / node logs                             | Surface read-only banner; no user action possible until recovered. |
+| Unexpected deploy                  | `Deploy to GitHub Pages` run without matching commit on main  | Treat as UI compromise — escalate to P0.                           |
 
 ### Triage levels
 
@@ -277,7 +277,7 @@ out of scope per `RELEASE-CANDIDATE.md`. The incidents we plan for:
 ### Response — P0 (UI compromise)
 
 1. **Revert Pages deploy.** Go to GitHub Actions → `Deploy to GitHub
-   Pages` → previous successful run → "Re-run all jobs". This
+Pages` → previous successful run → "Re-run all jobs". This
    republishes the last-known-good bundle.
 2. **Freeze** `main` — branch-protection rule forbidding force-push,
    require review on every PR.
@@ -310,17 +310,17 @@ Root cause is almost always a contract upgrade we missed.
    still map to the same operations.
 2. Update `BASELINES` in `scripts/verify-mainnet-addresses.ts`.
 3. Commit: `baseline: rotate <role> codeHash post AlphBanX upgrade
-   (<tx-hash>)`.
+(<tx-hash>)`.
 4. Close the auto-opened incident issue with a link to the commit.
 
 ### Communications
 
-| Audience | Channel | When |
-|---|---|---|
-| Users with open positions | Banner on every page | Immediately on P0/P1 |
-| Broader community | X, Discord, Telegram | Within 1 h of P0/P1 |
-| AlphBanX team | Their Discord / Telegram | If the issue is upstream |
-| Security researchers | Email in `SECURITY.md` | On receipt of a report |
+| Audience                  | Channel                  | When                     |
+| ------------------------- | ------------------------ | ------------------------ |
+| Users with open positions | Banner on every page     | Immediately on P0/P1     |
+| Broader community         | X, Discord, Telegram     | Within 1 h of P0/P1      |
+| AlphBanX team             | Their Discord / Telegram | If the issue is upstream |
+| Security researchers      | Email in `SECURITY.md`   | On receipt of a report   |
 
 The banner lives in `web/src/components/alpha-banner.tsx`. Build +
 GH-Pages deploy is ~6 min end-to-end.

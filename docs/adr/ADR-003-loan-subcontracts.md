@@ -8,6 +8,7 @@
 The spec mandates "exactly one active loan per wallet" (`docs/00-protocol-spec.md §2`, quoting GitBook). We need a contract layout that (a) makes this structural (not just an assertion), (b) supports the sorted-list insertion/deletion from ADR-002, (c) keeps per-loan state cheap, and (d) works natively with Ralph's subcontract model.
 
 Ralph's subcontract primitives:
+
 - `copyCreateSubContract!(path: ByteVec, bytecode: ByteVec, encoded: ByteVec, init: ByteVec)` creates a child from a template.
 - `subContractId!(path: ByteVec)` returns the deterministic child ID as `blake2b(blake2b(parentId ‖ path))`.
 - Each subcontract carries a 0.1 ALPH minimum deposit, refundable on destruction.

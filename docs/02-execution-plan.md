@@ -8,17 +8,17 @@ Phase numbering and scope match `openabx_plan.md` and the revised plan at `/User
 
 ## Overview
 
-| Phase | Name | Status | Calendar estimate | Gated by |
-|---|---|---|---|---|
-| 0 | Spec + architecture + live-app inventory + address extraction | **in review** (this PR) | — | Human review |
-| 0.5 | ABI compat decision | pending | 0.5 day | Phase 0 sign-off |
-| 1 | Monorepo scaffold + CI | pending | 2–3 days | Phase 0.5 decision |
-| 2 | Tokens + oracle + circuit breaker | pending | 4–5 days | Phase 1 green |
-| 3 | Loan lifecycle + sorted list + indexer | pending | 7–10 days | Phase 2 green |
-| 4 | Auction pools + liquidation + redemption + 30-day fuzz | pending | 10–14 days | Phase 3 green |
-| 5 | Staking + vesting + governance | pending | 5–7 days | Phase 4 green |
-| 6 | Frontend (5 pages, 2-network SDK) | pending | 10–14 days | Phase 5 green |
-| 7 | Docs + testnet deploy + Vercel mainnet UI | pending | 4–5 days | Phase 6 green |
+| Phase | Name                                                          | Status                  | Calendar estimate | Gated by           |
+| ----- | ------------------------------------------------------------- | ----------------------- | ----------------- | ------------------ |
+| 0     | Spec + architecture + live-app inventory + address extraction | **in review** (this PR) | —                 | Human review       |
+| 0.5   | ABI compat decision                                           | pending                 | 0.5 day           | Phase 0 sign-off   |
+| 1     | Monorepo scaffold + CI                                        | pending                 | 2–3 days          | Phase 0.5 decision |
+| 2     | Tokens + oracle + circuit breaker                             | pending                 | 4–5 days          | Phase 1 green      |
+| 3     | Loan lifecycle + sorted list + indexer                        | pending                 | 7–10 days         | Phase 2 green      |
+| 4     | Auction pools + liquidation + redemption + 30-day fuzz        | pending                 | 10–14 days        | Phase 3 green      |
+| 5     | Staking + vesting + governance                                | pending                 | 5–7 days          | Phase 4 green      |
+| 6     | Frontend (5 pages, 2-network SDK)                             | pending                 | 10–14 days        | Phase 5 green      |
+| 7     | Docs + testnet deploy + Vercel mainnet UI                     | pending                 | 4–5 days          | Phase 6 green      |
 
 **Total estimate:** 42–58 engineer-days for a single full-time engineer. Scale with parallelism during Phase 6 (UI) and Phase 4 (contracts + fuzz).
 
@@ -56,6 +56,7 @@ Phase numbering and scope match `openabx_plan.md` and the revised plan at `/User
 ## Phase 1 — Monorepo scaffold (2–3 days)
 
 **Deliverables:**
+
 - `pnpm-workspace.yaml` + six workspaces: `contracts/`, `web/`, `sdk/`, `e2e/`, `indexer/`, `docs/`.
 - `contracts/` with `@alephium/cli` v3.0.3 wired; `alephium.config.ts`; a `contracts/src/hello.ral` that compiles.
 - `sdk/` with a typed stub and a `getClient(network, role)` factory backed by `addresses.ts` and `abi/`.
@@ -72,6 +73,7 @@ Phase numbering and scope match `openabx_plan.md` and the revised plan at `/User
 ## Phase 2 — Tokens + oracle + circuit breaker (4–5 days)
 
 **Contracts:**
+
 - `ABDToken.ral`, `ABXToken.ral` (APS-native; no ERC-20 allowance surface).
 - `DIAAlphPriceAdapter.ral` — thin wrapper calling DIA xMarket with `getValue("ALPH/USD")`; returns `(price: U256, timestamp: U256)`.
 - `ABDPriceOracle.ral` — constant 1e18 return value.
@@ -79,6 +81,7 @@ Phase numbering and scope match `openabx_plan.md` and the revised plan at `/User
 - `CircuitBreaker.ral` — `paused: Bool` + `pauser: Address`. Oracle-staleness auto-halt.
 
 **Tests (Ralph unit, in `contracts/test/`):**
+
 - Mint/burn authority checks (only LoanManager can mint ABD; only Vesting/AuctionFarming can move ABX reserve; etc.).
 - Oracle value propagation (set mock DIA registry, assert adapter returns same value).
 - Circuit breaker halts all operations it is wired into.
@@ -94,22 +97,26 @@ Phase numbering and scope match `openabx_plan.md` and the revised plan at `/User
 ## Phase 3 — Loan lifecycle + sorted list + indexer (7–10 days)
 
 **Contracts:**
+
 - `SortedList.ral` + `ListNode.ral` — generic primitive. Unit-tested in isolation.
 - `LoanManager.ral` + per-tier `InterestPool.ral` + per-borrower `Loan.ral`.
 - `BorrowerOperations.ral` — user-facing router.
 
 **Behaviour:**
+
 - OpenLoan / BorrowMore / Repay / AddCollateral / WithdrawCollateral / CloseLoan / AccrueInterest — per `docs/00-protocol-spec.md §4`.
 - One loan per wallet enforced via `subContractId!(toByteVec!(owner))`.
 - Interest accrual at 6-hour quantisation; settled on every interaction.
 - Insertion and deletion from sorted list use off-chain hints.
 
 **Indexer:**
+
 - Subscribes to Loan-contract events (Created, Adjusted, Closed) and AccrueInterest events.
 - Maintains the cross-tier ascending-`ir` redemption view + within-tier secondary-key order.
 - Exposes `/hints/insert` and `/hints/redeem` HTTP endpoints.
 
 **Tests:**
+
 - Ralph unit: every state transition + property tests for CR math (10k random input combinations).
 - Fuzz stub: 1 simulated day, 10 loans, price RNG, asserting the 12 invariants from spec §5.
 - Indexer tests: replay a recorded devnet trace; compare indexer's view to the ground truth from `GET /contracts/{addr}/sub-contracts`.
@@ -122,16 +129,19 @@ Phase numbering and scope match `openabx_plan.md` and the revised plan at `/User
 ## Phase 4 — Auction + liquidation + redemption + 30-day fuzz (10–14 days)
 
 **Contracts:**
+
 - `AuctionManager.ral` + per-tier `AuctionPool.ral` + per-user `Bid.ral` + per-wallet `Bidder.ral`.
 - `AuctionFarming.ral` — emits ABX to pool depositors, routes to Vesting for 12-mo linear unlock.
 
 **Behaviour:**
+
 - DepositToPool / WithdrawFromPool (0.5 % closing bid fee) / ClaimDiscountedAlph / ClaimFarmRewards.
 - Liquidation cascade: pool 0 → pool 1 → … ; reverts if combined insufficient (default per §7 item #4).
 - Redemption: burn ABD, traverse sorted loans lowest-tier first, 1.5 % fee rebated to force-closed borrower.
 - Dynamic fee split: `k = Σ_pools_abd / totalSupply(abd)`; `(1−k)` to pool depositors, `k` to ABX stakers (index not yet wired — stakers ALPH bucket accrues into a sink for Phase 5).
 
 **Fuzz harness (the big one):**
+
 - `tests/fuzz/market.ts`: 30-day simulated market. Variables: 50 borrowers, prices geometric-Brownian on `[$0.01, $1]`, random actions per block chosen from {OpenLoan, BorrowMore, Repay, Withdraw, AddCollateral, Deposit, Withdraw, Liquidate, Redeem} weighted to produce actual liquidations.
 - Gate: 0 invariant violations, 0 stuck funds, reward sums within 1e-12 relative tolerance.
 - Nightly CI only; PR CI runs 1 simulated day with 10 borrowers.
@@ -145,12 +155,14 @@ Phase numbering and scope match `openabx_plan.md` and the revised plan at `/User
 ## Phase 5 — Staking + vesting + governance (5–7 days)
 
 **Contracts:**
+
 - `StakeManager.ral` + `Staker.ral` + `LockInfo.ral`. 14-day unstake cooldown. Rewards paid in ALPH via index math (receives from Phase 4's sink).
 - `Vesting.ral` + `Schedule.ral`. 12-month linear unlock. Sole caller with write access: `AuctionFarming`.
 - `CircuitBreaker.ral` wired everywhere it needs to be (OpenLoan / BorrowMore / Redeem / Liquidate / Deposit / Withdraw). Fresh integration tests.
 - `Timelock.ral` — 24-hour queue for admin-role calls.
 
 **Tests:**
+
 - Reward math matches `docs/03-reward-math.md` reference spreadsheet to 1e-12 tolerance.
 - 14-day cooldown invariant (can't unstake early).
 - Governance: param changes go through timelock; pause bypasses timelock; pause cannot seize funds.
@@ -162,6 +174,7 @@ Phase numbering and scope match `openabx_plan.md` and the revised plan at `/User
 ## Phase 6 — Frontend (10–14 days)
 
 **Pages (ordered by live-app priority per `docs/00-protocol-spec.md §1.1`):**
+
 1. `/` — Dashboard: global stats (TVL, total debt, ABD / ABX / ALPH prices), user position summary once connected.
 2. `/borrow` — Open vault form (8 interest tiers), adjust / close for existing vault, liquidation-price ticker, CR gauge, mint fee preview.
 3. `/auction` — Four pool cards (5/10/15/20 %), deposit/withdraw, per-pool APR (ALPH yield + ABX farming), "My deposits" sub-tab.
@@ -169,6 +182,7 @@ Phase numbering and scope match `openabx_plan.md` and the revised plan at `/User
 5. `/vesting` — Per-user vesting schedules (only Earn-pool ABX in v1), claim button.
 
 **Cross-cutting:**
+
 - Two-network SDK via `getClient(network, role)` factory.
 - Mainnet first-run modal: "This app calls AlphBanX's mainnet contracts, which we did not deploy or audit. [Learn more]" → `/docs/05-security.md`.
 - React Query invalidation via `updateBalanceForTx`.
@@ -177,6 +191,7 @@ Phase numbering and scope match `openabx_plan.md` and the revised plan at `/User
 - Not a visual clone of app.alphbanx.com; shadcn + custom Tailwind theme.
 
 **Testing:**
+
 - Playwright E2E per page, testnet happy path + error states.
 - Mainnet smoke: "page renders, RPC resolves, connected wallet shows correct balance."
 
@@ -187,17 +202,20 @@ Phase numbering and scope match `openabx_plan.md` and the revised plan at `/User
 ## Phase 7 — Docs + mainnet UI ship (4–5 days)
 
 **Scripts:**
+
 - `scripts/deploy-testnet.ts` — idempotent; writes `deployments/testnet.json`.
 - **No `deploy-mainnet.ts` for contracts.** (User decision #3.)
 - `scripts/verify-mainnet-addresses.ts` — daily CI check: re-reads every mainnet address in `deployments/mainnet.json`, hashes the bytecode, compares to Phase 0 hash. Mismatch = alert + frontend auto-rolls to "under maintenance".
 
 **Docs:**
+
 - `docs/04-deploy-runbook.md` — testnet deploy checklist; mainnet-frontend release checklist.
 - `docs/05-security.md` — threat model for a third-party mainnet frontend; user disclaimer text; incident response for AlphBanX upgrades or exploits.
 - `docs/06-user-guide.md` — end-user walkthrough for both testnet (using our contracts) and mainnet (using AlphBanX's contracts).
 - `RELEASE-CANDIDATE.md` — what's ready, what still needs an external paid audit, which params governance should set.
 
 **Shipping:**
+
 - Vercel main branch → `NEXT_PUBLIC_NETWORK=mainnet`. Preview branches default to testnet.
 - README one-command setup.
 

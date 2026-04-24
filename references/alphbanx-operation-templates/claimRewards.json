@@ -4,9 +4,7 @@
   "methodIndex": 33,
   "txId": "f54add3e557f4bb5b3030a14342e61ffb3d1adc249b1de87845ad72c8cec7066",
   "scriptOpt": "0101030000000713c44ac20e8d1d3c57b015002ac0b4ed76d8c29b91c65f47594808f80e17e63acd83a84caa357d0c43f8a22c0e0d144020cb15784c91a7c8cc0c073e77a9ea2c4e8eec5782c27d5e47febb3e6c9439fb00012118",
-  "contractInputs": [
-    "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu"
-  ],
+  "contractInputs": ["28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu"],
   "methods": [
     {
       "index": 0,

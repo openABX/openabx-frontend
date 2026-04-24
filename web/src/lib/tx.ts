@@ -9,14 +9,14 @@
 // docs/07-mainnet-write-path.md. `canTransact(network)` centralizes the
 // policy so pages can disable buttons without scattering the check.
 
-import { DUST_AMOUNT, ONE_ALPH, type SignerProvider } from '@alephium/web3'
+import { DUST_AMOUNT, ONE_ALPH, type SignerProvider } from "@alephium/web3";
 import {
   AuctionPool,
   BorrowerOperations,
   StakeManager,
   Vesting,
-} from '@openabx/contracts'
-import type { MainnetOperation, Network, PreparedTx } from '@openabx/sdk'
+} from "@openabx/contracts";
+import type { MainnetOperation, Network, PreparedTx } from "@openabx/sdk";
 import {
   buildAddCollateral as mnBuildAddCollateral,
   buildClaimRewards as mnBuildClaimRewards,
@@ -35,11 +35,11 @@ import {
   getNetworkConfig,
   resolveAddress,
   simulateScript,
-} from '@openabx/sdk'
-import { tokenIdFromAddress } from './user-position'
+} from "@openabx/sdk";
+import { tokenIdFromAddress } from "./user-position";
 
 export function canTransact(network: Network): boolean {
-  return getNetworkConfig(network).isOpenAbxDeployment
+  return getNetworkConfig(network).isOpenAbxDeployment;
 }
 
 /**
@@ -48,8 +48,8 @@ export function canTransact(network: Network): boolean {
  * verified operations on mainnet.
  */
 export function canTransactOp(network: Network, op: MainnetOperation): boolean {
-  if (getNetworkConfig(network).isOpenAbxDeployment) return true
-  return canMainnetWrite(op)
+  if (getNetworkConfig(network).isOpenAbxDeployment) return true;
+  return canMainnetWrite(op);
 }
 
 async function submitPrepared(
@@ -57,8 +57,8 @@ async function submitPrepared(
   signer: SignerProvider,
   prepared: PreparedTx,
 ): Promise<TxResult> {
-  const account = await signer.getSelectedAccount()
-  const signerAddress = account.address
+  const account = await signer.getSelectedAccount();
+  const signerAddress = account.address;
   // Defense in depth: simulate before sign to catch any bytecode regression.
   const sim = await simulateScript(
     getNetworkConfig(network).nodeUrl,
@@ -68,9 +68,9 @@ async function submitPrepared(
       attoAlphAmount: prepared.attoAlphAmount + ONE_ALPH, // buffer for gas
       tokens: prepared.tokens,
     },
-  )
+  );
   if (!sim.ok) {
-    throw new Error(`Simulation failed (would revert on-chain): ${sim.error}`)
+    throw new Error(`Simulation failed (would revert on-chain): ${sim.error}`);
   }
   const res = await signer.signAndSubmitExecuteScriptTx({
     signerAddress,
@@ -80,36 +80,39 @@ async function submitPrepared(
       id: t.id,
       amount: t.amount.toString(),
     })),
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 // -------- Common helpers -----------------------------------------------------
 
 function requireSigner(signer: SignerProvider | undefined): SignerProvider {
-  if (!signer) throw new Error('Wallet not connected')
-  return signer
+  if (!signer) throw new Error("Wallet not connected");
+  return signer;
 }
 
-function requireAddress(network: Network, role: Parameters<typeof resolveAddress>[1]): string {
-  const addr = resolveAddress(network, role)
+function requireAddress(
+  network: Network,
+  role: Parameters<typeof resolveAddress>[1],
+): string {
+  const addr = resolveAddress(network, role);
   if (!addr)
     throw new Error(
       `${role} is not deployed on ${network}. Run pnpm -C contracts run deploy:${network}.`,
-    )
-  return addr
+    );
+  return addr;
 }
 
 export interface TxResult {
-  txId: string
+  txId: string;
 }
 
 // -------- Borrow / Loan ------------------------------------------------------
 
 export interface OpenLoanParams {
-  collateralAlphAtto: bigint // ALPH collateral (1e18)
-  borrowAbdAtto: bigint // ABD debt (1e9)
-  interestRate1e18: bigint // one of 8 tier values
+  collateralAlphAtto: bigint; // ALPH collateral (1e18)
+  borrowAbdAtto: bigint; // ABD debt (1e9)
+  interestRate1e18: bigint; // one of 8 tier values
 }
 
 export async function openLoan(
@@ -117,17 +120,17 @@ export async function openLoan(
   signer: SignerProvider,
   params: OpenLoanParams,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
+  requireSigner(signer);
+  if (network === "mainnet") {
     const prepared = mnBuildOpenLoan(
       params.collateralAlphAtto,
       params.borrowAbdAtto,
       params.interestRate1e18,
-    )
-    return submitPrepared(network, signer, prepared)
+    );
+    return submitPrepared(network, signer, prepared);
   }
-  const boAddr = requireAddress(network, 'borrowerOperations')
-  const bo = BorrowerOperations.at(boAddr)
+  const boAddr = requireAddress(network, "borrowerOperations");
+  const bo = BorrowerOperations.at(boAddr);
   const res = await bo.transact.openLoan({
     signer,
     args: {
@@ -136,8 +139,8 @@ export async function openLoan(
       interestRate: params.interestRate1e18,
     },
     attoAlphAmount: params.collateralAlphAtto + ONE_ALPH,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 export async function addCollateral(
@@ -145,17 +148,19 @@ export async function addCollateral(
   signer: SignerProvider,
   amountAtto: bigint,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
-    return submitPrepared(network, signer, mnBuildAddCollateral(amountAtto))
+  requireSigner(signer);
+  if (network === "mainnet") {
+    return submitPrepared(network, signer, mnBuildAddCollateral(amountAtto));
   }
-  const bo = BorrowerOperations.at(requireAddress(network, 'borrowerOperations'))
+  const bo = BorrowerOperations.at(
+    requireAddress(network, "borrowerOperations"),
+  );
   const res = await bo.transact.addCollateral({
     signer,
     args: { amount: amountAtto },
     attoAlphAmount: amountAtto + DUST_AMOUNT,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 export async function withdrawCollateral(
@@ -163,22 +168,24 @@ export async function withdrawCollateral(
   signer: SignerProvider,
   amountAtto: bigint,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
-    const account = await signer.getSelectedAccount()
+  requireSigner(signer);
+  if (network === "mainnet") {
+    const account = await signer.getSelectedAccount();
     return submitPrepared(
       network,
       signer,
       mnBuildWithdrawCollateral(amountAtto, account.address),
-    )
+    );
   }
-  const bo = BorrowerOperations.at(requireAddress(network, 'borrowerOperations'))
+  const bo = BorrowerOperations.at(
+    requireAddress(network, "borrowerOperations"),
+  );
   const res = await bo.transact.withdrawCollateral({
     signer,
     args: { amount: amountAtto },
     attoAlphAmount: DUST_AMOUNT,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 export async function borrowMore(
@@ -186,13 +193,15 @@ export async function borrowMore(
   signer: SignerProvider,
   additionalDebtAtto: bigint,
 ): Promise<TxResult> {
-  const bo = BorrowerOperations.at(requireAddress(network, 'borrowerOperations'))
+  const bo = BorrowerOperations.at(
+    requireAddress(network, "borrowerOperations"),
+  );
   const res = await bo.transact.borrowMore({
     signer,
     args: { additionalDebt: additionalDebtAtto },
     attoAlphAmount: DUST_AMOUNT,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 export async function repay(
@@ -201,20 +210,22 @@ export async function repay(
   ownerAddress: string,
   amountAbdAtto: bigint,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
-    return submitPrepared(network, signer, mnBuildRepay(amountAbdAtto))
+  requireSigner(signer);
+  if (network === "mainnet") {
+    return submitPrepared(network, signer, mnBuildRepay(amountAbdAtto));
   }
-  const bo = BorrowerOperations.at(requireAddress(network, 'borrowerOperations'))
-  const abdId = tokenIdFromAddress(requireAddress(network, 'abdToken'))
-  if (!abdId) throw new Error('ABD token id could not be derived')
+  const bo = BorrowerOperations.at(
+    requireAddress(network, "borrowerOperations"),
+  );
+  const abdId = tokenIdFromAddress(requireAddress(network, "abdToken"));
+  if (!abdId) throw new Error("ABD token id could not be derived");
   const res = await bo.transact.repay({
     signer,
     args: { owner: ownerAddress, amount: amountAbdAtto },
     tokens: [{ id: abdId, amount: amountAbdAtto }],
     attoAlphAmount: DUST_AMOUNT,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 export async function closeLoan(
@@ -222,21 +233,23 @@ export async function closeLoan(
   signer: SignerProvider,
   remainingDebtAbdAtto: bigint = 0n,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
-    const account = await signer.getSelectedAccount()
+  requireSigner(signer);
+  if (network === "mainnet") {
+    const account = await signer.getSelectedAccount();
     return submitPrepared(
       network,
       signer,
       mnBuildCloseLoan(remainingDebtAbdAtto, account.address),
-    )
+    );
   }
-  const bo = BorrowerOperations.at(requireAddress(network, 'borrowerOperations'))
+  const bo = BorrowerOperations.at(
+    requireAddress(network, "borrowerOperations"),
+  );
   const res = await bo.transact.closeLoan({
     signer,
     attoAlphAmount: DUST_AMOUNT,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 // -------- Redemption / Liquidation -------------------------------------------
@@ -247,24 +260,26 @@ export async function redeem(
   targetOwner: string,
   amountAbdAtto: bigint,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
+  requireSigner(signer);
+  if (network === "mainnet") {
     return submitPrepared(
       network,
       signer,
       mnBuildRedeem(targetOwner, amountAbdAtto),
-    )
+    );
   }
-  const bo = BorrowerOperations.at(requireAddress(network, 'borrowerOperations'))
-  const abdId = tokenIdFromAddress(requireAddress(network, 'abdToken'))
-  if (!abdId) throw new Error('ABD token id could not be derived')
+  const bo = BorrowerOperations.at(
+    requireAddress(network, "borrowerOperations"),
+  );
+  const abdId = tokenIdFromAddress(requireAddress(network, "abdToken"));
+  if (!abdId) throw new Error("ABD token id could not be derived");
   const res = await bo.transact.redeem({
     signer,
     args: { owner: targetOwner, amount: amountAbdAtto },
     tokens: [{ id: abdId, amount: amountAbdAtto }],
     attoAlphAmount: DUST_AMOUNT,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 export async function liquidate(
@@ -272,37 +287,41 @@ export async function liquidate(
   signer: SignerProvider,
   targetOwner: string,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
+  requireSigner(signer);
+  if (network === "mainnet") {
     throw new Error(
-      'Mainnet liquidate is pending — no observed sample tx yet in our catalog. ' +
-        'Liquidations are typically bot-driven; once one lands with a clear ' +
-        'token-flow signature, the cataloguer will surface it.',
-    )
+      "Mainnet liquidate is pending — no observed sample tx yet in our catalog. " +
+        "Liquidations are typically bot-driven; once one lands with a clear " +
+        "token-flow signature, the cataloguer will surface it.",
+    );
   }
-  const bo = BorrowerOperations.at(requireAddress(network, 'borrowerOperations'))
+  const bo = BorrowerOperations.at(
+    requireAddress(network, "borrowerOperations"),
+  );
   const res = await bo.transact.liquidate({
     signer,
     args: { owner: targetOwner },
     attoAlphAmount: DUST_AMOUNT,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 // -------- Auction pools ------------------------------------------------------
 
-export type PoolTier = 500 | 1000 | 1500 | 2000
+export type PoolTier = 500 | 1000 | 1500 | 2000;
 
-export function poolRoleForTier(tier: PoolTier): Parameters<typeof resolveAddress>[1] {
+export function poolRoleForTier(
+  tier: PoolTier,
+): Parameters<typeof resolveAddress>[1] {
   switch (tier) {
     case 500:
-      return 'auctionPool5'
+      return "auctionPool5";
     case 1000:
-      return 'auctionPool10'
+      return "auctionPool10";
     case 1500:
-      return 'auctionPool15'
+      return "auctionPool15";
     case 2000:
-      return 'auctionPool20'
+      return "auctionPool20";
   }
 }
 
@@ -312,20 +331,24 @@ export async function depositToPool(
   tier: PoolTier,
   amountAbdAtto: bigint,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
-    return submitPrepared(network, signer, mnBuildPoolDeposit(tier, amountAbdAtto))
+  requireSigner(signer);
+  if (network === "mainnet") {
+    return submitPrepared(
+      network,
+      signer,
+      mnBuildPoolDeposit(tier, amountAbdAtto),
+    );
   }
-  const pool = AuctionPool.at(requireAddress(network, poolRoleForTier(tier)))
-  const abdId = tokenIdFromAddress(requireAddress(network, 'abdToken'))
-  if (!abdId) throw new Error('ABD token id could not be derived')
+  const pool = AuctionPool.at(requireAddress(network, poolRoleForTier(tier)));
+  const abdId = tokenIdFromAddress(requireAddress(network, "abdToken"));
+  if (!abdId) throw new Error("ABD token id could not be derived");
   const res = await pool.transact.deposit({
     signer,
     args: { amount: amountAbdAtto },
     tokens: [{ id: abdId, amount: amountAbdAtto }],
     attoAlphAmount: ONE_ALPH,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 export async function withdrawFromPool(
@@ -334,22 +357,22 @@ export async function withdrawFromPool(
   tier: PoolTier,
   amountAbdAtto: bigint,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
-    const account = await signer.getSelectedAccount()
+  requireSigner(signer);
+  if (network === "mainnet") {
+    const account = await signer.getSelectedAccount();
     return submitPrepared(
       network,
       signer,
       mnBuildPoolWithdraw(tier, amountAbdAtto, account.address),
-    )
+    );
   }
-  const pool = AuctionPool.at(requireAddress(network, poolRoleForTier(tier)))
+  const pool = AuctionPool.at(requireAddress(network, poolRoleForTier(tier)));
   const res = await pool.transact.withdraw({
     signer,
     args: { amount: amountAbdAtto },
     attoAlphAmount: DUST_AMOUNT,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 export async function claimFromPool(
@@ -358,21 +381,21 @@ export async function claimFromPool(
   tier: PoolTier,
   claimableAlphAtto: bigint = 1n,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
-    const account = await signer.getSelectedAccount()
+  requireSigner(signer);
+  if (network === "mainnet") {
+    const account = await signer.getSelectedAccount();
     return submitPrepared(
       network,
       signer,
       mnBuildPoolClaim(tier, account.address, claimableAlphAtto),
-    )
+    );
   }
-  const pool = AuctionPool.at(requireAddress(network, poolRoleForTier(tier)))
+  const pool = AuctionPool.at(requireAddress(network, poolRoleForTier(tier)));
   const res = await pool.transact.claim({
     signer,
     attoAlphAmount: DUST_AMOUNT,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 // -------- Staking ------------------------------------------------------------
@@ -382,20 +405,20 @@ export async function stakeAbx(
   signer: SignerProvider,
   amountAtto: bigint,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
-    return submitPrepared(network, signer, mnBuildStake(amountAtto))
+  requireSigner(signer);
+  if (network === "mainnet") {
+    return submitPrepared(network, signer, mnBuildStake(amountAtto));
   }
-  const sm = StakeManager.at(requireAddress(network, 'stakeManager'))
-  const abxId = tokenIdFromAddress(requireAddress(network, 'abxToken'))
-  if (!abxId) throw new Error('ABX token id could not be derived')
+  const sm = StakeManager.at(requireAddress(network, "stakeManager"));
+  const abxId = tokenIdFromAddress(requireAddress(network, "abxToken"));
+  if (!abxId) throw new Error("ABX token id could not be derived");
   const res = await sm.transact.stake({
     signer,
     args: { amount: amountAtto },
     tokens: [{ id: abxId, amount: amountAtto }],
     attoAlphAmount: ONE_ALPH,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 export async function requestUnstake(
@@ -403,51 +426,59 @@ export async function requestUnstake(
   signer: SignerProvider,
   amountAtto: bigint,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
-    return submitPrepared(network, signer, mnBuildRequestUnstake(amountAtto))
+  requireSigner(signer);
+  if (network === "mainnet") {
+    return submitPrepared(network, signer, mnBuildRequestUnstake(amountAtto));
   }
-  const sm = StakeManager.at(requireAddress(network, 'stakeManager'))
+  const sm = StakeManager.at(requireAddress(network, "stakeManager"));
   const res = await sm.transact.requestUnstake({
     signer,
     args: { amount: amountAtto },
     attoAlphAmount: DUST_AMOUNT,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 export async function claimUnstake(
   network: Network,
   signer: SignerProvider,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
-    const account = await signer.getSelectedAccount()
-    return submitPrepared(network, signer, mnBuildClaimUnstake(account.address))
+  requireSigner(signer);
+  if (network === "mainnet") {
+    const account = await signer.getSelectedAccount();
+    return submitPrepared(
+      network,
+      signer,
+      mnBuildClaimUnstake(account.address),
+    );
   }
-  const sm = StakeManager.at(requireAddress(network, 'stakeManager'))
+  const sm = StakeManager.at(requireAddress(network, "stakeManager"));
   const res = await sm.transact.claimUnstake({
     signer,
     attoAlphAmount: DUST_AMOUNT,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 export async function claimStakingRewards(
   network: Network,
   signer: SignerProvider,
 ): Promise<TxResult> {
-  requireSigner(signer)
-  if (network === 'mainnet') {
-    const account = await signer.getSelectedAccount()
-    return submitPrepared(network, signer, mnBuildClaimRewards(account.address))
+  requireSigner(signer);
+  if (network === "mainnet") {
+    const account = await signer.getSelectedAccount();
+    return submitPrepared(
+      network,
+      signer,
+      mnBuildClaimRewards(account.address),
+    );
   }
-  const sm = StakeManager.at(requireAddress(network, 'stakeManager'))
+  const sm = StakeManager.at(requireAddress(network, "stakeManager"));
   const res = await sm.transact.claim({
     signer,
     attoAlphAmount: DUST_AMOUNT,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
 
 // -------- Vesting ------------------------------------------------------------
@@ -457,12 +488,11 @@ export async function claimVesting(
   signer: SignerProvider,
   beneficiary: string,
 ): Promise<TxResult> {
-  const v = Vesting.at(requireAddress(network, 'vesting'))
+  const v = Vesting.at(requireAddress(network, "vesting"));
   const res = await v.transact.claim({
     signer,
     args: { beneficiary },
     attoAlphAmount: DUST_AMOUNT,
-  })
-  return { txId: res.txId }
+  });
+  return { txId: res.txId };
 }
-

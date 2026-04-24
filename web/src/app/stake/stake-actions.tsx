@@ -1,66 +1,66 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useWallet } from '@alephium/web3-react'
-import { NETWORK } from '@/lib/env'
+import { useState } from "react";
+import { useWallet } from "@alephium/web3-react";
+import { NETWORK } from "@/lib/env";
 import {
   canTransactOp,
   claimStakingRewards,
   claimUnstake,
   requestUnstake,
   stakeAbx,
-} from '@/lib/tx'
-import { useStakePosition, useWalletBalances } from '@/lib/hooks'
-import { useTxRunner } from '@/lib/hooks/use-tx-runner'
-import { formatAmount, numberToBigint } from '@/lib/format'
-import { TxStatusLine } from '@/components/tx-status-line'
-import { cn } from '@/lib/utils'
+} from "@/lib/tx";
+import { useStakePosition, useWalletBalances } from "@/lib/hooks";
+import { useTxRunner } from "@/lib/hooks/use-tx-runner";
+import { formatAmount, numberToBigint } from "@/lib/format";
+import { TxStatusLine } from "@/components/tx-status-line";
+import { cn } from "@/lib/utils";
 
-type StakeMode = 'stake' | 'unstake'
+type StakeMode = "stake" | "unstake";
 
 export function StakeActions() {
-  const wallet = useWallet()
-  const { data: stake } = useStakePosition()
-  const { data: balances } = useWalletBalances()
-  const [mode, setMode] = useState<StakeMode>('stake')
-  const [amount, setAmount] = useState('')
-  const { state: submit, runTx } = useTxRunner()
+  const wallet = useWallet();
+  const { data: stake } = useStakePosition();
+  const { data: balances } = useWalletBalances();
+  const [mode, setMode] = useState<StakeMode>("stake");
+  const [amount, setAmount] = useState("");
+  const { state: submit, runTx } = useTxRunner();
 
-  const writesAllowed = canTransactOp(NETWORK, 'stake')
-  const isConnected = wallet.connectionStatus === 'connected'
+  const writesAllowed = canTransactOp(NETWORK, "stake");
+  const isConnected = wallet.connectionStatus === "connected";
   const isBusy =
-    submit.kind === 'awaitingSign' ||
-    submit.kind === 'submitted' ||
-    submit.kind === 'confirming'
+    submit.kind === "awaitingSign" ||
+    submit.kind === "submitted" ||
+    submit.kind === "confirming";
 
   async function runPrimary(e: React.FormEvent) {
-    e.preventDefault()
-    if (!isConnected || !wallet.signer) return
-    const raw = Number(amount) || 0
-    if (raw <= 0) return
-    const atto = numberToBigint(raw, 9)
-    if (atto <= 0n) return
+    e.preventDefault();
+    if (!isConnected || !wallet.signer) return;
+    const raw = Number(amount) || 0;
+    if (raw <= 0) return;
+    const atto = numberToBigint(raw, 9);
+    if (atto <= 0n) return;
     await runTx(() =>
-      mode === 'stake'
+      mode === "stake"
         ? stakeAbx(NETWORK, wallet.signer!, atto)
         : requestUnstake(NETWORK, wallet.signer!, atto),
-    )
+    );
   }
 
-  async function runClaim(label: 'rewards' | 'unstake') {
-    if (!isConnected || !wallet.signer) return
+  async function runClaim(label: "rewards" | "unstake") {
+    if (!isConnected || !wallet.signer) return;
     await runTx(() =>
-      label === 'rewards'
+      label === "rewards"
         ? claimStakingRewards(NETWORK, wallet.signer!)
         : claimUnstake(NETWORK, wallet.signer!),
-    )
+    );
   }
 
   const cooldownReady =
     stake?.pendingUnstakeAtto &&
     stake.pendingUnstakeAtto > 0n &&
     stake.unstakeReadyAtMs > 0n &&
-    Date.now() >= Number(stake.unstakeReadyAtMs)
+    Date.now() >= Number(stake.unstakeReadyAtMs);
 
   return (
     <section className="space-y-4">
@@ -82,12 +82,14 @@ export function StakeActions() {
           value={
             stake && stake.pendingUnstakeAtto > 0n
               ? `${formatAmount(stake.pendingUnstakeAtto, 9, 2)} ABX`
-              : '—'
+              : "—"
           }
           note={
-            stake && stake.pendingUnstakeAtto > 0n && stake.unstakeReadyAtMs > 0n
+            stake &&
+            stake.pendingUnstakeAtto > 0n &&
+            stake.unstakeReadyAtMs > 0n
               ? cooldownReady
-                ? 'cooldown elapsed — claim ready'
+                ? "cooldown elapsed — claim ready"
                 : `ready ${new Date(Number(stake.unstakeReadyAtMs)).toLocaleString()}`
               : undefined
           }
@@ -101,24 +103,24 @@ export function StakeActions() {
         <div className="flex gap-1">
           <button
             type="button"
-            onClick={() => setMode('stake')}
+            onClick={() => setMode("stake")}
             className={cn(
-              'rounded-md border px-3 py-2 text-sm',
-              mode === 'stake'
-                ? 'border-primary bg-primary text-primary-foreground'
-                : 'border-border text-muted-foreground',
+              "rounded-md border px-3 py-2 text-sm",
+              mode === "stake"
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-border text-muted-foreground",
             )}
           >
             Stake
           </button>
           <button
             type="button"
-            onClick={() => setMode('unstake')}
+            onClick={() => setMode("unstake")}
             className={cn(
-              'rounded-md border px-3 py-2 text-sm',
-              mode === 'unstake'
-                ? 'border-primary bg-primary text-primary-foreground'
-                : 'border-border text-muted-foreground',
+              "rounded-md border px-3 py-2 text-sm",
+              mode === "unstake"
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-border text-muted-foreground",
             )}
           >
             Request unstake
@@ -131,7 +133,7 @@ export function StakeActions() {
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder={
-            mode === 'stake'
+            mode === "stake"
               ? `ABX (balance ${formatAmount(balances?.abxAtto ?? null, 9, 2)})`
               : `ABX (staked ${formatAmount(stake?.stakedAtto ?? null, 9, 2)})`
           }
@@ -142,17 +144,13 @@ export function StakeActions() {
             type="submit"
             disabled={!isConnected || isBusy}
             className={cn(
-              'rounded-md px-4 py-2 text-sm font-semibold',
+              "rounded-md px-4 py-2 text-sm font-semibold",
               isConnected && !isBusy
-                ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                : 'cursor-not-allowed bg-muted text-muted-foreground',
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "cursor-not-allowed bg-muted text-muted-foreground",
             )}
           >
-            {isBusy
-              ? 'Signing…'
-              : mode === 'stake'
-              ? 'Stake'
-              : 'Request'}
+            {isBusy ? "Signing…" : mode === "stake" ? "Stake" : "Request"}
           </button>
         ) : (
           <button
@@ -170,19 +168,18 @@ export function StakeActions() {
           {(stake?.pendingRewardsAtto ?? 0n) > 0n && (
             <button
               type="button"
-              onClick={() => runClaim('rewards')}
+              onClick={() => runClaim("rewards")}
               disabled={isBusy}
               className="rounded-md border border-primary/40 bg-primary/10 px-3 py-2 text-sm text-primary hover:bg-primary/15 disabled:opacity-60"
             >
-              Claim{' '}
-              {formatAmount(stake?.pendingRewardsAtto ?? 0n, 18, 4)} ALPH
+              Claim {formatAmount(stake?.pendingRewardsAtto ?? 0n, 18, 4)} ALPH
               rewards
             </button>
           )}
           {cooldownReady && (
             <button
               type="button"
-              onClick={() => runClaim('unstake')}
+              onClick={() => runClaim("unstake")}
               disabled={isBusy}
               className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
             >
@@ -194,7 +191,7 @@ export function StakeActions() {
 
       <TxStatusLine state={submit} />
     </section>
-  )
+  );
 }
 
 function Stat({
@@ -202,9 +199,9 @@ function Stat({
   value,
   note,
 }: {
-  label: string
-  value: string
-  note?: string
+  label: string;
+  value: string;
+  note?: string;
 }) {
   return (
     <div className="card p-4">
@@ -214,5 +211,5 @@ function Stat({
       <p className="mt-1 font-mono text-lg">{value}</p>
       {note && <p className="text-xs text-muted-foreground">{note}</p>}
     </div>
-  )
+  );
 }

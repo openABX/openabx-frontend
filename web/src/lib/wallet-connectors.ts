@@ -11,13 +11,13 @@
 import {
   createDesktopWalletConnector,
   createWalletConnectConnector,
-} from '@alephium/web3-react'
+} from "@alephium/web3-react";
 
-const OFFICIAL_REOWN_RELAY = 'wss://relay.walletconnect.com'
+const OFFICIAL_REOWN_RELAY = "wss://relay.walletconnect.com";
 
-const signClientOptions = { relayUrl: OFFICIAL_REOWN_RELAY }
+const signClientOptions = { relayUrl: OFFICIAL_REOWN_RELAY };
 
 export const fixedWalletConnectors = {
   walletConnect: createWalletConnectConnector(signClientOptions),
   desktopWallet: createDesktopWalletConnector(signClientOptions),
-}
+};

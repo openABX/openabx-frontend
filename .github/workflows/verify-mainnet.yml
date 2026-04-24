@@ -10,7 +10,7 @@ name: Verify mainnet addresses
 on:
   schedule:
     # 09:00 UTC daily. Avoid midnight to sidestep batch-scheduler contention.
-    - cron: '0 9 * * *'
+    - cron: "0 9 * * *"
   workflow_dispatch:
 
 permissions:

@@ -85,24 +85,24 @@ StakeManager, AuctionManager, LoanManager, and both tokens. Sample counts are
 number of distinct transactions whose per-wallet token delta uniquely
 identifies the operation.
 
-| Contract | methodIndex | Operation | Confidence | Samples |
-|---|---|---|---|---|
-| **BorrowerOperations** (`28QGP95r…`) | 11 | openLoan | high | 221 |
-| BorrowerOperations | 12 | openLoan (variant — likely tier-specific) | high | 46 |
-| BorrowerOperations | 10 | repay | medium | 421 |
-| BorrowerOperations | 8 | addCollateral (primary) | medium | 455 |
-| BorrowerOperations | 7 | addCollateral (rare — likely borrowMore) | medium | 55 |
-| BorrowerOperations | 19 | closeLoan | medium | 72 |
-| BorrowerOperations | 20 | withdrawCollateral | medium | 412 |
-| **StakeManager** (`28Mhs2…`) | 30 | stake | **high** | 721 (+ user tx `9838896456fa…`) |
-| StakeManager | 31 | requestUnstake | low | 26 |
-| StakeManager | 32 | claimUnstake | high | 99 |
-| StakeManager | 33 | claimRewards | medium | 1,726 |
-| **AuctionManager** (`29YL53te…`) | 36 | poolDeposit | high | 255 |
-| AuctionManager | 41 | poolWithdraw | medium | 386 |
-| AuctionManager | 40 | poolClaim | high | 95 |
-| AuctionManager | 42 | poolClaim (variant) | high | 787 |
-| AuctionManager | 43 | (unclassified — 31 samples) | low | 31 |
+| Contract                             | methodIndex | Operation                                 | Confidence | Samples                         |
+| ------------------------------------ | ----------- | ----------------------------------------- | ---------- | ------------------------------- |
+| **BorrowerOperations** (`28QGP95r…`) | 11          | openLoan                                  | high       | 221                             |
+| BorrowerOperations                   | 12          | openLoan (variant — likely tier-specific) | high       | 46                              |
+| BorrowerOperations                   | 10          | repay                                     | medium     | 421                             |
+| BorrowerOperations                   | 8           | addCollateral (primary)                   | medium     | 455                             |
+| BorrowerOperations                   | 7           | addCollateral (rare — likely borrowMore)  | medium     | 55                              |
+| BorrowerOperations                   | 19          | closeLoan                                 | medium     | 72                              |
+| BorrowerOperations                   | 20          | withdrawCollateral                        | medium     | 412                             |
+| **StakeManager** (`28Mhs2…`)         | 30          | stake                                     | **high**   | 721 (+ user tx `9838896456fa…`) |
+| StakeManager                         | 31          | requestUnstake                            | low        | 26                              |
+| StakeManager                         | 32          | claimUnstake                              | high       | 99                              |
+| StakeManager                         | 33          | claimRewards                              | medium     | 1,726                           |
+| **AuctionManager** (`29YL53te…`)     | 36          | poolDeposit                               | high       | 255                             |
+| AuctionManager                       | 41          | poolWithdraw                              | medium     | 386                             |
+| AuctionManager                       | 40          | poolClaim                                 | high       | 95                              |
+| AuctionManager                       | 42          | poolClaim (variant)                       | high       | 787                             |
+| AuctionManager                       | 43          | (unclassified — 31 samples)               | low        | 31                              |
 
 Additional surfaced contract during the scan —
 `vxM9L97vxybEo3FHU9PSzwCVnBUoSispm8tpq22Twftj` — received **4,680 internal
@@ -126,9 +126,9 @@ called from other contracts, not a user-facing entry point. Role probably
 - AuctionManager mi=43 — 1 sample, unclassified.
 - **BorrowerOperations mi=3, mi=9** — view/query methods used to pre-compute
   values for subsequent writes (mi=7, mi=20). Decoded 2026-04-24:
-  * mi=3: takes 1 U256, returns 1 U256 (computed collateral-equivalent?).
-  * mi=9: takes 1 U256 + 1 Address, returns 1 U256 (withdrawal preview?).
-  These are not standalone write operations — they pair with mi=7/20.
+  - mi=3: takes 1 U256, returns 1 U256 (computed collateral-equivalent?).
+  - mi=9: takes 1 U256 + 1 Address, returns 1 U256 (withdrawal preview?).
+    These are not standalone write operations — they pair with mi=7/20.
 - **`redeem`** — no observation yet. Unlike repay/close, redeem may go
   through a dedicated method on LoanManager (not via BorrowerOperations).
   The UI surfaces a clear error on click until we capture a sample.

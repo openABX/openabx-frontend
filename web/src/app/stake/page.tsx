@@ -1,6 +1,6 @@
-import { PageStatusBanner } from '@/components/page-status-banner'
-import { StakeActions } from './stake-actions'
-import { StakeLive } from './stake-live'
+import { PageStatusBanner } from "@/components/page-status-banner";
+import { StakeActions } from "./stake-actions";
+import { StakeLive } from "./stake-live";
 
 export default function StakePage() {
   return (
@@ -10,9 +10,9 @@ export default function StakePage() {
           Stake ABX, earn ALPH
         </h1>
         <p className="max-w-2xl text-base text-muted-foreground">
-          Protocol fees — minting, borrowing, liquidation, redemption —
-          split dynamically between auction-pool depositors and ABX stakers.
-          Rewards are paid in ALPH; unstaking triggers a 14-day cooldown.
+          Protocol fees — minting, borrowing, liquidation, redemption — split
+          dynamically between auction-pool depositors and ABX stakers. Rewards
+          are paid in ALPH; unstaking triggers a 14-day cooldown.
         </p>
       </header>
 
@@ -20,5 +20,5 @@ export default function StakePage() {
       <StakeLive />
       <StakeActions />
     </div>
-  )
+  );
 }

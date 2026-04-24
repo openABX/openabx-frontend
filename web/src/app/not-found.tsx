@@ -1,9 +1,9 @@
-import Link from 'next/link'
-import { AlertTriangle, ArrowRight } from 'lucide-react'
+import Link from "next/link";
+import { AlertTriangle, ArrowRight } from "lucide-react";
 
 export const metadata = {
-  title: 'Not found',
-}
+  title: "Not found",
+};
 
 export default function NotFound() {
   return (
@@ -18,21 +18,29 @@ export default function NotFound() {
           That route isn&rsquo;t part of OpenABX.
         </h1>
         <p className="max-w-2xl text-base text-muted-foreground">
-          The page you asked for doesn&rsquo;t exist. You probably want one
-          of the seven protocol pages below, or the dashboard.
+          The page you asked for doesn&rsquo;t exist. You probably want one of
+          the seven protocol pages below, or the dashboard.
         </p>
       </div>
 
       <div className="grid w-full gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {[
-          { href: '/', label: 'Dashboard', desc: 'Protocol-wide live state' },
-          { href: '/borrow', label: 'Borrow', desc: 'Mint ABD against ALPH' },
-          { href: '/auction', label: 'Auction pools', desc: 'Earn on liquidations' },
-          { href: '/stake', label: 'Stake', desc: 'Protocol fee share' },
-          { href: '/redeem', label: 'Redeem', desc: 'Burn ABD for ALPH' },
-          { href: '/liquidate', label: 'Liquidate', desc: 'Keeper watchlist' },
-          { href: '/vesting', label: 'Vesting', desc: 'Unlock schedule' },
-          { href: '/dev/tokens', label: 'Dev · tokens', desc: 'Raw on-chain state' },
+          { href: "/", label: "Dashboard", desc: "Protocol-wide live state" },
+          { href: "/borrow", label: "Borrow", desc: "Mint ABD against ALPH" },
+          {
+            href: "/auction",
+            label: "Auction pools",
+            desc: "Earn on liquidations",
+          },
+          { href: "/stake", label: "Stake", desc: "Protocol fee share" },
+          { href: "/redeem", label: "Redeem", desc: "Burn ABD for ALPH" },
+          { href: "/liquidate", label: "Liquidate", desc: "Keeper watchlist" },
+          { href: "/vesting", label: "Vesting", desc: "Unlock schedule" },
+          {
+            href: "/dev/tokens",
+            label: "Dev · tokens",
+            desc: "Raw on-chain state",
+          },
         ].map((item) => (
           <Link
             key={item.href}
@@ -48,5 +56,5 @@ export default function NotFound() {
         ))}
       </div>
     </div>
-  )
+  );
 }

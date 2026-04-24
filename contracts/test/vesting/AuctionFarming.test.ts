@@ -1,7 +1,12 @@
-import { beforeAll, describe, expect, it } from 'vitest'
-import { addressFromContractId, binToHex, DUST_AMOUNT, ONE_ALPH } from '@alephium/web3'
-import { randomBytes } from 'node:crypto'
-import { AuctionFarming, type AuctionFarmingTypes } from '../../artifacts/ts'
+import { beforeAll, describe, expect, it } from "vitest";
+import {
+  addressFromContractId,
+  binToHex,
+  DUST_AMOUNT,
+  ONE_ALPH,
+} from "@alephium/web3";
+import { randomBytes } from "node:crypto";
+import { AuctionFarming, type AuctionFarmingTypes } from "../../artifacts/ts";
 import {
   aliceAddress,
   bobAddress,
@@ -9,9 +14,9 @@ import {
   inputFrom,
   setupTestProvider,
   U256_MAX,
-} from '../helpers'
+} from "../helpers";
 
-const TWELVE_MONTHS_MS = 31_536_000_000n
+const TWELVE_MONTHS_MS = 31_536_000_000n;
 
 function baseFields(
   overrides: Partial<AuctionFarmingTypes.Fields> = {},
@@ -25,38 +30,42 @@ function baseFields(
     paused: false,
     vestingDurationMs: TWELVE_MONTHS_MS,
     ...overrides,
-  }
+  };
 }
 
-describe('AuctionFarming', () => {
-  beforeAll(setupTestProvider)
+describe("AuctionFarming", () => {
+  beforeAll(setupTestProvider);
 
-  it('exposes constructor state', async () => {
-    const fields = baseFields()
-    const adm = await AuctionFarming.tests.getAdmin({ initialFields: fields })
-    expect(adm.returns).toBe(aliceAddress)
-    const paused = await AuctionFarming.tests.isPaused({ initialFields: fields })
-    expect(paused.returns).toBe(false)
-    const duration = await AuctionFarming.tests.getVestingDurationMs({ initialFields: fields })
-    expect(duration.returns).toBe(TWELVE_MONTHS_MS)
-  })
+  it("exposes constructor state", async () => {
+    const fields = baseFields();
+    const adm = await AuctionFarming.tests.getAdmin({ initialFields: fields });
+    expect(adm.returns).toBe(aliceAddress);
+    const paused = await AuctionFarming.tests.isPaused({
+      initialFields: fields,
+    });
+    expect(paused.returns).toBe(false);
+    const duration = await AuctionFarming.tests.getVestingDurationMs({
+      initialFields: fields,
+    });
+    expect(duration.returns).toBe(TWELVE_MONTHS_MS);
+  });
 
-  it('admin can pause', async () => {
-    const fake = fungibleTestContract()
+  it("admin can pause", async () => {
+    const fake = fungibleTestContract();
     const result = await AuctionFarming.tests.setPaused({
       initialFields: baseFields(),
       contractAddress: fake.contractAddress,
       inputAssets: [inputFrom(aliceAddress, DUST_AMOUNT)],
       args: { newPaused: true },
-    })
+    });
     const state = result.contracts.find(
       (c) => c.address === fake.contractAddress,
-    ) as unknown as AuctionFarmingTypes.State
-    expect(state.fields.paused).toBe(true)
-  })
+    ) as unknown as AuctionFarmingTypes.State;
+    expect(state.fields.paused).toBe(true);
+  });
 
-  it('non-admin pause reverts', async () => {
-    const fake = fungibleTestContract()
+  it("non-admin pause reverts", async () => {
+    const fake = fungibleTestContract();
     await expect(
       AuctionFarming.tests.setPaused({
         initialFields: baseFields(),
@@ -64,11 +73,11 @@ describe('AuctionFarming', () => {
         inputAssets: [inputFrom(bobAddress, DUST_AMOUNT)],
         args: { newPaused: true },
       }),
-    ).rejects.toThrow(/AssertionFailed|1000/)
-  })
+    ).rejects.toThrow(/AssertionFailed|1000/);
+  });
 
-  it('setVestingDurationMs rejects 0', async () => {
-    const fake = fungibleTestContract()
+  it("setVestingDurationMs rejects 0", async () => {
+    const fake = fungibleTestContract();
     await expect(
       AuctionFarming.tests.setVestingDurationMs({
         initialFields: baseFields(),
@@ -76,12 +85,12 @@ describe('AuctionFarming', () => {
         inputAssets: [inputFrom(aliceAddress, DUST_AMOUNT)],
         args: { newMs: 0n },
       }),
-    ).rejects.toThrow(/AssertionFailed|1004/)
-  })
+    ).rejects.toThrow(/AssertionFailed|1004/);
+  });
 
-  it('creditDepositor by non-notifier reverts (1001)', async () => {
-    const fake = fungibleTestContract()
-    const wrongCaller = addressFromContractId(binToHex(randomBytes(32)))
+  it("creditDepositor by non-notifier reverts (1001)", async () => {
+    const fake = fungibleTestContract();
+    const wrongCaller = addressFromContractId(binToHex(randomBytes(32)));
     await expect(
       AuctionFarming.tests.creditDepositor({
         initialFields: baseFields(),
@@ -93,13 +102,13 @@ describe('AuctionFarming', () => {
         },
         args: { beneficiary: bobAddress, abxAmount: 100n },
       }),
-    ).rejects.toThrow(/AssertionFailed|1001/)
-  })
+    ).rejects.toThrow(/AssertionFailed|1001/);
+  });
 
-  it('creditDepositor when paused reverts (1002)', async () => {
-    const fake = fungibleTestContract()
-    const notifierCid = binToHex(randomBytes(32))
-    const notifierAddr = addressFromContractId(notifierCid)
+  it("creditDepositor when paused reverts (1002)", async () => {
+    const fake = fungibleTestContract();
+    const notifierCid = binToHex(randomBytes(32));
+    const notifierAddr = addressFromContractId(notifierCid);
     await expect(
       AuctionFarming.tests.creditDepositor({
         initialFields: baseFields({ paused: true, notifier: notifierCid }),
@@ -111,6 +120,6 @@ describe('AuctionFarming', () => {
         },
         args: { beneficiary: bobAddress, abxAmount: 100n },
       }),
-    ).rejects.toThrow(/AssertionFailed|1002/)
-  })
-})
+    ).rejects.toThrow(/AssertionFailed|1002/);
+  });
+});
