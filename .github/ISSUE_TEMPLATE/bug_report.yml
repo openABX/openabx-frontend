@@ -1,0 +1,168 @@
+name: Bug report
+description: Something on openabx.com isn't working as expected. Please do NOT use this form for security vulnerabilities — use the "Security disclosure" link instead.
+title: "bug: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Before you file
+
+        🚨 **NEVER paste your private key, seed phrase, mnemonic, or wallet password into this form.**
+        OpenABX will never ask for them, and no one reading this issue can help you if you share them.
+
+        🔒 **Found a security vulnerability?** Do NOT file it here — this form is public.
+        Use **[Security disclosure](https://github.com/openABX/openABX-frontend/security/advisories/new)** so we can coordinate a fix before disclosure.
+
+        💸 **Lost funds via a tx we sent?** Open the issue anyway, but also mention it in the "Severity" field so we can page someone.
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How badly is this blocking you?
+      options:
+        - "⚠️  Funds at risk — I lost ALPH, ABD, or ABX because of this"
+        - "🔴 Blocker — I can't use a core flow (borrow / stake / claim / redeem)"
+        - "🟠 Broken feature — a page or action doesn't work, but I have workarounds"
+        - "🟡 Wrong number — a displayed value looks incorrect"
+        - "🟢 Cosmetic — layout, copy, dark mode, mobile rendering, etc."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: network
+    attributes:
+      label: Network
+      description: Which network were you on when the bug happened? (Visible in the header badge.)
+      options:
+        - mainnet
+        - testnet
+        - devnet
+    validations:
+      required: true
+
+  - type: dropdown
+    id: page
+    attributes:
+      label: Page / flow
+      description: Where in the app did it happen?
+      options:
+        - "/ (landing)"
+        - "/dashboard"
+        - "/borrow"
+        - "/redeem"
+        - "/stake"
+        - "/auction"
+        - "/liquidate"
+        - "/vesting"
+        - "/dev/tokens"
+        - Wallet connection / disconnection
+        - Other (describe below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened?
+      description: One sentence — what went wrong, what did you expect.
+      placeholder: "Clicked 'Claim 12 ALPH' on /stake; wallet received only 5 ALPH."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Numbered list so we can follow exactly what you did. Include amounts and any values you typed.
+      placeholder: |
+        1. Opened https://openabx.com/stake on mainnet.
+        2. Connected Alephium wallet (address 1AB…).
+        3. Saw "Pending rewards: 12.0000 ALPH".
+        4. Clicked "Claim 12.0000 ALPH rewards".
+        5. Signed the tx in my wallet.
+        6. Only 5 ALPH arrived in my wallet.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_vs_actual
+    attributes:
+      label: Expected vs. actual result
+      description: What should have happened, and what actually happened? Include numbers where relevant.
+      placeholder: |
+        Expected: to receive 12 ALPH in my wallet.
+        Actual: received 5 ALPH. Explorer shows the tx paid out exactly 5.386 ALPH.
+    validations:
+      required: true
+
+  - type: input
+    id: tx_hash
+    attributes:
+      label: Transaction hash (if any)
+      description: If a wallet tx was submitted, paste its hash. Helps us match logs to on-chain state.
+      placeholder: "bc74392fc4f4bdb9ea1de338d1572465533b1150577ae06f49a7334e9ba43a6c"
+
+  - type: input
+    id: wallet_address
+    attributes:
+      label: Wallet address (optional)
+      description: Your address is already public on-chain; sharing it only helps us reproduce. NEVER include your seed phrase or private key.
+      placeholder: "1AHioTejekkY8RtURVWaxqydn9kJuYUR1AcUVDFrkcruN"
+
+  - type: input
+    id: browser_os
+    attributes:
+      label: Browser, version, and OS
+      description: Check in chrome://version, about:support (Firefox), or System Settings.
+      placeholder: "Chrome 137.0 on macOS 15.2"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: wallet
+    attributes:
+      label: Wallet
+      description: Which wallet are you connecting with?
+      options:
+        - Alephium extension wallet (desktop)
+        - Alephium mobile wallet (via WalletConnect)
+        - Alephium desktop wallet
+        - Other (describe in "What happened")
+        - Not connected — bug doesn't require wallet
+    validations:
+      required: true
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Browser console output
+      description: |
+        Open DevTools → Console. Copy any red errors or warnings you see AROUND the time of the bug.
+        Right-click → "Save as…" for long output and attach as a file instead of pasting.
+      render: shell
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or screen recording
+      description: Drag images or video straight into this box — GitHub uploads them. If the bug is a visual glitch, a screenshot is usually more useful than words.
+
+  - type: checkboxes
+    id: acknowledgements
+    attributes:
+      label: Acknowledgements
+      options:
+        - label: I have NOT pasted any private key, seed phrase, mnemonic, or wallet password anywhere in this issue.
+          required: true
+        - label: I understand this is a public issue visible to anyone, and have removed anything I don't want shared.
+          required: true
+        - label: If this is a security vulnerability, I will close this issue and re-report via [Security Advisory](https://github.com/openABX/openABX-frontend/security/advisories/new) instead.
+          required: true
+        - label: I've read the [pre-audit status](https://github.com/openABX/openABX-frontend#pre-audit-status) and understand OpenABX's clean-room contracts are testnet-only; mainnet bugs are in the UI layer talking to AlphBanX's live contracts.
+          required: true

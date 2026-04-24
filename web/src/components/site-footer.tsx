@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BugReportLink } from "./bug-report-link";
 
 export function SiteFooter() {
   return (
@@ -56,11 +57,6 @@ export function SiteFooter() {
               external: true,
             },
             {
-              href: "https://github.com/openABX/openABX-frontend/issues/new",
-              label: "Report a bug",
-              external: true,
-            },
-            {
               href: "https://github.com/openABX/openABX-frontend/security/advisories/new",
               label: "Security disclosure",
               external: true,
@@ -71,6 +67,7 @@ export function SiteFooter() {
               external: true,
             },
           ]}
+          extra={<BugReportLink />}
         />
       </div>
 
@@ -101,9 +98,11 @@ export function SiteFooter() {
 function FooterCol({
   title,
   links,
+  extra,
 }: {
   title: string;
   links: Array<{ href: string; label: string; external?: boolean }>;
+  extra?: React.ReactNode;
 }) {
   return (
     <div>
@@ -123,6 +122,7 @@ function FooterCol({
             </Link>
           </li>
         ))}
+        {extra && <li>{extra}</li>}
       </ul>
     </div>
   );
