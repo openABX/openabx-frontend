@@ -1,0 +1,74 @@
+name: Deploy web to GitHub Pages
+
+# Auto-deploys web/ to GitHub Pages at openabx.com on every push to main.
+# Separate from ci.yml — Pages deploy runs only after a merge into main,
+# whereas ci.yml runs on PRs. A run here produces exactly one live version
+# of the site; concurrency is forced to 1 so a rapid second push waits for
+# the first to finish rather than racing it.
+#
+# Prereqs (one-time, done in repo settings):
+#   Settings → Pages → Source: GitHub Actions.
+#   Settings → Pages → Custom domain: openabx.com (enables DNS verification).
+#   DNS for openabx.com:
+#     - apex (@):   four A records pointing at GitHub's Pages IPs
+#                   185.199.108.153, 185.199.109.153,
+#                   185.199.110.153, 185.199.111.153
+#     - www:        CNAME to openabx.github.io.  (optional redirect)
+#   Settings → Pages → Enforce HTTPS: on (after cert issues, ~15 min).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: Build static export
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # The live production site reads AlphBanX's mainnet contracts.
+      - name: Next.js static export
+        env:
+          NEXT_PUBLIC_NETWORK: mainnet
+          NEXT_PUBLIC_SITE_URL: https://openabx.com
+          # Custom-apex hosting: no path prefix.
+          NEXT_PUBLIC_BASE_PATH: ''
+          NEXT_PUBLIC_ENABLE_DEV_ROUTES: 'false'
+          # Optional — wallet connect uses this; empty falls back to the
+          # public-project-id path at runtime.
+          NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
+        run: pnpm -C web build
+      - name: Verify CNAME file copied
+        run: test -f web/out/CNAME && cat web/out/CNAME
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/out
+
+  deploy:
+    name: Publish to Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

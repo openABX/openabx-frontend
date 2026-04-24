@@ -21,7 +21,7 @@ const DESCRIPTION =
   'Independent, open-source interface to the ABD stablecoin protocol on Alephium. Borrow ABD against ALPH, earn from auction pools, and stake ABX for protocol fees. MIT licensed, community built, pre-audit beta.'
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || `https://openabx.github.io${BASE_PATH}`
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://openabx.com'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
