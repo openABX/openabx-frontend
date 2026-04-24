@@ -447,10 +447,25 @@ export async function claimUnstake(
   requireSigner(signer);
   if (network === "mainnet") {
     const account = await signer.getSelectedAccount();
+    // Read the user's current pendingUnstakeAbxAtto from the StakeManager
+    // sub-contract (mut[2]); pass as the script arg so the transferred
+    // ABX equals the user's actual matured amount. The prior static 150k
+    // baked into the template short-paid/bounced users with any other
+    // amount — see sdk/src/mainnet/index.ts::buildClaimUnstake for the
+    // on-chain evidence.
+    const pos = await fetchMainnetStakePosition(network, account.address);
+    if (pos.pendingUnstakeAbxAtto <= 0n) {
+      throw new Error("No pending unstake to claim");
+    }
+    if (pos.unstakeReadyAtMs > 0n && Date.now() < Number(pos.unstakeReadyAtMs)) {
+      throw new Error(
+        `Unstake cooldown not elapsed: ready at ${new Date(Number(pos.unstakeReadyAtMs)).toISOString()}`,
+      );
+    }
     return submitPrepared(
       network,
       signer,
-      mnBuildClaimUnstake(account.address),
+      mnBuildClaimUnstake(account.address, pos.pendingUnstakeAbxAtto),
     );
   }
   const sm = StakeManager.at(requireAddress(network, "stakeManager"));

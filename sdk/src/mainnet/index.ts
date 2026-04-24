@@ -86,9 +86,15 @@ const T = {
   // with the user's real pending (from fetchMainnetStakePosition).
   claimRewardsAmount: 5386884103532206000n,
   requestUnstakeAbx: 250000000101087n,
-  // claimUnstake has a U256 (150000000000000) that's probably rewards-claim
-  // estimate — but simulation proved leaving it unchanged works; same
-  // caller-address substitution pattern as claimRewards.
+  // claimUnstake's baked U256 IS the ABX amount released — proven by
+  // cross-referencing 4 historical AlphBanX mainnet claimUnstake txs
+  // (2026-04-24 audit): every tx's baked U256 equals the recipient's
+  // ABX token output exactly (150k, 6k, 30.2k, 72k ABX, no exceptions).
+  // AlphBanX's UI substitutes the user's matured unstake amount per-tx;
+  // OpenABX shipped the 150k sample literal to every user, so anyone
+  // whose matured ≠ 150k was short-paid or bounced. Same fix shape as
+  // claimRewards: caller passes pendingUnstakeAbxAtto from the reader.
+  claimUnstakeAmount: 150000000000000n,
   poolDepositAbd: 1396000000000n,
   // Note poolWithdraw has two U256s: 158 (likely pool tier bps / 100 ? NO
   // since 158 isn't 5/10/15/20; could be a user-specific flag) and 15 (which
@@ -187,19 +193,28 @@ export function buildRequestUnstake(amountAbxAtto: bigint): PreparedTx {
 }
 
 /**
- * Claim unstaked ABX after the cooldown period has elapsed.
+ * Claim unstaked ABX after the cooldown period has elapsed. Pass the
+ * user's full pendingUnstakeAbxAtto (from fetchMainnetStakePosition); the
+ * contract's method 32 takes this as the transfer amount.
  */
-export function buildClaimUnstake(signerAddress: string): PreparedTx {
+export function buildClaimUnstake(
+  signerAddress: string,
+  claimAmountAbxAtto: bigint,
+): PreparedTx {
   assertValidAssetAddress(signerAddress, "signerAddress");
+  if (claimAmountAbxAtto <= 0n) {
+    throw new Error("buildClaimUnstake: claimAmountAbxAtto must be > 0");
+  }
   const tmpl = t<TemplateFile>(claimUnstake);
   const bytecode = applyTemplate(tmpl, {
     replaceSignerAddress: signerAddress,
+    replaceU256: [{ from: T.claimUnstakeAmount, to: claimAmountAbxAtto }],
   });
   return {
     bytecode,
     attoAlphAmount: DUST,
     tokens: [],
-    label: "Claim matured unstake",
+    label: `Claim ${claimAmountAbxAtto} atto-ABX matured unstake`,
   };
 }
 
