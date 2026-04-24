@@ -1,0 +1,40 @@
+// Thin wrapper over a DIA-xMarket-compatible oracle registry. Immutable —
+// the registry id and the feed key are fixed at deploy. If DIA ever moves
+// its registry, we deploy a new adapter and re-point PlatformSettings.
+//
+// Live mainnet reference (2026-04-22): registry at
+// 285zrkZTPpUCpjKg9E3z238VmpUBQEAbESGsJT6yX7Rod; feedKey
+// 5f4b92205af6f25a3462384eda297084e1fad3d15e2638d15ae5c2832978a600
+// (observed on AlphBanX's DIAAlphPriceAdapter immField[0]).
+
+Contract DiaAlphPriceAdapter(
+  registryId: ByteVec,   // immutable: the DIA registry contract id
+  feedKey: ByteVec       // immutable: the registry key for ALPH/USD
+) {
+
+  // Read-only accessors are intentionally permissionless.
+  @using(checkExternalCaller = false)
+  pub fn getValue() -> (U256, U256) {
+    return IOracleRegistry(registryId).getValue(feedKey)
+  }
+
+  @using(checkExternalCaller = false)
+  pub fn getPrice() -> U256 {
+    let (price, _) = IOracleRegistry(registryId).getValue(feedKey)
+    return price
+  }
+
+  @using(checkExternalCaller = false)
+  pub fn getTimestamp() -> U256 {
+    let (_, timestamp) = IOracleRegistry(registryId).getValue(feedKey)
+    return timestamp
+  }
+
+  pub fn getRegistryId() -> ByteVec {
+    return registryId
+  }
+
+  pub fn getFeedKey() -> ByteVec {
+    return feedKey
+  }
+}

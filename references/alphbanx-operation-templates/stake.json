@@ -1,0 +1,166 @@
+{
+  "operation": "stake",
+  "contract": "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu",
+  "methodIndex": 30,
+  "txId": "3526c31ece147f00c47b1a3ee311cfa185a3ad8afd88322f265f492acfbe1ea3",
+  "scriptOpt": "0101030004004027b417000c0d144020cb15784c91a7c8cc0c073e77a9ea2c4e8eec5782c27d5e47febb3e6c9439fb0001171701d1170216000d0d144020cb15784c91a7c8cc0c073e77a9ea2c4e8eec5782c27d5e47febb3e6c9439fb00011c17031603c5194c041602d12a170216007a1602a2160113c2044ad46082b5a316001600160013c2044ad46082b51600110c144020cb15784c91a7c8cc0c073e77a9ea2c4e8eec5782c27d5e47febb3e6c9439fb00011e",
+  "contractInputs": [
+    "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu",
+    "tpxjsWJSaUh5i7XzNAsTWMRtD9QvDTV9zmMNeHHS6jQB",
+    "29YL53teVrvK2o4P2cVej8aCGN7iQS8mE86bgxA2oFWa3"
+  ],
+  "methods": [
+    {
+      "index": 0,
+      "argsLength": 0,
+      "localsLength": 4,
+      "returnLength": 0,
+      "instrs": [
+        {
+          "name": "CallerAddress"
+        },
+        {
+          "name": "StoreLocal",
+          "index": 0
+        },
+        {
+          "name": "U256Const0"
+        },
+        {
+          "name": "U256Const1"
+        },
+        {
+          "name": "BytesConst",
+          "valueHex": "cb15784c91a7c8cc0c073e77a9ea2c4e8eec5782c27d5e47febb3e6c9439fb00",
+          "asAddress": "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu"
+        },
+        {
+          "name": "CallExternal",
+          "index": 23
+        },
+        {
+          "name": "StoreLocal",
+          "index": 1
+        },
+        {
+          "name": "MinimalContractDeposit"
+        },
+        {
+          "name": "StoreLocal",
+          "index": 2
+        },
+        {
+          "name": "LoadLocal",
+          "index": 0
+        },
+        {
+          "name": "U256Const1"
+        },
+        {
+          "name": "U256Const1"
+        },
+        {
+          "name": "BytesConst",
+          "valueHex": "cb15784c91a7c8cc0c073e77a9ea2c4e8eec5782c27d5e47febb3e6c9439fb00",
+          "asAddress": "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu"
+        },
+        {
+          "name": "CallExternal",
+          "index": 28
+        },
+        {
+          "name": "StoreLocal",
+          "index": 3
+        },
+        {
+          "name": "LoadLocal",
+          "index": 3
+        },
+        {
+          "name": "ContractExists"
+        },
+        {
+          "name": "BoolNot"
+        },
+        {
+          "name": "IfFalse",
+          "offset": 4
+        },
+        {
+          "name": "LoadLocal",
+          "index": 2
+        },
+        {
+          "name": "MinimalContractDeposit"
+        },
+        {
+          "name": "U256Add"
+        },
+        {
+          "name": "StoreLocal",
+          "index": 2
+        },
+        {
+          "name": "LoadLocal",
+          "index": 0
+        },
+        {
+          "name": "Dup"
+        },
+        {
+          "name": "LoadLocal",
+          "index": 2
+        },
+        {
+          "name": "ApproveAlph"
+        },
+        {
+          "name": "LoadLocal",
+          "index": 1
+        },
+        {
+          "name": "U256Const",
+          "value": "4719437185717"
+        },
+        {
+          "name": "ApproveToken"
+        },
+        {
+          "name": "LoadLocal",
+          "index": 0
+        },
+        {
+          "name": "LoadLocal",
+          "index": 0
+        },
+        {
+          "name": "LoadLocal",
+          "index": 0
+        },
+        {
+          "name": "U256Const",
+          "value": "4719437185717"
+        },
+        {
+          "name": "LoadLocal",
+          "index": 0
+        },
+        {
+          "name": "U256Const5"
+        },
+        {
+          "name": "U256Const0"
+        },
+        {
+          "name": "BytesConst",
+          "valueHex": "cb15784c91a7c8cc0c073e77a9ea2c4e8eec5782c27d5e47febb3e6c9439fb00",
+          "asAddress": "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu"
+        },
+        {
+          "name": "CallExternal",
+          "index": 30
+        }
+      ]
+    }
+  ]
+}

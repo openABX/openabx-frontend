@@ -1,0 +1,32 @@
+[
+  {
+    "address": "vxM9L97vxybEo3FHU9PSzwCVnBUoSispm8tpq22Twftj",
+    "totalCalls": 4680,
+    "methodIndices": {
+      "0": 1365,
+      "3": 48,
+      "7": 48,
+      "8": 711,
+      "9": 382,
+      "10": 714,
+      "11": 568,
+      "12": 193,
+      "19": 269,
+      "20": 382
+    },
+    "sampleTxIds": [
+      "c231b4172484de73be496dae32639a32b67e113bbc7326acc5c2a71da9f82e44",
+      "c231b4172484de73be496dae32639a32b67e113bbc7326acc5c2a71da9f82e44",
+      "c231b4172484de73be496dae32639a32b67e113bbc7326acc5c2a71da9f82e44",
+      "86a571c656df34f3d1edd296457402798b3e7b097c47a392bad633cf103a597c",
+      "86a571c656df34f3d1edd296457402798b3e7b097c47a392bad633cf103a597c"
+    ],
+    "deltaSignatures": [
+      "Δalph=+ Δabd=0 Δabx=0",
+      "Δalph=- Δabd=0 Δabx=0",
+      "Δalph=- Δabd=+ Δabx=0",
+      "Δalph=- Δabd=- Δabx=0",
+      "Δalph=+ Δabd=- Δabx=0"
+    ]
+  }
+]

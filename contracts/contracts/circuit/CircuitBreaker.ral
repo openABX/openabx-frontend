@@ -1,0 +1,113 @@
+// Global pause gate + oracle-staleness auto-halt.
+//
+// Protocol contracts that write state consult this gate before executing. The
+// intent is to:
+//
+//   1. Give the pauser (initially the admin multisig, later governance) a
+//      reversible kill switch for emergency response — without giving them
+//      any ability to seize funds.
+//   2. Provide a permissionless check that the current oracle timestamp is
+//      within `oracleStalenessMillis` of now. LoanManager / AuctionManager
+//      call requireOracleFresh(...) before every state-mutating op.
+//
+// Defaults (set at deploy; governance-adjustable):
+//   - paused = false
+//   - oracleStalenessMillis = 1_800_000   (30 minutes; per protocol spec §7 #9)
+
+Contract CircuitBreaker(
+  mut paused: Bool,
+  mut pauser: Address,
+  mut oracleStalenessMillis: U256
+) {
+
+  event PausedChanged(paused: Bool, by: Address)
+  event PauserChanged(oldPauser: Address, newPauser: Address)
+  event OracleStalenessChanged(oldMillis: U256, newMillis: U256)
+
+  // Maximum clock-skew tolerance for an oracle timestamp that is AHEAD of
+  // block time. Beyond this we refuse the reading — a 10-minute future skew
+  // is an oracle bug / attack signal, not a legitimate reading.
+  const MAX_FUTURE_SKEW_MS = 600000
+
+  enum ErrorCodes {
+    NotPauser      = 100
+    Paused         = 101
+    OracleStale    = 102
+    InvalidStalenessThreshold = 103
+    OracleFutureSkew = 104
+  }
+
+  // --- read-only helpers ----------------------------------------------------
+
+  pub fn isPaused() -> Bool {
+    return paused
+  }
+
+  pub fn getPauser() -> Address {
+    return pauser
+  }
+
+  pub fn getOracleStalenessMillis() -> U256 {
+    return oracleStalenessMillis
+  }
+
+  // Reverts with `Paused` when the breaker is tripped. Anyone may call;
+  // protocol state-mutating entry points invoke this at their start.
+  pub fn requireNotPaused() -> () {
+    assert!(!paused, ErrorCodes.Paused)
+  }
+
+  // Reverts with `OracleStale` when the provided `lastUpdateMillis` is older
+  // than `oracleStalenessMillis` relative to the current block, or with
+  // `OracleFutureSkew` when the oracle timestamp is more than
+  // MAX_FUTURE_SKEW_MS ahead of block time (a future-dated reading is a bug
+  // signal, not a fresh one).
+  pub fn requireOracleFresh(lastUpdateMillis: U256) -> () {
+    let nowMillis = blockTimeStamp!()
+    if (nowMillis >= lastUpdateMillis) {
+      assert!(nowMillis - lastUpdateMillis <= oracleStalenessMillis, ErrorCodes.OracleStale)
+    } else {
+      assert!(lastUpdateMillis - nowMillis <= MAX_FUTURE_SKEW_MS, ErrorCodes.OracleFutureSkew)
+    }
+  }
+
+  // Full check: not paused AND oracle fresh. Convenience for LoanManager.
+  pub fn requireHealthy(lastUpdateMillis: U256) -> () {
+    requireNotPaused()
+    requireOracleFresh(lastUpdateMillis)
+  }
+
+  // --- pauser actions -------------------------------------------------------
+
+  @using(updateFields = true)
+  pub fn pause() -> () {
+    checkCaller!(callerAddress!() == pauser, ErrorCodes.NotPauser)
+    paused = true
+    emit PausedChanged(true, callerAddress!())
+  }
+
+  @using(updateFields = true)
+  pub fn unpause() -> () {
+    checkCaller!(callerAddress!() == pauser, ErrorCodes.NotPauser)
+    paused = false
+    emit PausedChanged(false, callerAddress!())
+  }
+
+  @using(updateFields = true)
+  pub fn transferPauser(newPauser: Address) -> () {
+    checkCaller!(callerAddress!() == pauser, ErrorCodes.NotPauser)
+    let old = pauser
+    pauser = newPauser
+    emit PauserChanged(old, newPauser)
+  }
+
+  @using(updateFields = true)
+  pub fn setOracleStalenessMillis(newMillis: U256) -> () {
+    checkCaller!(callerAddress!() == pauser, ErrorCodes.NotPauser)
+    // Refuse nonsensical values: 0 (no check) or > 1 day.
+    assert!(newMillis > 0 && newMillis <= 86_400_000, ErrorCodes.InvalidStalenessThreshold)
+    let old = oracleStalenessMillis
+    oracleStalenessMillis = newMillis
+    emit OracleStalenessChanged(old, newMillis)
+  }
+}

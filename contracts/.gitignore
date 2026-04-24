@@ -1,0 +1,5 @@
+artifacts/
+dist/
+.cache/
+.project.json
+deployments/*.local.json

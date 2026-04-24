@@ -1,0 +1,35 @@
+// Constant $1 price oracle for ABD.
+//
+// ABD is a stablecoin pegged to $1 USD. This contract is the on-chain
+// sentinel that any protocol contract can call to get "ABD in USD". It
+// always returns `precision` (1e18 at 1e18 scale = $1.0). The matching
+// `getTimestamp()` returns the current block timestamp so consumers can
+// use the same staleness-check machinery as for the DIA adapter without
+// special-casing.
+//
+// This contract is intentionally immutable — no setter methods, no
+// mutable fields, no admin. The only way to change the ABD peg is to
+// deploy a different oracle and re-point PlatformSettings at it.
+
+Contract AbdPriceOracle(
+  precision: U256   // immutable; set to 10^18 at deploy
+) {
+
+  pub fn getPrice() -> U256 {
+    return precision
+  }
+
+  pub fn getTimestamp() -> U256 {
+    return blockTimeStamp!()
+  }
+
+  pub fn getPrecision() -> U256 {
+    return precision
+  }
+
+  // Matches the DIA adapter's (price, timestamp) return shape so both can
+  // be used interchangeably by the fee / CR math.
+  pub fn getValue() -> (U256, U256) {
+    return precision, blockTimeStamp!()
+  }
+}

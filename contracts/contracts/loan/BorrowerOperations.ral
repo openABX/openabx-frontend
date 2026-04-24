@@ -1,0 +1,108 @@
+// Thin user-facing router. Every wallet-originating loan interaction lands
+// here first. BorrowerOperations reads the oracle price + timestamp + the
+// current block timestamp, then forwards to LoanManager with those values
+// pinned as call arguments. This keeps LoanManager's API deterministic (no
+// implicit clock or oracle reads), which matters for unit tests and the
+// Phase 4 audit/fuzz harness.
+//
+// APS approvals cascade. A user calling openLoan approves
+// (collateralAmount + minimalContractDeposit) ALPH; the approval propagates
+// into LoanManager → Loan subcontract without the user having to know any
+// of that.
+//
+// Audit fix A-03: every LoanManager method that needs the end-user's
+// identity now takes the user address explicitly. BorrowerOperations
+// forwards `callerAddress!()` as that argument so that `LoanManager.repay`
+// / `redeem` can burn ABD from (and, for redeem, pay ALPH to) the real
+// user, instead of using the router's contract address.
+
+Contract BorrowerOperations(
+  loanManager: ByteVec,
+  oracle: ByteVec,
+  abdTokenId: ByteVec
+) {
+
+  pub fn getLoanManager() -> ByteVec  { return loanManager }
+  pub fn getOracle() -> ByteVec       { return oracle }
+  pub fn getAbdTokenId() -> ByteVec   { return abdTokenId }
+
+  @using(preapprovedAssets = true, checkExternalCaller = false)
+  pub fn openLoan(
+    collateralAmount: U256,
+    borrowAmount: U256,
+    interestRate: U256
+  ) -> () {
+    let caller = callerAddress!()
+    let (price, priceUpdateMs) = DiaAlphPriceAdapter(oracle).getValue()
+    let nowMs = blockTimeStamp!()
+    LoanManager(loanManager).openLoan{caller -> ALPH: collateralAmount + minimalContractDeposit!()}(
+      caller, collateralAmount, borrowAmount, interestRate, price, nowMs, priceUpdateMs
+    )
+  }
+
+  @using(preapprovedAssets = true, checkExternalCaller = false)
+  pub fn addCollateral(amount: U256) -> () {
+    let caller = callerAddress!()
+    let (_, priceUpdateMs) = DiaAlphPriceAdapter(oracle).getValue()
+    LoanManager(loanManager).addCollateral{caller -> ALPH: amount}(caller, amount, priceUpdateMs)
+  }
+
+  @using(checkExternalCaller = false)
+  pub fn withdrawCollateral(amount: U256) -> () {
+    let caller = callerAddress!()
+    let (price, priceUpdateMs) = DiaAlphPriceAdapter(oracle).getValue()
+    LoanManager(loanManager).withdrawCollateral(caller, amount, price, priceUpdateMs)
+  }
+
+  @using(checkExternalCaller = false)
+  pub fn borrowMore(additionalDebt: U256) -> () {
+    let caller = callerAddress!()
+    let (price, priceUpdateMs) = DiaAlphPriceAdapter(oracle).getValue()
+    LoanManager(loanManager).borrowMore(caller, additionalDebt, price, priceUpdateMs)
+  }
+
+  // A repayer can be ANYONE, not just the loan owner. The owner argument
+  // selects which loan's debt is reduced; the caller pays the ABD. We
+  // forward `caller` as the `from` address so LoanManager burns against
+  // the user's wallet, not the router's contract address (audit fix A-03).
+  @using(preapprovedAssets = true, checkExternalCaller = false)
+  pub fn repay(owner: Address, amount: U256) -> () {
+    let caller = callerAddress!()
+    let (_, priceUpdateMs) = DiaAlphPriceAdapter(oracle).getValue()
+    LoanManager(loanManager).repay{caller -> abdTokenId: amount}(caller, owner, amount, priceUpdateMs)
+  }
+
+  @using(checkExternalCaller = false)
+  pub fn closeLoan() -> () {
+    let caller = callerAddress!()
+    let (_, priceUpdateMs) = DiaAlphPriceAdapter(oracle).getValue()
+    LoanManager(loanManager).closeLoan(caller, priceUpdateMs)
+  }
+
+  @using(checkExternalCaller = false)
+  pub fn accrueInterest(owner: Address) -> () {
+    let (price, priceUpdateMs) = DiaAlphPriceAdapter(oracle).getValue()
+    let nowMs = blockTimeStamp!()
+    LoanManager(loanManager).accrueInterest(owner, price, nowMs, priceUpdateMs)
+  }
+
+  // Permissionless: anyone can liquidate a below-MCR loan. Caller receives
+  // no direct reward (the bid-success fee goes to the pools); automated
+  // bots typically handle this to keep the protocol healthy.
+  @using(checkExternalCaller = false)
+  pub fn liquidate(owner: Address) -> () {
+    let (price, priceUpdateMs) = DiaAlphPriceAdapter(oracle).getValue()
+    LoanManager(loanManager).liquidate(owner, price, priceUpdateMs)
+  }
+
+  // Redeemer burns ABD and receives ALPH from the targeted loan. Pass the
+  // caller address through explicitly so LoanManager can (a) debit the
+  // user's ABD approval and (b) pay the ALPH payout to the user's wallet
+  // instead of this router's contract (audit fix A-03).
+  @using(preapprovedAssets = true, checkExternalCaller = false)
+  pub fn redeem(owner: Address, amount: U256) -> () {
+    let caller = callerAddress!()
+    let (price, priceUpdateMs) = DiaAlphPriceAdapter(oracle).getValue()
+    LoanManager(loanManager).redeem{caller -> abdTokenId: amount}(caller, owner, amount, price, priceUpdateMs)
+  }
+}

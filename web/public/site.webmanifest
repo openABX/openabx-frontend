@@ -1,0 +1,17 @@
+{
+  "name": "OpenABX",
+  "short_name": "OpenABX",
+  "description": "Open-source UI for the AlphBanX stablecoin protocol on Alephium.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a1511",
+  "theme_color": "#2eff9a",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

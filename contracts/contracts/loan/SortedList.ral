@@ -1,0 +1,164 @@
+// Hint-verified doubly-linked sorted list (ADR-002).
+//
+// The list stores ListNode subcontracts keyed by U256 and ordered by
+// ascending key. Insertions and removals are O(1) on-chain — the caller
+// supplies `prevHint` and `nextHint` that must be the correct neighbours
+// of the proposed position, and the contract only verifies (not discovers)
+// that position. An off-chain indexer is responsible for producing valid
+// hints; if the caller's hint is stale, the call reverts and the caller
+// retries with a fresher one.
+//
+// Sentinel values for prevHint/nextHint:
+//   - prevHint = #   (empty ByteVec) → new node becomes the head.
+//   - nextHint = #   → new node becomes the tail.
+//
+// Access control: only `owner` (typically the LoanManager contract) can
+// insert and remove. Node creation uses `copyCreateSubContract!` cloning
+// `nodeTemplate` (a deployed ListNode instance). The subcontract path is
+// the nonce — one per insert — giving each node a unique id even for
+// duplicate keys.
+
+Contract SortedList(
+  owner: ByteVec,          // contract id of the authorized caller (LoanManager)
+  nodeTemplate: ByteVec,   // deployed ListNode template id
+  mut head: ByteVec,
+  mut tail: ByteVec,
+  mut count: U256,
+  mut nextNonce: U256      // monotonic; used as subcontract path for new nodes
+) {
+
+  event NodeInserted(id: ByteVec, key: U256, payload: ByteVec)
+  event NodeRemoved(id: ByteVec)
+
+  const EMPTY = #
+
+  enum ErrorCodes {
+    NotOwner              = 500
+    InvalidHintNeighbour  = 501
+    InvalidHintOrder      = 502
+    NodeNotFound          = 503
+    EmptySentinelMismatch = 504
+  }
+
+  pub fn getOwner() -> ByteVec   { return owner }
+  pub fn getHead() -> ByteVec    { return head }
+  pub fn getTail() -> ByteVec    { return tail }
+  pub fn getCount() -> U256      { return count }
+  pub fn getNextNonce() -> U256  { return nextNonce }
+
+  pub fn isEmpty() -> Bool {
+    return count == 0
+  }
+
+  // Creates a new ListNode subcontract between `prevHint` and `nextHint`.
+  // Returns the new node's contract id.
+  //
+  // Hint validation rules:
+  //   - If the list is empty, both hints MUST be EMPTY.
+  //   - If inserting as head (prevHint = EMPTY), the existing head must
+  //     equal nextHint; the new key must be <= nextHint.getKey.
+  //   - If inserting as tail (nextHint = EMPTY), the existing tail must
+  //     equal prevHint; the new key must be >= prevHint.getKey.
+  //   - Middle insertion: prev and next must be directly linked (prev.nextId
+  //     == nextId of new == next; next.prevId == prev); new key must fit in
+  //     [prev.key, next.key].
+  @using(preapprovedAssets = true, updateFields = true)
+  pub fn insert(
+    caller: Address,
+    key: U256,
+    payload: ByteVec,
+    prevHint: ByteVec,
+    nextHint: ByteVec
+  ) -> ByteVec {
+    checkCaller!(callerContractId!() == owner, ErrorCodes.NotOwner)
+
+    // Build the subcontract via the shared template. The path is the nonce
+    // so every call produces a fresh, unique subcontract id even for
+    // duplicate keys.
+    let path = toByteVec!(nextNonce)
+    let (encImm, encMut) = ListNode.encodeFields!(
+      selfContractId!(),
+      key,
+      payload,
+      prevHint,
+      nextHint
+    )
+    let newId = copyCreateSubContract!{caller -> ALPH: minimalContractDeposit!()}(
+      path,
+      nodeTemplate,
+      encImm,
+      encMut
+    )
+    nextNonce = nextNonce + 1
+
+    // Validate + relink neighbours per the four cases.
+    if (isEmpty()) {
+      // Empty list: hints must be empty sentinels. New node is both head and tail.
+      assert!(prevHint == EMPTY, ErrorCodes.EmptySentinelMismatch)
+      assert!(nextHint == EMPTY, ErrorCodes.EmptySentinelMismatch)
+      head = newId
+      tail = newId
+    } else {
+      // Validate neighbour identities.
+      if (prevHint == EMPTY) {
+        // Inserting at head.
+        assert!(nextHint == head, ErrorCodes.InvalidHintNeighbour)
+        assert!(key <= ListNode(nextHint).getKey(), ErrorCodes.InvalidHintOrder)
+        ListNode(nextHint).setPrevId(newId)
+        head = newId
+      } else if (nextHint == EMPTY) {
+        // Inserting at tail.
+        assert!(prevHint == tail, ErrorCodes.InvalidHintNeighbour)
+        assert!(key >= ListNode(prevHint).getKey(), ErrorCodes.InvalidHintOrder)
+        ListNode(prevHint).setNextId(newId)
+        tail = newId
+      } else {
+        // Middle insertion.
+        assert!(
+          ListNode(prevHint).getNextId() == nextHint,
+          ErrorCodes.InvalidHintNeighbour
+        )
+        assert!(
+          ListNode(nextHint).getPrevId() == prevHint,
+          ErrorCodes.InvalidHintNeighbour
+        )
+        assert!(key >= ListNode(prevHint).getKey(), ErrorCodes.InvalidHintOrder)
+        assert!(key <= ListNode(nextHint).getKey(), ErrorCodes.InvalidHintOrder)
+        ListNode(prevHint).setNextId(newId)
+        ListNode(nextHint).setPrevId(newId)
+      }
+    }
+
+    count = count + 1
+    emit NodeInserted(newId, key, payload)
+    return newId
+  }
+
+  // Removes a node. The caller must pass the ACTUAL nodeId — we read its
+  // current prev/next from chain (no hint needed since we have the node
+  // itself). Neighbours are relinked and the subcontract destroyed.
+  @using(updateFields = true)
+  pub fn remove(nodeId: ByteVec, refundTo: Address) -> () {
+    checkCaller!(callerContractId!() == owner, ErrorCodes.NotOwner)
+    assert!(contractExists!(nodeId), ErrorCodes.NodeNotFound)
+
+    let nodePrev = ListNode(nodeId).getPrevId()
+    let nodeNext = ListNode(nodeId).getNextId()
+
+    if (nodePrev == EMPTY) {
+      head = nodeNext
+    } else {
+      ListNode(nodePrev).setNextId(nodeNext)
+    }
+
+    if (nodeNext == EMPTY) {
+      tail = nodePrev
+    } else {
+      ListNode(nodeNext).setPrevId(nodePrev)
+    }
+
+    ListNode(nodeId).destroy(refundTo)
+    count = count - 1
+    emit NodeRemoved(nodeId)
+  }
+}

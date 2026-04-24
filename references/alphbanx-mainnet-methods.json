@@ -1,0 +1,235 @@
+{
+  "29YL53teVrvK2o4P2cVej8aCGN7iQS8mE86bgxA2oFWa3": {
+    "role": "auctionManager",
+    "methods": {
+      "19": {
+        "count": 10,
+        "sampleTxIds": [
+          "18b3050df2caab420dd1ae4f8f559ad4ef4709ff4136dabd89ecda65aaa73462",
+          "870692eb55f048c1f5048601f75767cf5a68e3733609e062b00ebc137c74c3bc",
+          "918e8168c06dbbecb04205cffc4177b874f317618f16d75e2c5dd44e7462d018",
+          "b8127b2fbd57c2776139ea61dc71f6eb5a9789387064f3604fd7a994f0895370",
+          "18b3050df2caab420dd1ae4f8f559ad4ef4709ff4136dabd89ecda65aaa73462"
+        ],
+        "argPattern": "U256Const0,U256Const1,Bytes(32)"
+      },
+      "28": {
+        "count": 10,
+        "sampleTxIds": [
+          "18b3050df2caab420dd1ae4f8f559ad4ef4709ff4136dabd89ecda65aaa73462",
+          "870692eb55f048c1f5048601f75767cf5a68e3733609e062b00ebc137c74c3bc",
+          "918e8168c06dbbecb04205cffc4177b874f317618f16d75e2c5dd44e7462d018",
+          "b8127b2fbd57c2776139ea61dc71f6eb5a9789387064f3604fd7a994f0895370",
+          "18b3050df2caab420dd1ae4f8f559ad4ef4709ff4136dabd89ecda65aaa73462"
+        ],
+        "argPattern": "CallerAddress,LoadLocal,U256Const1,U256Const1,Bytes(32)"
+      },
+      "35": {
+        "count": 10,
+        "sampleTxIds": [
+          "18b3050df2caab420dd1ae4f8f559ad4ef4709ff4136dabd89ecda65aaa73462",
+          "870692eb55f048c1f5048601f75767cf5a68e3733609e062b00ebc137c74c3bc",
+          "918e8168c06dbbecb04205cffc4177b874f317618f16d75e2c5dd44e7462d018",
+          "b8127b2fbd57c2776139ea61dc71f6eb5a9789387064f3604fd7a994f0895370",
+          "18b3050df2caab420dd1ae4f8f559ad4ef4709ff4136dabd89ecda65aaa73462"
+        ],
+        "argPattern": "LoadLocal,MinimalContractDeposit,LoadLocal,U256Const1,U256Const1,Bytes(32)"
+      },
+      "36": {
+        "count": 10,
+        "sampleTxIds": [
+          "18b3050df2caab420dd1ae4f8f559ad4ef4709ff4136dabd89ecda65aaa73462",
+          "870692eb55f048c1f5048601f75767cf5a68e3733609e062b00ebc137c74c3bc",
+          "918e8168c06dbbecb04205cffc4177b874f317618f16d75e2c5dd44e7462d018",
+          "b8127b2fbd57c2776139ea61dc71f6eb5a9789387064f3604fd7a994f0895370",
+          "18b3050df2caab420dd1ae4f8f559ad4ef4709ff4136dabd89ecda65aaa73462"
+        ],
+        "argPattern": "U256Const,U256Const,LoadLocal,U256Const3,U256Const0,Bytes(32)"
+      },
+      "40": {
+        "count": 3,
+        "sampleTxIds": [
+          "2aa8dd3139d9c58aaf900f4d175ba77d5cc2af256690b3da7fed476dd122145e",
+          "3185d4d9aeb7d00b0f75dcf0705b7e73b6e3acd58f96fe8e7fed5dff75df2133",
+          "7c02fc16e723aa33adbe535f68c322adeddb2f94556356a8fe13d81570b6082b"
+        ],
+        "argPattern": "U256Const,AddressConst,Bytes(32),U256Const4,U256Const1,Bytes(32)"
+      },
+      "41": {
+        "count": 32,
+        "sampleTxIds": [
+          "fc9284c71d6fe37812ca0cacb15970bef9d8a3a90219299089627f773ea6f44e",
+          "bec0b610f6c881be45c208dfa10f3a878b5312e39f78f0842624525f7d6e3a40",
+          "8a8faece85a1217dddacf6717db31e526a96869a58be8fe79a4504775465364c",
+          "fc9284c71d6fe37812ca0cacb15970bef9d8a3a90219299089627f773ea6f44e",
+          "bec0b610f6c881be45c208dfa10f3a878b5312e39f78f0842624525f7d6e3a40"
+        ],
+        "argPattern": "U256Const,U256Const,AddressConst,U256Const3,U256Const0,Bytes(32)"
+      },
+      "42": {
+        "count": 1,
+        "sampleTxIds": [
+          "168610a8c9edc32b8523d36b7fa91d8dbe83bfeca395bf53a625b667fd7f9780"
+        ],
+        "argPattern": "U256Const0,U256Const,AddressConst,U256Const3,U256Const0,Bytes(32)"
+      }
+    }
+  },
+  "28QGP95rnmZYKRBEsBeGBTdLHetoSE9nxEatVrtuN2bEF": {
+    "role": "unknown-4968b",
+    "methods": {
+      "0": {
+        "count": 27,
+        "sampleTxIds": [
+          "575dd5410d83233d04fada2d9083c3d870081a508bcc85ecf2d69717cbabfccf",
+          "ebdbaa45cbaa7c96bd45edb5a7f99ad6c61bf91809c8d458da3109a05a588e12",
+          "9b684793ad47d7ef0b2d3049081cbbd16274ae251d6be5dd1f5e9aaf1eb79d39",
+          "9b684793ad47d7ef0b2d3049081cbbd16274ae251d6be5dd1f5e9aaf1eb79d39",
+          "9b684793ad47d7ef0b2d3049081cbbd16274ae251d6be5dd1f5e9aaf1eb79d39"
+        ],
+        "argPattern": "U256Const0,U256Const1,Bytes(32)"
+      },
+      "3": {
+        "count": 2,
+        "sampleTxIds": [
+          "dbb2cbfad961ef1fe87f947d475730d2ad3c35af81f07e1276ae67d06da1aa9f",
+          "964aaad68d82a9c26075307fda0977f6413d68450974f60aa7981fd0a4c76565"
+        ],
+        "argPattern": "U256Const,U256Const1,U256Const1,Bytes(32)"
+      },
+      "7": {
+        "count": 2,
+        "sampleTxIds": [
+          "dbb2cbfad961ef1fe87f947d475730d2ad3c35af81f07e1276ae67d06da1aa9f",
+          "964aaad68d82a9c26075307fda0977f6413d68450974f60aa7981fd0a4c76565"
+        ],
+        "argPattern": "U256Const5,Bytes(32),LoadLocal,U256Const,U256Const0,Bytes(32)"
+      },
+      "8": {
+        "count": 15,
+        "sampleTxIds": [
+          "2daf50f97ffaf75540bdd0f7c4bda06568e23affd1641d24d4137d9cfbf124ff",
+          "40f811416ce6f237826501e0b2791bfde6bf11ea3347e7e686e3335192f3b5a0",
+          "07a7691212fe0793c94f98667dd5dd844e07df816ab1c4afa1c4e266b9dfa281",
+          "98e15dfe5a152545ed21d6e20661bc8a5d3441f2c8b763be7d2c26e949c38819",
+          "6cfa4c0c1feb1331e55629d6ea62e632e23c5d52681dae15615f3fd7d81b8544"
+        ],
+        "argPattern": "U256Const,U256Const,Bytes(32),U256Const2,U256Const0,Bytes(32)"
+      },
+      "9": {
+        "count": 2,
+        "sampleTxIds": [
+          "575dd5410d83233d04fada2d9083c3d870081a508bcc85ecf2d69717cbabfccf",
+          "ebdbaa45cbaa7c96bd45edb5a7f99ad6c61bf91809c8d458da3109a05a588e12"
+        ],
+        "argPattern": "U256Const,AddressConst,Bytes(32),U256Const3,U256Const0,Bytes(32)"
+      },
+      "10": {
+        "count": 24,
+        "sampleTxIds": [
+          "9b684793ad47d7ef0b2d3049081cbbd16274ae251d6be5dd1f5e9aaf1eb79d39",
+          "9b684793ad47d7ef0b2d3049081cbbd16274ae251d6be5dd1f5e9aaf1eb79d39",
+          "9b684793ad47d7ef0b2d3049081cbbd16274ae251d6be5dd1f5e9aaf1eb79d39",
+          "9f87291382959d071fd4064ab6a4bdb056914f795d835ca8571ea5a0f2cc2c81",
+          "1a976ca21d405b5850f6125c8242cbf2e9f9deacf4243f4e004b455b2b019a03"
+        ],
+        "argPattern": "U256Const,U256Const,Bytes(32),U256Const2,U256Const0,Bytes(32)"
+      },
+      "11": {
+        "count": 5,
+        "sampleTxIds": [
+          "e5c072534f33f20200d09a707942bb0832f085dcafb589767d109b636b18f702",
+          "8620ad7ebe4fdf2bd76e4fe2b4b13145470e5b913db9a249b93ba97e1d0ae2c9",
+          "76e7b4cd0f5261d33713af06d4aa0adfffa785a9936e796c8c52ae8fa6ad7d58",
+          "e9b26a5621414b3ba7d9fb75bc61b5af9cdddc1e0124fd9d4b2b2ace193322e5",
+          "8254e8b2404746b78656344a26e2ab3ef6e9057958928bb1b79b25f1a3ba185a"
+        ],
+        "argPattern": "U256Const,AddressConst,Bytes(32),U256Const3,U256Const0,Bytes(32)"
+      },
+      "12": {
+        "count": 3,
+        "sampleTxIds": [
+          "1597c06169dbbe3f9203e21489a5e70bcc77f8efb6326d4b74a0bc6b6b9a6dcc",
+          "c542e099deb93f0fa7596bb8cc161932fc3ed484bca1b62e3b5bbdf3d6a58204",
+          "5f673331d76d52969bd0918beefa8b1d7f88f260fc019d4dfaddf7e688f97f72"
+        ],
+        "argPattern": "U256Const,AddressConst,Bytes(32),U256Const4,U256Const0,Bytes(32)"
+      },
+      "19": {
+        "count": 1,
+        "sampleTxIds": [
+          "90a6c0197e03c1995b9dde4b9b6a77116c929285f6d3170d8eeca55fb2b48e7d"
+        ],
+        "argPattern": "U256Const,U256Const0,Bytes(0),U256Const5,U256Const0,Bytes(32)"
+      },
+      "20": {
+        "count": 2,
+        "sampleTxIds": [
+          "575dd5410d83233d04fada2d9083c3d870081a508bcc85ecf2d69717cbabfccf",
+          "ebdbaa45cbaa7c96bd45edb5a7f99ad6c61bf91809c8d458da3109a05a588e12"
+        ],
+        "argPattern": "LoadLocal,U256Const0,LoadLocal,U256Const1,U256Const0,Bytes(32)"
+      }
+    }
+  },
+  "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu": {
+    "role": "seen-in-loan-txs (candidate BorrowerOperations/LoanHelper)",
+    "methods": {
+      "23": {
+        "count": 17,
+        "sampleTxIds": [
+          "59d5e13d1d5c0bcda6f1e9e981a6ab797e8c8cb755fea79d39b7d7aa10a03f95",
+          "f62bd9cd8cd2e357318ddf99df14eb5cbedc4bb0a77ceb5cf3b343ce95ad24be",
+          "251042512cdd9a521c3aee31d7c13f92c287d63cf7d1f483e1ac0e969f4249bd",
+          "dc66ccf4a342055c02d484523994b5a6a305676061a147d9eafc45dfbaabfa6c",
+          "93c21355166173f324405b6b5d0c54895341b5401c8dd8ece51f30c0952d79f1"
+        ],
+        "argPattern": "CallerAddress,U256Const0,U256Const1,Bytes(32)"
+      },
+      "28": {
+        "count": 17,
+        "sampleTxIds": [
+          "59d5e13d1d5c0bcda6f1e9e981a6ab797e8c8cb755fea79d39b7d7aa10a03f95",
+          "f62bd9cd8cd2e357318ddf99df14eb5cbedc4bb0a77ceb5cf3b343ce95ad24be",
+          "251042512cdd9a521c3aee31d7c13f92c287d63cf7d1f483e1ac0e969f4249bd",
+          "dc66ccf4a342055c02d484523994b5a6a305676061a147d9eafc45dfbaabfa6c",
+          "93c21355166173f324405b6b5d0c54895341b5401c8dd8ece51f30c0952d79f1"
+        ],
+        "argPattern": "MinimalContractDeposit,LoadLocal,U256Const1,U256Const1,Bytes(32)"
+      },
+      "30": {
+        "count": 17,
+        "sampleTxIds": [
+          "59d5e13d1d5c0bcda6f1e9e981a6ab797e8c8cb755fea79d39b7d7aa10a03f95",
+          "f62bd9cd8cd2e357318ddf99df14eb5cbedc4bb0a77ceb5cf3b343ce95ad24be",
+          "251042512cdd9a521c3aee31d7c13f92c287d63cf7d1f483e1ac0e969f4249bd",
+          "dc66ccf4a342055c02d484523994b5a6a305676061a147d9eafc45dfbaabfa6c",
+          "93c21355166173f324405b6b5d0c54895341b5401c8dd8ece51f30c0952d79f1"
+        ],
+        "argPattern": "LoadLocal,U256Const,LoadLocal,U256Const5,U256Const0,Bytes(32)"
+      },
+      "32": {
+        "count": 10,
+        "sampleTxIds": [
+          "f873f79518eeabac34523262e427a65945014117fa328e20d7553a8dd3d87a3c",
+          "0aa04fd181fa1d4336d573513da671bc3814a69b7474bc39b4787d519803d242",
+          "708abf57c79f49e22aecb7c457140bbed84526dcacd6ffdcb47fbc40c90c3a28",
+          "f873f79518eeabac34523262e427a65945014117fa328e20d7553a8dd3d87a3c",
+          "0aa04fd181fa1d4336d573513da671bc3814a69b7474bc39b4787d519803d242"
+        ],
+        "argPattern": "U256Const,AddressConst,U256Const,U256Const3,U256Const1,Bytes(32)"
+      },
+      "33": {
+        "count": 75,
+        "sampleTxIds": [
+          "7a0b66a4e86ed1638e8a48fe5802926c0d8c7e9e4a96aadb03cf52d0174d7a78",
+          "2b62a217fc716683288546ffee9a4f3913afd660874897de689784af3850f83f",
+          "082b1456093d9f1ef7a3059c2d28c36efb8ce1e3aa16d82e75b5b8878b89b6b6",
+          "1b211919c2ed9ee5e091f0b57e8afd2949bbbd446aab930893e1aa69076c16c7",
+          "255284290f1bcdf643520dd1a6e1906c58f4b517dc2d676c7c563dd3d673e7ec"
+        ],
+        "argPattern": "U256Const,AddressConst,U256Const2,U256Const1,Bytes(32)"
+      }
+    }
+  }
+}

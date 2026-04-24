@@ -1,0 +1,54 @@
+{
+  "operation": "claimUnstake",
+  "contract": "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu",
+  "methodIndex": 32,
+  "txId": "8af1bfee2f185e1e14496e758be4913000a29d8140b51ffeee75b8b63ed23f9e",
+  "scriptOpt": "0101030000000813c2886c98b7600015008a01bd66ff5307c5a9408a265c0a458fabae65bdb07185b47cf45249485cbc091340640f0d144020cb15784c91a7c8cc0c073e77a9ea2c4e8eec5782c27d5e47febb3e6c9439fb00012018",
+  "contractInputs": [
+    "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu",
+    "uATds1K9931oKoiLeYF94qCR5zWy5NE4S5whN89bHkK1"
+  ],
+  "methods": [
+    {
+      "index": 0,
+      "argsLength": 0,
+      "localsLength": 0,
+      "returnLength": 0,
+      "instrs": [
+        {
+          "name": "U256Const",
+          "value": "150000000000000"
+        },
+        {
+          "name": "AddressConst",
+          "value": {
+            "kind": "P2PKH",
+            "value": "8a01bd66ff5307c5a9408a265c0a458fabae65bdb07185b47cf45249485cbc09"
+          }
+        },
+        {
+          "name": "U256Const",
+          "value": "100"
+        },
+        {
+          "name": "U256Const3"
+        },
+        {
+          "name": "U256Const1"
+        },
+        {
+          "name": "BytesConst",
+          "valueHex": "cb15784c91a7c8cc0c073e77a9ea2c4e8eec5782c27d5e47febb3e6c9439fb00",
+          "asAddress": "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu"
+        },
+        {
+          "name": "CallExternal",
+          "index": 32
+        },
+        {
+          "name": "Pop"
+        }
+      ]
+    }
+  ]
+}

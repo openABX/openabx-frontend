@@ -1,0 +1,28 @@
+.DS_Store
+.claude
+
+# Secrets — never commit these.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+
+# Deploy artifacts with contract addresses per network. Regeneratable; not secret,
+# but avoids merge conflicts on manual re-deploy.
+deployments.*.json
+contracts/deployments.*.json
+
+# Node / build output.
+node_modules/
+dist/
+out/
+.next/
+.turbo/
+*.tsbuildinfo
+
+# Test / coverage output.
+coverage/
+playwright-report/
+test-results/

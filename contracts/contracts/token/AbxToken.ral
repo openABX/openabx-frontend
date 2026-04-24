@@ -1,0 +1,53 @@
+import "std/fungible_token_interface"
+
+// OpenABX governance / fee-share token. Fixed 100,000,000 ABX at 9 decimals,
+// issued entirely at deploy to an initial holder. No post-deploy minting —
+// the tokens flow into allocations (team, investors, community, auction-pool
+// yield-farming, etc.) via regular transfers from the initial holder.
+//
+// This contract is deliberately thin. Phase 4's AuctionFarming and Phase 5's
+// Vesting contracts each hold their own ABX allocation; they do not mint
+// from ABX directly. `burn` is exposed so governance can decommission a
+// portion of the supply if it ever decides to.
+
+Contract AbxToken(
+  symbol: ByteVec,
+  name: ByteVec,
+  decimals: U256,
+  mut totalSupply: U256
+) implements IFungibleToken {
+
+  event Burned(from: Address, amount: U256, newTotalSupply: U256)
+
+  enum ErrorCodes {
+    ZeroAmount = 100
+    InsufficientSupply = 101
+  }
+
+  pub fn getSymbol() -> ByteVec {
+    return symbol
+  }
+
+  pub fn getName() -> ByteVec {
+    return name
+  }
+
+  pub fn getDecimals() -> U256 {
+    return decimals
+  }
+
+  pub fn getTotalSupply() -> U256 {
+    return totalSupply
+  }
+
+  // Permissionless self-burn: any holder can burn their own ABX.
+  @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+  pub fn burn(from: Address, amount: U256) -> () {
+    assert!(callerAddress!() == from, ErrorCodes.ZeroAmount)
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    assert!(amount <= totalSupply, ErrorCodes.InsufficientSupply)
+    transferTokenToSelf!(from, selfContractId!(), amount)
+    totalSupply = totalSupply - amount
+    emit Burned(from, amount, totalSupply)
+  }
+}

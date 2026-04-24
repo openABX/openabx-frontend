@@ -1,0 +1,202 @@
+// Linear vesting schedules. One Schedule per beneficiary address.
+//
+// Scope (GitBook §Auction Pools): "ABX rewards are vested linearly over 12
+// months" for Earn-pool yield farming. This contract is intentionally
+// generic — it can carry any ABX vesting schedule, not just Earn-pool
+// rewards. The per-beneficiary field `source` carries a tag the caller
+// sets on create, so off-chain indexers can distinguish Earn-farming
+// allocations from, say, a team allocation that a governance proposal
+// later adds.
+//
+// Out of Phase 5 scope: team / investor allocations (per spec §7 #8
+// NEEDS_HUMAN_CONFIRMATION). We do NOT implement those. The creator
+// role (initially admin; AuctionFarming in Phase 5 part 3) can only add
+// schedules whose total ABX the contract already holds — there is no
+// path for the creator to emit new ABX.
+//
+// Math (all raw units):
+//   vested(now) = totalAbx × min(durationMs, max(0, now − startMs))
+//                 / durationMs
+//   claimable   = vested(now) − claimed
+//
+// Timer: blockTimeStamp!() returns milliseconds since epoch on Alephium.
+//
+// Access control:
+//   - `createSchedule` is callable only by the registered `creator` (an
+//     Address, not a ByteVec, so it can be either an admin EOA or a
+//     future AuctionFarming contract's address).
+//   - `claim(beneficiary)` is permissionless — anyone can crank on behalf
+//     of a beneficiary (the ABX still goes to the beneficiary, not the
+//     caller).
+//   - `admin` can re-point `creator` via `setCreator`, which is how
+//     governance transfers the role to AuctionFarming in Phase 5 part 3.
+
+struct Schedule {
+  mut totalAbx: U256,       // total ABX allocated to this beneficiary
+  mut startMs: U256,        // vesting-start timestamp (blockTimeStamp units)
+  mut durationMs: U256,     // linear-vesting duration in ms
+  mut claimed: U256,        // ABX already claimed
+  mut source: ByteVec,      // tag (e.g., "earn-farming"); opaque to this contract
+  mut createdBy: Address    // audit fix H2: original creator, used as map-entry refund target
+}
+
+Contract Vesting(
+  abxTokenId: ByteVec,
+  mut admin: Address,
+  mut creator: Address,
+  mut totalAllocated: U256,   // cumulative ABX registered across all schedules
+  mut totalClaimed: U256      // cumulative ABX transferred out via claim()
+) {
+
+  mapping[Address, Schedule] schedules
+
+  event ScheduleCreated(
+    beneficiary: Address,
+    totalAbx: U256,
+    startMs: U256,
+    durationMs: U256,
+    source: ByteVec
+  )
+  event Claimed(beneficiary: Address, amount: U256)
+  event CreatorChanged(oldCreator: Address, newCreator: Address)
+  event AdminChanged(oldAdmin: Address, newAdmin: Address)
+
+  const TWELVE_MONTHS_MS = 31536000000
+
+  enum ErrorCodes {
+    NotAdmin           = 900
+    NotCreator         = 901
+    ScheduleExists     = 902
+    ScheduleMissing    = 903
+    ZeroAmount         = 904
+    ZeroDuration       = 905
+    NothingToClaim     = 906
+  }
+
+  // --- read-only ------------------------------------------------------------
+
+  pub fn getAbxTokenId() -> ByteVec       { return abxTokenId }
+  pub fn getAdmin() -> Address            { return admin }
+  pub fn getCreator() -> Address          { return creator }
+  pub fn getTotalAllocated() -> U256      { return totalAllocated }
+  pub fn getTotalClaimed() -> U256        { return totalClaimed }
+  pub fn getTwelveMonthsMs() -> U256      { return TWELVE_MONTHS_MS }
+
+  pub fn hasSchedule(who: Address) -> Bool {
+    return schedules.contains!(who)
+  }
+
+  pub fn getSchedule(who: Address) -> (U256, U256, U256, U256, ByteVec, Address) {
+    let s = schedules[who]
+    return s.totalAbx, s.startMs, s.durationMs, s.claimed, s.source, s.createdBy
+  }
+
+  // Returns the total vested amount (including already-claimed) as of `nowMs`.
+  // Callers typically pass blockTimeStamp!() for `nowMs`.
+  pub fn vestedAt(who: Address, nowMs: U256) -> U256 {
+    if (!schedules.contains!(who)) { return 0 }
+    let s = schedules[who]
+    if (s.durationMs == 0) {
+      // Defensive: zero-duration schedule means immediate full vesting.
+      return s.totalAbx
+    }
+    if (nowMs <= s.startMs) {
+      return 0
+    }
+    let elapsed = nowMs - s.startMs
+    if (elapsed >= s.durationMs) {
+      return s.totalAbx
+    }
+    return s.totalAbx * elapsed / s.durationMs
+  }
+
+  pub fn claimableAt(who: Address, nowMs: U256) -> U256 {
+    if (!schedules.contains!(who)) { return 0 }
+    let vested = vestedAt(who, nowMs)
+    let s = schedules[who]
+    if (vested <= s.claimed) { return 0 }
+    return vested - s.claimed
+  }
+
+  // --- admin / creator management -------------------------------------------
+
+  @using(updateFields = true)
+  pub fn setAdmin(newAdmin: Address) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = admin
+    admin = newAdmin
+    emit AdminChanged(old, newAdmin)
+  }
+
+  @using(updateFields = true)
+  pub fn setCreator(newCreator: Address) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = creator
+    creator = newCreator
+    emit CreatorChanged(old, newCreator)
+  }
+
+  // --- schedule lifecycle ---------------------------------------------------
+
+  // Creator must approve `totalAbx` ABX at call site. We accept only ONE
+  // schedule per beneficiary address for simplicity; a top-up call can be
+  // added in Phase 5 part 3 if real deployments need it.
+  @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+  pub fn createSchedule(
+    beneficiary: Address,
+    totalAbx: U256,
+    startMs: U256,
+    durationMs: U256,
+    source: ByteVec
+  ) -> () {
+    checkCaller!(callerAddress!() == creator, ErrorCodes.NotCreator)
+    assert!(totalAbx > 0, ErrorCodes.ZeroAmount)
+    assert!(durationMs > 0, ErrorCodes.ZeroDuration)
+    assert!(!schedules.contains!(beneficiary), ErrorCodes.ScheduleExists)
+
+    let by = callerAddress!()
+    transferTokenToSelf!(by, abxTokenId, totalAbx)
+
+    let s = Schedule {
+      totalAbx: totalAbx,
+      startMs: startMs,
+      durationMs: durationMs,
+      claimed: 0,
+      source: source,
+      createdBy: by
+    }
+    // Map-entry deposit (0.1 ALPH) is refunded to the original creator
+    // stored in `createdBy` — see `claim()` garbage-collect path (H2).
+    schedules.insert!(by, beneficiary, s)
+
+    totalAllocated = totalAllocated + totalAbx
+    emit ScheduleCreated(beneficiary, totalAbx, startMs, durationMs, source)
+  }
+
+  // Permissionless crank. Transfers `claimable` ABX to `beneficiary` (NOT
+  // the caller). If the schedule is fully vested and fully claimed after
+  // this call, the map entry is removed (refunds the 0.1 ALPH deposit to
+  // the original creator).
+  @using(assetsInContract = true, updateFields = true, checkExternalCaller = false)
+  pub fn claim(beneficiary: Address) -> () {
+    assert!(schedules.contains!(beneficiary), ErrorCodes.ScheduleMissing)
+    let nowMs = blockTimeStamp!()
+    let claimable = claimableAt(beneficiary, nowMs)
+    assert!(claimable > 0, ErrorCodes.NothingToClaim)
+
+    schedules[beneficiary].claimed = schedules[beneficiary].claimed + claimable
+    transferTokenFromSelf!(beneficiary, abxTokenId, claimable)
+    totalClaimed = totalClaimed + claimable
+
+    // Garbage-collect fully vested + fully claimed schedules. Refund the
+    // 0.1 ALPH map-entry deposit to the ORIGINAL creator (audit fix H2) —
+    // using `creator` here would misdirect the refund if `setCreator` has
+    // since rotated the role.
+    let s = schedules[beneficiary]
+    if (s.claimed >= s.totalAbx) {
+      schedules.remove!(s.createdBy, beneficiary)
+    }
+
+    emit Claimed(beneficiary, claimable)
+  }
+}

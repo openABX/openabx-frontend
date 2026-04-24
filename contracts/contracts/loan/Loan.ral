@@ -1,0 +1,112 @@
+// Per-borrower loan state. One Loan subcontract per wallet, keyed on owner.
+//
+// This contract is a *pure state holder*. All business logic — CR checks,
+// interest math, fee handling — lives in LoanManager. Loan exposes only:
+//   (a) read-only getters for the frontend and indexer, and
+//   (b) manager-only mutators that assert `callerContractId!() == manager`.
+//
+// Subcontract deposit (0.1 ALPH) is auto-handled by the Danube VM, so this
+// contract does not explicitly reserve it in `collateral`. `collateral` is
+// the borrower's economic collateral only.
+//
+// Units:
+//   - debt: atto-ABD (9 decimals; 1 ABD = 1_000_000_000)
+//   - collateral: atto-ALPH (18 decimals; 1 ALPH = 10^18)
+//   - interestRate: annualised rate at 1e18 scale (e.g. 5 % = 5 × 10^16)
+//   - lastInterestMs: milliseconds since epoch (matches blockTimeStamp!()).
+
+Contract Loan(
+  manager: ByteVec,
+  owner: Address,
+  interestRate: U256,
+  mut debt: U256,
+  mut collateral: U256,
+  mut lastInterestMs: U256
+) {
+
+  event CollateralAdjusted(owner: Address, newCollateral: U256)
+  event DebtAdjusted(owner: Address, newDebt: U256)
+  event InterestAnchorUpdated(owner: Address, nowMs: U256)
+  event Destroyed(owner: Address, refundTo: Address)
+
+  enum ErrorCodes {
+    NotManager              = 200
+    InsufficientCollateral  = 201
+    InsufficientDebt        = 202
+    MustBeFullyRepaid       = 203
+  }
+
+  // --- read-only accessors --------------------------------------------------
+
+  pub fn getOwner() -> Address           { return owner }
+  pub fn getManager() -> ByteVec         { return manager }
+  pub fn getInterestRate() -> U256       { return interestRate }
+  pub fn getDebt() -> U256               { return debt }
+  pub fn getCollateral() -> U256         { return collateral }
+  pub fn getLastInterestMs() -> U256     { return lastInterestMs }
+
+  // --- manager-only mutators ------------------------------------------------
+  // checkCaller! is inlined per the PlatformSettings note: the compiler's
+  // external-caller-check analyser doesn't follow private-fn callees in
+  // @alephium/cli v3.0.3.
+
+  @using(preapprovedAssets = true, assetsInContract = true, updateFields = true)
+  pub fn pullCollateral(from: Address, amount: U256) -> () {
+    checkCaller!(callerContractId!() == manager, ErrorCodes.NotManager)
+    transferTokenToSelf!(from, ALPH, amount)
+    collateral = collateral + amount
+    emit CollateralAdjusted(owner, collateral)
+  }
+
+  @using(assetsInContract = true, updateFields = true)
+  pub fn pushCollateral(to: Address, amount: U256) -> () {
+    checkCaller!(callerContractId!() == manager, ErrorCodes.NotManager)
+    assert!(amount <= collateral, ErrorCodes.InsufficientCollateral)
+    transferTokenFromSelf!(to, ALPH, amount)
+    collateral = collateral - amount
+    emit CollateralAdjusted(owner, collateral)
+  }
+
+  @using(updateFields = true)
+  pub fn addDebt(amount: U256) -> () {
+    checkCaller!(callerContractId!() == manager, ErrorCodes.NotManager)
+    debt = debt + amount
+    emit DebtAdjusted(owner, debt)
+  }
+
+  @using(updateFields = true)
+  pub fn reduceDebt(amount: U256) -> () {
+    checkCaller!(callerContractId!() == manager, ErrorCodes.NotManager)
+    assert!(amount <= debt, ErrorCodes.InsufficientDebt)
+    debt = debt - amount
+    emit DebtAdjusted(owner, debt)
+  }
+
+  @using(updateFields = true)
+  pub fn setLastInterestMs(nowMs: U256) -> () {
+    checkCaller!(callerContractId!() == manager, ErrorCodes.NotManager)
+    lastInterestMs = nowMs
+    emit InterestAnchorUpdated(owner, nowMs)
+  }
+
+  @using(assetsInContract = true, updateFields = true)
+  pub fn payInterestToManager(amountAlph: U256, nowMs: U256) -> () {
+    checkCaller!(callerContractId!() == manager, ErrorCodes.NotManager)
+    assert!(amountAlph <= collateral, ErrorCodes.InsufficientCollateral)
+    // Push interest ALPH directly back to the manager's contract vault.
+    transferTokenFromSelf!(contractIdToAddress!(manager), ALPH, amountAlph)
+    collateral = collateral - amountAlph
+    lastInterestMs = nowMs
+    emit CollateralAdjusted(owner, collateral)
+    emit InterestAnchorUpdated(owner, nowMs)
+  }
+
+  @using(assetsInContract = true)
+  pub fn destroy(refundTo: Address) -> () {
+    checkCaller!(callerContractId!() == manager, ErrorCodes.NotManager)
+    assert!(debt == 0, ErrorCodes.MustBeFullyRepaid)
+    emit Destroyed(owner, refundTo)
+    // Any remaining collateral + the 0.1 ALPH subcontract deposit refund to the borrower.
+    destroySelf!(refundTo)
+  }
+}

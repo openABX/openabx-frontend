@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Dark-first theme inspired by alephium.org — near-black background with a
+ * bright green accent. Light-mode falls back to a clean white. CSS vars are
+ * consumed by tailwind.config.ts via hsl(var(--…)) references.
+ */
+
+@layer base {
+  :root {
+    /* Surfaces */
+    --background: 210 15% 5%; /* near-black with a hint of blue */
+    --surface: 215 20% 8%; /* one step lighter for cards */
+    --surface-2: 215 20% 12%; /* two steps for elevated layers */
+
+    --foreground: 210 20% 98%;
+    --muted: 215 16% 14%;
+    --muted-foreground: 215 15% 60%;
+
+    /* Accent — Alephium-style electric green */
+    --primary: 152 100% 55%;
+    --primary-foreground: 210 15% 5%;
+
+    --accent: 152 100% 55%;
+    --accent-foreground: 210 15% 5%;
+
+    /* Semantics */
+    --success: 152 100% 55%;
+    --warning: 40 95% 60%;
+    --destructive: 0 85% 62%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 215 20% 15%;
+    --ring: 152 100% 55%;
+    --radius: 0.75rem;
+  }
+
+  /* Force a single dark theme at the document level. The `.dark` class is
+   * still kept as a safety net. */
+  html {
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1,
+      'ss01' 1,
+      'cv11' 1;
+    background:
+      radial-gradient(
+        ellipse 800px 600px at top,
+        hsl(152 60% 25% / 0.12),
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse 1000px 700px at bottom right,
+        hsl(200 70% 30% / 0.08),
+        transparent 60%
+      ),
+      hsl(var(--background));
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.3);
+    color: hsl(var(--foreground));
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-border bg-[hsl(var(--surface))] backdrop-blur-sm;
+  }
+  .card-elevated {
+    @apply rounded-xl border border-border bg-[hsl(var(--surface-2))] shadow-[0_0_0_1px_hsl(var(--primary)/0.08),0_20px_40px_-20px_hsl(var(--primary)/0.15)];
+  }
+  .glow-text {
+    text-shadow: 0 0 30px hsl(var(--primary) / 0.4);
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all hover:brightness-110 hover:shadow-[0_0_24px_hsl(var(--primary)/0.4)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:shadow-none;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-lg border border-border bg-transparent px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-primary/5;
+  }
+  .stat-value {
+    font-variant-numeric: tabular-nums;
+  }
+}

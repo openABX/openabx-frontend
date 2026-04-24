@@ -1,0 +1,111 @@
+{
+  "operation": "closeLoan",
+  "contract": "28QGP95rnmZYKRBEsBeGBTdLHetoSE9nxEatVrtuN2bEF",
+  "methodIndex": 19,
+  "txId": "40994781ec355e1c5af4fb45e18c90c9ace2159203be3ea14bf986f7374726fd",
+  "scriptOpt": "010103000200170c0d144020cbbd66a6a67863245be61176bf37c7ac2b69e04fc5a9fefec1741dedbcf43a00010017000c0d1600010c1701b4160113c12047ec85fda313c12047ec85fd1500f5fb3fb4e976bbfe083e413c919a799673b96210a6e975058a8db326ea50061e1340640c1400110c144020cbbd66a6a67863245be61176bf37c7ac2b69e04fc5a9fefec1741dedbcf43a000113",
+  "contractInputs": [
+    "tpxjsWJSaUh5i7XzNAsTWMRtD9QvDTV9zmMNeHHS6jQB",
+    "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu",
+    "29YL53teVrvK2o4P2cVej8aCGN7iQS8mE86bgxA2oFWa3",
+    "288xqicj5pfGWuxJLKYU78Pe55LENz4ndGXRoykz7NL2K"
+  ],
+  "methods": [
+    {
+      "index": 0,
+      "argsLength": 0,
+      "localsLength": 2,
+      "returnLength": 0,
+      "instrs": [
+        {
+          "name": "U256Const0"
+        },
+        {
+          "name": "U256Const1"
+        },
+        {
+          "name": "BytesConst",
+          "valueHex": "cbbd66a6a67863245be61176bf37c7ac2b69e04fc5a9fefec1741dedbcf43a00",
+          "asAddress": "28QGP95rnmZYKRBEsBeGBTdLHetoSE9nxEatVrtuN2bEF"
+        },
+        {
+          "name": "CallExternal",
+          "index": 0
+        },
+        {
+          "name": "StoreLocal",
+          "index": 0
+        },
+        {
+          "name": "U256Const0"
+        },
+        {
+          "name": "U256Const1"
+        },
+        {
+          "name": "LoadLocal",
+          "index": 0
+        },
+        {
+          "name": "CallExternal",
+          "index": 12
+        },
+        {
+          "name": "StoreLocal",
+          "index": 1
+        },
+        {
+          "name": "CallerAddress"
+        },
+        {
+          "name": "LoadLocal",
+          "index": 1
+        },
+        {
+          "name": "U256Const",
+          "value": "138645636605"
+        },
+        {
+          "name": "ApproveToken"
+        },
+        {
+          "name": "U256Const",
+          "value": "138645636605"
+        },
+        {
+          "name": "AddressConst",
+          "value": {
+            "kind": "P2PKH",
+            "value": "f5fb3fb4e976bbfe083e413c919a799673b96210a6e975058a8db326ea50061e"
+          }
+        },
+        {
+          "name": "U256Const",
+          "value": "100"
+        },
+        {
+          "name": "U256Const0"
+        },
+        {
+          "name": "BytesConst",
+          "valueHex": ""
+        },
+        {
+          "name": "U256Const5"
+        },
+        {
+          "name": "U256Const0"
+        },
+        {
+          "name": "BytesConst",
+          "valueHex": "cbbd66a6a67863245be61176bf37c7ac2b69e04fc5a9fefec1741dedbcf43a00",
+          "asAddress": "28QGP95rnmZYKRBEsBeGBTdLHetoSE9nxEatVrtuN2bEF"
+        },
+        {
+          "name": "CallExternal",
+          "index": 19
+        }
+      ]
+    }
+  ]
+}

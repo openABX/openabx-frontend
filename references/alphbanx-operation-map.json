@@ -1,0 +1,276 @@
+{
+  "28QGP95rnmZYKRBEsBeGBTdLHetoSE9nxEatVrtuN2bEF": {
+    "role": "borrowerOperations",
+    "family": "borrower",
+    "methodMap": {
+      "7": [
+        {
+          "operation": "addCollateral",
+          "confidence": "medium",
+          "count": 55,
+          "sampleTxIds": [
+            "c1833cd23efbd83da185be03354491478c1b4ec0c44b29ffac3fbc0e8c42221b",
+            "fd5e0b6a054c396f6b05a958987ccfc9ded9b6ee64e200d43a5350c6e6474e25",
+            "ece6bd37013c10183a630e13f0fbbdc6ef62bab608eb9a40bf84604c0de94d77"
+          ],
+          "explanation": "ALPH flowed into loan, no ABD change"
+        }
+      ],
+      "8": [
+        {
+          "operation": "addCollateral",
+          "confidence": "medium",
+          "count": 455,
+          "sampleTxIds": [
+            "2daf50f97ffaf75540bdd0f7c4bda06568e23affd1641d24d4137d9cfbf124ff",
+            "40f811416ce6f237826501e0b2791bfde6bf11ea3347e7e686e3335192f3b5a0",
+            "3270114501a42c9e0e1fd0e5f1e9fe35cba820c734629a55a9ce71392895894e"
+          ],
+          "explanation": "ALPH flowed into loan, no ABD change"
+        }
+      ],
+      "10": [
+        {
+          "operation": "repay",
+          "confidence": "medium",
+          "count": 421,
+          "sampleTxIds": [
+            "9b684793ad47d7ef0b2d3049081cbbd16274ae251d6be5dd1f5e9aaf1eb79d39",
+            "0b47d7e13b76fd031702be7190ccb278c73319d1152f679810392d9c020a55d4",
+            "8bc5a04fd46fdd17c09dce71f1c1ec9123071df009297a0938fe623930fb92a2"
+          ],
+          "explanation": "ABD flowed out, debt reduced"
+        }
+      ],
+      "11": [
+        {
+          "operation": "openLoan",
+          "confidence": "high",
+          "count": 221,
+          "sampleTxIds": [
+            "8a9c089e792cb3abf6a0f89317282e6b8bbc0abccfc55d4af56942002d01d806",
+            "17f346c7bde983a83d96a5f042a4af2333f6e639222502009be7a55daad2d403",
+            "3ace5b0f75709940937078d801abecea0be6fd92703aae0d14ce36ae6081f73e"
+          ],
+          "explanation": "ABD minted to user, ALPH collateral out"
+        }
+      ],
+      "12": [
+        {
+          "operation": "openLoan",
+          "confidence": "high",
+          "count": 46,
+          "sampleTxIds": [
+            "b25a05d115d40d6d2ae019bb3482d51cc646165ac158713a63522d44875c25da",
+            "96621ebb749ccf34cec1bfc3bd5d72ff9656813f649208951ab7ad74482d7d60",
+            "1d4161d886fc7b711e025b57219e2c97c615dd6a69caebacd8a3a066c9930dda"
+          ],
+          "explanation": "ABD minted to user, ALPH collateral out"
+        }
+      ],
+      "19": [
+        {
+          "operation": "closeLoan",
+          "confidence": "medium",
+          "count": 72,
+          "sampleTxIds": [
+            "40994781ec355e1c5af4fb45e18c90c9ace2159203be3ea14bf986f7374726fd",
+            "a8046a88b3a019ec32e8b28fa6a0f3097273d75e0ccf4b7afcb203ee5fbdaa0c",
+            "95b3fe6a21b62f2de6378fbf8e7720241cd465288bdeca199f7dd9d6e1d3758f"
+          ],
+          "explanation": "ABD burned, ALPH collateral returned"
+        }
+      ],
+      "20": [
+        {
+          "operation": "withdrawCollateral",
+          "confidence": "medium",
+          "count": 412,
+          "sampleTxIds": [
+            "161b512bebba95f6730abe7134b41ed840ba89b517297014cb7d0b20fd3cb176",
+            "c8471af945fc68f862d129e6d3236fc9da7d52d6a82b3260e3d3761d97ec49ed",
+            "4750500b8e3ca8ad2a13833ae2b607e39d77854b9e11859e02d1cc9dfbd187cd"
+          ],
+          "explanation": "ALPH returned to user, no ABD change"
+        },
+        {
+          "operation": "addCollateral",
+          "confidence": "medium",
+          "count": 2,
+          "sampleTxIds": [
+            "e98e506aa43907f982558a7e442d6012bdb22d6dfaefa780f818cc322c4f00f5",
+            "a2870850f6d99d89feecc031022bc960d5b5ec72597d8d1b84df186af0729d90"
+          ],
+          "explanation": "ALPH flowed into loan, no ABD change"
+        }
+      ]
+    }
+  },
+  "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu": {
+    "role": "stakeManager",
+    "family": "stake",
+    "methodMap": {
+      "30": [
+        {
+          "operation": "stake",
+          "confidence": "high",
+          "count": 721,
+          "sampleTxIds": [
+            "3526c31ece147f00c47b1a3ee311cfa185a3ad8afd88322f265f492acfbe1ea3",
+            "9838896456fa957b8fb9f12f3c7adabe707e05c597fd8537d01d613ba7e4580d",
+            "7d30c850eba933f48649963bd710fcb00e51e9ad248ca138a8331f15556bf41f"
+          ],
+          "explanation": "ABX flowed out of user wallet into StakeManager"
+        }
+      ],
+      "31": [
+        {
+          "operation": "requestUnstake",
+          "confidence": "low",
+          "count": 26,
+          "sampleTxIds": [
+            "5c90728811eda18ff8abc63e9be3c998fc355974d744e8b6004f12e2334b0902",
+            "ad68289dfc8f640182d764bca26813fed33964c21d7b56dc6b27cc43e878c3c2",
+            "8a4703c17eeaa350a4b6fcf4e687fe9f7d8afa51870335663d945fc9c3fed761"
+          ],
+          "explanation": "no token move; candidate requestUnstake (starts cooldown)"
+        }
+      ],
+      "32": [
+        {
+          "operation": "claimUnstake",
+          "confidence": "high",
+          "count": 99,
+          "sampleTxIds": [
+            "8af1bfee2f185e1e14496e758be4913000a29d8140b51ffeee75b8b63ed23f9e",
+            "f873f79518eeabac34523262e427a65945014117fa328e20d7553a8dd3d87a3c",
+            "0aa04fd181fa1d4336d573513da671bc3814a69b7474bc39b4787d519803d242"
+          ],
+          "explanation": "ABX returned to user wallet"
+        }
+      ],
+      "33": [
+        {
+          "operation": "claimRewards",
+          "confidence": "medium",
+          "count": 1726,
+          "sampleTxIds": [
+            "f54add3e557f4bb5b3030a14342e61ffb3d1adc249b1de87845ad72c8cec7066",
+            "219399cd583eff25dc0c0ea5ad13e0fde09c099a8190e3d5c8dab92c837ebff0",
+            "a8ebb3fcc8ae7b8410a53da635e35be648e1df78ca7cf6d2433b50d182a944ee"
+          ],
+          "explanation": "ALPH returned to user, no token move — rewards claim"
+        },
+        {
+          "operation": "requestUnstake",
+          "confidence": "low",
+          "count": 7,
+          "sampleTxIds": [
+            "6322c035d76463fc5c0a849fac5259343574fed2c138c1b84e9ccfe091bc00cf",
+            "83806ff4eee4ad8aba6af584a5728e46317e4fa4e7c1be22b9d821f00e9aeb8e",
+            "5d530b4a41490ba3cf37c206cb812702e06a65c5dbe0fb823c4e6dbeef83548d"
+          ],
+          "explanation": "no token move; candidate requestUnstake (starts cooldown)"
+        }
+      ]
+    }
+  },
+  "29YL53teVrvK2o4P2cVej8aCGN7iQS8mE86bgxA2oFWa3": {
+    "role": "auctionManager",
+    "family": "auction",
+    "methodMap": {
+      "36": [
+        {
+          "operation": "poolDeposit",
+          "confidence": "high",
+          "count": 255,
+          "sampleTxIds": [
+            "18b3050df2caab420dd1ae4f8f559ad4ef4709ff4136dabd89ecda65aaa73462",
+            "870692eb55f048c1f5048601f75767cf5a68e3733609e062b00ebc137c74c3bc",
+            "918e8168c06dbbecb04205cffc4177b874f317618f16d75e2c5dd44e7462d018"
+          ],
+          "explanation": "ABD flowed out of user wallet into pool"
+        }
+      ],
+      "40": [
+        {
+          "operation": "poolClaim",
+          "confidence": "high",
+          "count": 95,
+          "sampleTxIds": [
+            "3185d4d9aeb7d00b0f75dcf0705b7e73b6e3acd58f96fe8e7fed5dff75df2133",
+            "7c02fc16e723aa33adbe535f68c322adeddb2f94556356a8fe13d81570b6082b",
+            "a09143d6b8dfd30b7334a934e262e172e2aa6d3025908bfda40642751197f15b"
+          ],
+          "explanation": "ALPH returned with no ABD change — pool reward claim"
+        },
+        {
+          "operation": "unknown",
+          "confidence": "low",
+          "count": 15,
+          "sampleTxIds": [
+            "95251edba26aaf0f0fd5bb1cae397881d852497e35a77162420f4755c86712be",
+            "2aa8dd3139d9c58aaf900f4d175ba77d5cc2af256690b3da7fed476dd122145e",
+            "b9335437212f81be43be85fcad172eecf3e84e5c801005bee63af8ac1c444374"
+          ],
+          "explanation": "unclassified — Δalph=-25096200495720456, Δabd=0, Δabx=0"
+        }
+      ],
+      "41": [
+        {
+          "operation": "poolWithdraw",
+          "confidence": "medium",
+          "count": 386,
+          "sampleTxIds": [
+            "fc9284c71d6fe37812ca0cacb15970bef9d8a3a90219299089627f773ea6f44e",
+            "bec0b610f6c881be45c208dfa10f3a878b5312e39f78f0842624525f7d6e3a40",
+            "8a8faece85a1217dddacf6717db31e526a96869a58be8fe79a4504775465364c"
+          ],
+          "explanation": "ABD returned + ALPH received — combined withdraw+claim?"
+        }
+      ],
+      "42": [
+        {
+          "operation": "poolClaim",
+          "confidence": "high",
+          "count": 787,
+          "sampleTxIds": [
+            "cbcb4c9bb525420697e61c61367305aa5f95314c7b83a23dc51093665b2fd197",
+            "c2be1a8eefe8a8bc1286b903859a3694e619e7e6b71b352efba4feac16403ec4",
+            "7b13dbce9bf23381a560176fbeecf8444d413bdd244047358cb9f1d39919a641"
+          ],
+          "explanation": "ALPH returned with no ABD change — pool reward claim"
+        },
+        {
+          "operation": "unknown",
+          "confidence": "low",
+          "count": 19,
+          "sampleTxIds": [
+            "06151071582f8a33d2a129217a5fbf0a3147edece634feb2f3c210c9db3b68f4",
+            "ac8f5ed26dbff4097cde61c92adb422e0a8d3b958c284b433dd7011109549005",
+            "9c80cbc86d2cb699efccc17738f7dde2d23bcf23293d8941d551fc23a39e6d31"
+          ],
+          "explanation": "unclassified — Δalph=-14951499999982271, Δabd=0, Δabx=0"
+        }
+      ],
+      "43": [
+        {
+          "operation": "unknown",
+          "confidence": "low",
+          "count": 31,
+          "sampleTxIds": [
+            "a82e9227e9e2621ebf36a155caae0e1ba7f328aa97f796f9f702dca1cfb56176",
+            "039fd5515b38df09808112e196045c2ef04a22e1e5ceacd0672aec5e96b86fe5",
+            "a6437f12ec21a1b55e0d3ce290c26876d2c1ef7ad04e9da226e6ca4b0deee069"
+          ],
+          "explanation": "unclassified — Δalph=-229699000000000000, Δabd=0, Δabx=0"
+        }
+      ]
+    }
+  },
+  "tpxjsWJSaUh5i7XzNAsTWMRtD9QvDTV9zmMNeHHS6jQB": {
+    "role": "loanManager",
+    "family": "loan",
+    "methodMap": {}
+  }
+}

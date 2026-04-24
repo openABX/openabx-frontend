@@ -1,0 +1,518 @@
+// Parent contract for all Loan subcontracts. Holds the global debt/collateral
+// accounting, interest parameters, and protocol-wide fee schedule. Every
+// state-mutating method is called from BorrowerOperations — LoanManager
+// itself does not talk to end-user wallets. Business logic lives here; Loan
+// is a pure state holder.
+//
+// Units + scaling (see docs/00-protocol-spec.md §2):
+//   - Debt: atto-ABD (1 ABD = 10^9).
+//   - Collateral: atto-ALPH (1 ALPH = 10^18).
+//   - Prices (DIA): USD-per-ALPH at 10^18 scale (matches Phase 0 observation).
+//   - Rates (fee, MCR, interest): 10^18 scale (0.5 % = 5 × 10^15, 200 % = 2 × 10^18).
+//
+// CR formula (1e18-scaled):
+//   CR_1e18 = (collateral × price) / (10^9 × debt)
+//   → "200 %" when CR_1e18 ≥ 2 × 10^18.
+//
+// Interest formula (per paper §2.4.7, substituting P_paper = 1 / P_dia):
+//   interest_atto_alph = (debt × ir × elapsedMs × 10^9) / (YEAR_MS × price)
+//
+// Minting fee:
+//   fee_atto_alph = (feeRate × debt × 10^9) / price
+//
+// Subcontract creation uses the Factory pattern per Alephium docs:
+// `loanTemplate` holds the contract id of a deployed "template" Loan instance.
+// `copyCreateSubContract!` copies its bytecode into a new subcontract keyed on
+// the borrower's address.
+
+Contract LoanManager(
+  abdTokenId: ByteVec,
+  oracleId: ByteVec,
+  loanTemplate: ByteVec,
+  mut admin: Address,
+  mut totalDebt: U256,
+  mut totalCollateral: U256,
+  mut mintingFee: U256,
+  mut mcrThreshold: U256,
+  mut minLoanSize: U256,
+  mut auctionManager: ByteVec,
+  mut borrowerOperations: ByteVec,    // audit fix A-01/A-04
+  mut circuitBreaker: ByteVec,        // audit fix O-02/D-23: no-op when empty
+  mut badDebt: U256                   // audit fix O-04: unabsorbed debt from partial liquidations
+) {
+
+  event LoanOpened(owner: Address, collateral: U256, debt: U256, interestRate: U256)
+  event LoanAdjusted(owner: Address, collateral: U256, debt: U256)
+  event LoanClosed(owner: Address)
+  event InterestSettled(owner: Address, interestAlph: U256, nowMs: U256)
+  event ParametersChanged(mintingFee: U256, mcrThreshold: U256, minLoanSize: U256)
+  event Liquidated(owner: Address, debtAbsorbed: U256, alphConsumed: U256, badDebtDelta: U256)
+  event BadDebtWrittenOff(amount: U256, newBadDebt: U256)
+  event Redeemed(
+    redeemer: Address,
+    owner: Address,
+    abdBurned: U256,
+    alphToRedeemer: U256,
+    alphRebate: U256
+  )
+  event AuctionManagerChanged(oldRef: ByteVec, newRef: ByteVec)
+  event CircuitBreakerChanged(oldRef: ByteVec, newRef: ByteVec)
+
+  const YEAR_MS = 31536000000
+  const SIX_HOURS_MS = 21600000
+  const ABD_SCALE = 1000000000
+  const PRECISION = 1000000000000000000
+  const BPS_SCALE = 10000
+  const REDEMPTION_FEE_BPS = 150    // 1.5 %
+
+  enum ErrorCodes {
+    NotAdmin                 = 300
+    LoanAlreadyExists        = 301
+    LoanDoesNotExist         = 302
+    BelowMcr                 = 304
+    BelowMinLoanSize         = 305
+    ZeroAmount               = 306
+    RepayExceedsDebt         = 307
+    UnsupportedRate          = 308
+    InsufficientCollateral   = 309
+    DebtOutstanding          = 310
+    NotLiquidatable          = 311
+    ZeroDebt                 = 312
+    AuctionManagerNotWired   = 313
+    NotBorrowerOps           = 314    // audit fix A-01/A-04
+    NotFromCaller            = 315    // caller address must equal declared `from`
+  }
+
+  // --- access-control helper (audit fix A-01/A-04) -------------------------
+  //
+  // Audit found that every state-mutating pub method on LoanManager had no
+  // caller check, allowing direct calls with attacker-supplied price arguments
+  // to drain any loan. Fix: a mut `borrowerOperations` field that, when set
+  // by 1_wire.ts post-deploy, locks every mutator to the BorrowerOperations
+  // wrapper. While unset (test fixtures, devnet bootstrap), the check is a
+  // no-op so existing tests keep working.
+  fn requireBorrowerOps() -> () {
+    if (size!(borrowerOperations) > 0) {
+      assert!(callerContractId!() == borrowerOperations, ErrorCodes.NotBorrowerOps)
+    }
+  }
+
+  // --- circuit-breaker gate (audit fix O-02/D-23) --------------------------
+  //
+  // If `circuitBreaker` is set, consult it before every mutator. `nowMs` and
+  // `lastUpdateMillis` are supplied by the caller (BorrowerOperations reads
+  // them from the oracle). When unset (test fixtures), the gate is a no-op.
+  fn requireHealthy(lastUpdateMillis: U256) -> () {
+    if (size!(circuitBreaker) > 0) {
+      CircuitBreaker(circuitBreaker).requireHealthy(lastUpdateMillis)
+    }
+  }
+
+  // --- read-only accessors --------------------------------------------------
+
+  pub fn getAbdTokenId() -> ByteVec        { return abdTokenId }
+  pub fn getOracleId() -> ByteVec          { return oracleId }
+  pub fn getAdmin() -> Address             { return admin }
+  pub fn getTotalDebt() -> U256            { return totalDebt }
+  pub fn getTotalCollateral() -> U256      { return totalCollateral }
+  pub fn getMintingFee() -> U256           { return mintingFee }
+  pub fn getMcrThreshold() -> U256         { return mcrThreshold }
+  pub fn getMinLoanSize() -> U256          { return minLoanSize }
+  pub fn getLoanTemplate() -> ByteVec      { return loanTemplate }
+  pub fn getAuctionManager() -> ByteVec    { return auctionManager }
+  pub fn getBorrowerOperations() -> ByteVec { return borrowerOperations }
+  pub fn getCircuitBreaker() -> ByteVec    { return circuitBreaker }
+  pub fn getBadDebt() -> U256              { return badDebt }
+
+  // 8 discrete tiers hard-coded per spec §2.
+  pub fn isSupportedInterestRate(ir: U256) -> Bool {
+    return
+      ir == 10000000000000000 ||
+      ir == 30000000000000000 ||
+      ir == 50000000000000000 ||
+      ir == 100000000000000000 ||
+      ir == 150000000000000000 ||
+      ir == 200000000000000000 ||
+      ir == 250000000000000000 ||
+      ir == 300000000000000000
+  }
+
+  pub fn computeCr(collateral: U256, debt: U256, price: U256) -> U256 {
+    if (debt == 0) {
+      return u256Max!()
+    }
+    return collateral * price / (ABD_SCALE * debt)
+  }
+
+  pub fn computeMintingFee(debt: U256, price: U256) -> U256 {
+    return mintingFee * debt * ABD_SCALE / price
+  }
+
+  pub fn computeInterest(debt: U256, interestRate: U256, elapsedMs: U256, price: U256) -> U256 {
+    if (debt == 0 || elapsedMs == 0) { return 0 }
+    let settledMs = (elapsedMs / SIX_HOURS_MS) * SIX_HOURS_MS
+    if (settledMs == 0) { return 0 }
+    return debt * interestRate * settledMs * ABD_SCALE / (YEAR_MS * price)
+  }
+
+  pub fn loanIdOf(owner: Address) -> ByteVec {
+    return subContractId!(toByteVec!(owner))
+  }
+
+  pub fn loanExists(owner: Address) -> Bool {
+    return contractExists!(subContractId!(toByteVec!(owner)))
+  }
+
+  // --- admin mutators -------------------------------------------------------
+
+  @using(updateFields = true)
+  pub fn setAdmin(newAdmin: Address) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    admin = newAdmin
+  }
+
+  @using(updateFields = true)
+  pub fn setParameters(newMintingFee: U256, newMcr: U256, newMinLoan: U256) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    mintingFee = newMintingFee
+    mcrThreshold = newMcr
+    minLoanSize = newMinLoan
+    emit ParametersChanged(newMintingFee, newMcr, newMinLoan)
+  }
+
+  @using(updateFields = true)
+  pub fn setAuctionManager(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = auctionManager
+    auctionManager = newRef
+    emit AuctionManagerChanged(old, newRef)
+  }
+
+  @using(updateFields = true)
+  pub fn setBorrowerOperations(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    borrowerOperations = newRef
+  }
+
+  @using(updateFields = true)
+  pub fn setCircuitBreaker(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = circuitBreaker
+    circuitBreaker = newRef
+    emit CircuitBreakerChanged(old, newRef)
+  }
+
+  // Admin-initiated write-off for socialised bad debt (audit fix O-04).
+  // Governance can mint ABD elsewhere (or capture fee revenue) to cover
+  // `badDebt` and then call this to reduce the outstanding counter.
+  @using(updateFields = true)
+  pub fn writeOffBadDebt(amount: U256) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    assert!(amount > 0 && amount <= badDebt, ErrorCodes.ZeroAmount)
+    badDebt = badDebt - amount
+    emit BadDebtWrittenOff(amount, badDebt)
+  }
+
+  // --- public lifecycle methods --------------------------------------------
+  //
+  // These are called by BorrowerOperations on the user's behalf. Every
+  // mutator now takes the end-user's address as an explicit `from`/`owner`
+  // parameter AND asserts `callerAddress!() == from` so that an admin-signed
+  // direct call cannot forge the user (audit fix A-03).
+
+  @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+  pub fn openLoan(
+    owner: Address,
+    collateralAmount: U256,
+    borrowAmount: U256,
+    interestRate: U256,
+    price: U256,
+    nowMs: U256,
+    priceUpdateMs: U256
+  ) -> () {
+    requireBorrowerOps()
+    requireHealthy(priceUpdateMs)
+    assert!(callerAddress!() == owner, ErrorCodes.NotFromCaller)
+    assert!(!loanExists(owner), ErrorCodes.LoanAlreadyExists)
+    assert!(isSupportedInterestRate(interestRate), ErrorCodes.UnsupportedRate)
+    assert!(borrowAmount >= minLoanSize, ErrorCodes.BelowMinLoanSize)
+    assert!(collateralAmount > 0, ErrorCodes.ZeroAmount)
+
+    let feeAlph = computeMintingFee(borrowAmount, price)
+    assert!(feeAlph < collateralAmount, ErrorCodes.InsufficientCollateral)
+    let netCollateral = collateralAmount - feeAlph
+
+    let cr = computeCr(netCollateral, borrowAmount, price)
+    assert!(cr >= mcrThreshold, ErrorCodes.BelowMcr)
+
+    // 1. Create the Loan subcontract.
+    let (encImm, encMut) = Loan.encodeFields!(
+      selfContractId!(),
+      owner,
+      interestRate,
+      borrowAmount,
+      0,
+      nowMs
+    )
+    let _ = copyCreateSubContract!{owner -> ALPH: minimalContractDeposit!()}(
+      toByteVec!(owner),
+      loanTemplate,
+      encImm,
+      encMut
+    )
+
+    // 2. Pull the minting fee into LoanManager's own vault (treasury).
+    transferTokenToSelf!(owner, ALPH, feeAlph)
+
+    // 3. Push the rest of the collateral into the new Loan's vault.
+    let loanId = loanIdOf(owner)
+    Loan(loanId).pullCollateral{owner -> ALPH: netCollateral}(owner, netCollateral)
+
+    // 4. Mint ABD to the borrower.
+    AbdToken(abdTokenId).mint(owner, borrowAmount)
+
+    totalDebt = totalDebt + borrowAmount
+    totalCollateral = totalCollateral + netCollateral
+
+    emit LoanOpened(owner, netCollateral, borrowAmount, interestRate)
+  }
+
+  @using(preapprovedAssets = true, updateFields = true, checkExternalCaller = false)
+  pub fn addCollateral(owner: Address, amount: U256, priceUpdateMs: U256) -> () {
+    requireBorrowerOps()
+    requireHealthy(priceUpdateMs)
+    assert!(callerAddress!() == owner, ErrorCodes.NotFromCaller)
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    assert!(loanExists(owner), ErrorCodes.LoanDoesNotExist)
+
+    let loanId = loanIdOf(owner)
+    Loan(loanId).pullCollateral{owner -> ALPH: amount}(owner, amount)
+    totalCollateral = totalCollateral + amount
+    emit LoanAdjusted(owner, Loan(loanId).getCollateral(), Loan(loanId).getDebt())
+  }
+
+  @using(updateFields = true, checkExternalCaller = false)
+  pub fn withdrawCollateral(owner: Address, amount: U256, price: U256, priceUpdateMs: U256) -> () {
+    requireBorrowerOps()
+    requireHealthy(priceUpdateMs)
+    assert!(callerAddress!() == owner, ErrorCodes.NotFromCaller)
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    assert!(loanExists(owner), ErrorCodes.LoanDoesNotExist)
+
+    let loanId = loanIdOf(owner)
+    let debt = Loan(loanId).getDebt()
+    let currentCollateral = Loan(loanId).getCollateral()
+    assert!(amount <= currentCollateral, ErrorCodes.InsufficientCollateral)
+
+    let postCollateral = currentCollateral - amount
+    let cr = computeCr(postCollateral, debt, price)
+    assert!(cr >= mcrThreshold, ErrorCodes.BelowMcr)
+
+    Loan(loanId).pushCollateral(owner, amount)
+    totalCollateral = totalCollateral - amount
+    emit LoanAdjusted(owner, postCollateral, debt)
+  }
+
+  @using(updateFields = true, checkExternalCaller = false)
+  pub fn borrowMore(owner: Address, additionalDebt: U256, price: U256, priceUpdateMs: U256) -> () {
+    requireBorrowerOps()
+    requireHealthy(priceUpdateMs)
+    assert!(callerAddress!() == owner, ErrorCodes.NotFromCaller)
+    assert!(additionalDebt > 0, ErrorCodes.ZeroAmount)
+    assert!(loanExists(owner), ErrorCodes.LoanDoesNotExist)
+
+    let loanId = loanIdOf(owner)
+    let existingDebt = Loan(loanId).getDebt()
+    let collateral = Loan(loanId).getCollateral()
+
+    let feeAlph = computeMintingFee(additionalDebt, price)
+    assert!(feeAlph < collateral, ErrorCodes.InsufficientCollateral)
+    let postCollateral = collateral - feeAlph
+    let postDebt = existingDebt + additionalDebt
+
+    let cr = computeCr(postCollateral, postDebt, price)
+    assert!(cr >= mcrThreshold, ErrorCodes.BelowMcr)
+
+    Loan(loanId).pushCollateral(contractIdToAddress!(selfContractId!()), feeAlph)
+    Loan(loanId).addDebt(additionalDebt)
+    AbdToken(abdTokenId).mint(owner, additionalDebt)
+
+    totalDebt = totalDebt + additionalDebt
+    totalCollateral = totalCollateral - feeAlph
+    emit LoanAdjusted(owner, postCollateral, postDebt)
+  }
+
+  // `from` is the address whose ABD approval should be debited for the burn.
+  // The router asserts that `from == user` (no delegation across wallets in v1).
+  @using(preapprovedAssets = true, updateFields = true, checkExternalCaller = false)
+  pub fn repay(from: Address, owner: Address, amount: U256, priceUpdateMs: U256) -> () {
+    requireBorrowerOps()
+    requireHealthy(priceUpdateMs)
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    assert!(loanExists(owner), ErrorCodes.LoanDoesNotExist)
+
+    let loanId = loanIdOf(owner)
+    let existingDebt = Loan(loanId).getDebt()
+    assert!(amount <= existingDebt, ErrorCodes.RepayExceedsDebt)
+
+    // Burn from the user, not from callerAddress!() (audit fix A-03).
+    AbdToken(abdTokenId).burn{from -> abdTokenId: amount}(from, amount)
+
+    Loan(loanId).reduceDebt(amount)
+    totalDebt = totalDebt - amount
+    emit LoanAdjusted(owner, Loan(loanId).getCollateral(), existingDebt - amount)
+  }
+
+  @using(updateFields = true, checkExternalCaller = false)
+  pub fn closeLoan(owner: Address, priceUpdateMs: U256) -> () {
+    requireBorrowerOps()
+    requireHealthy(priceUpdateMs)
+    assert!(callerAddress!() == owner, ErrorCodes.NotFromCaller)
+    assert!(loanExists(owner), ErrorCodes.LoanDoesNotExist)
+
+    let loanId = loanIdOf(owner)
+    assert!(Loan(loanId).getDebt() == 0, ErrorCodes.DebtOutstanding)
+
+    let remainingCollateral = Loan(loanId).getCollateral()
+    totalCollateral = totalCollateral - remainingCollateral
+
+    Loan(loanId).destroy(owner)
+    emit LoanClosed(owner)
+  }
+
+  // --- liquidation ----------------------------------------------------------
+  //
+  // Permissionless via BorrowerOperations. Any caller can liquidate a
+  // below-MCR loan. Pools absorb what they can at the tier discounts; any
+  // remaining debt is recorded as bad debt (audit fix O-04) and the loan is
+  // still destroyed so its collateral stops acting as a drag.
+  @using(assetsInContract = enforced, updateFields = true, checkExternalCaller = false)
+  pub fn liquidate(owner: Address, price: U256, priceUpdateMs: U256) -> () {
+    requireBorrowerOps()
+    requireHealthy(priceUpdateMs)
+    assert!(price > 0, ErrorCodes.ZeroAmount)
+    assert!(size!(auctionManager) > 0, ErrorCodes.AuctionManagerNotWired)
+    assert!(loanExists(owner), ErrorCodes.LoanDoesNotExist)
+
+    let loanId = loanIdOf(owner)
+    let debt = Loan(loanId).getDebt()
+    let collateral = Loan(loanId).getCollateral()
+    assert!(debt > 0, ErrorCodes.ZeroDebt)
+    assert!(collateral > 0, ErrorCodes.InsufficientCollateral)
+
+    let cr = computeCr(collateral, debt, price)
+    assert!(cr < mcrThreshold, ErrorCodes.NotLiquidatable)
+
+    // Pull the loan's entire ALPH collateral into our vault.
+    let selfAddr = contractIdToAddress!(selfContractId!())
+    Loan(loanId).pushCollateral(selfAddr, collateral)
+
+    // Forward to AuctionManager. Partial absorption is now permitted.
+    let (debtAbsorbed, alphConsumed) =
+      AuctionManager(auctionManager).absorbDebt{selfAddr -> ALPH: collateral}(
+        debt, collateral, price, owner
+      )
+
+    assert!(debtAbsorbed <= debt, ErrorCodes.RepayExceedsDebt)
+    let shortfall = debt - debtAbsorbed
+    if (shortfall > 0) {
+      badDebt = badDebt + shortfall
+    }
+
+    // Mark the loan fully settled (from LoanManager's perspective) and
+    // destroy the subcontract. Any residual debt is socialised via badDebt.
+    Loan(loanId).reduceDebt(debtAbsorbed)
+    if (shortfall > 0) {
+      Loan(loanId).reduceDebt(shortfall)
+    }
+    Loan(loanId).destroy(owner)
+
+    totalDebt = totalDebt - debt
+    totalCollateral = totalCollateral - collateral
+
+    emit Liquidated(owner, debtAbsorbed, alphConsumed, shortfall)
+    emit LoanClosed(owner)
+  }
+
+  // --- redemption -----------------------------------------------------------
+  //
+  // Redeemer burns ABD and receives ALPH from the targeted loan at (roughly)
+  // the oracle price, net of a 1.5 % fee that is REBATED to the borrower
+  // whose loan is being force-redeemed.
+  //
+  // `redeemer` is the address whose ABD is burned and who receives the
+  // payout ALPH (audit fix A-03). BorrowerOperations forwards the caller
+  // here so that the chain-through router does not break.
+  //
+  // The loan is NOT auto-destroyed even if its debt hits zero (audit fix
+  // M1). A borrower whose loan is fully redeemed can call closeLoan to
+  // release the remaining collateral explicitly.
+  @using(preapprovedAssets = true, updateFields = true, checkExternalCaller = false)
+  pub fn redeem(redeemer: Address, owner: Address, amount: U256, price: U256, priceUpdateMs: U256) -> () {
+    requireBorrowerOps()
+    requireHealthy(priceUpdateMs)
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    assert!(price > 0, ErrorCodes.ZeroAmount)
+    assert!(loanExists(owner), ErrorCodes.LoanDoesNotExist)
+
+    let loanId = loanIdOf(owner)
+    let existingDebt = Loan(loanId).getDebt()
+    assert!(existingDebt > 0, ErrorCodes.ZeroDebt)
+
+    let v = if (amount > existingDebt) existingDebt else amount
+
+    // Burn ABD from the redeemer directly (audit fix A-03).
+    AbdToken(abdTokenId).burn{redeemer -> abdTokenId: v}(redeemer, v)
+
+    // Compute ALPH payout.
+    let alphTotal = v * PRECISION * ABD_SCALE / price
+    let alphRebate = alphTotal * REDEMPTION_FEE_BPS / BPS_SCALE
+    let alphToRedeemer = alphTotal - alphRebate
+
+    let currentCollateral = Loan(loanId).getCollateral()
+    assert!(alphTotal <= currentCollateral, ErrorCodes.InsufficientCollateral)
+
+    Loan(loanId).pushCollateral(redeemer, alphToRedeemer)
+    Loan(loanId).pushCollateral(owner, alphRebate)
+    Loan(loanId).reduceDebt(v)
+
+    totalDebt = totalDebt - v
+    totalCollateral = totalCollateral - alphTotal
+
+    emit Redeemed(redeemer, owner, v, alphToRedeemer, alphRebate)
+  }
+
+  // Permissionless crank. Interest settles in whole 6-hour chunks; the
+  // residual (elapsed % SIX_HOURS_MS) is carried forward by advancing
+  // lastInterestMs by exactly `settledMs` rather than to `nowMs` (audit
+  // fix M2). That prevents griefers from repeatedly invoking just-under-6h
+  // cranks to shave interest.
+  @using(updateFields = true, checkExternalCaller = false)
+  pub fn accrueInterest(owner: Address, price: U256, nowMs: U256, priceUpdateMs: U256) -> () {
+    requireBorrowerOps()
+    requireHealthy(priceUpdateMs)
+    assert!(loanExists(owner), ErrorCodes.LoanDoesNotExist)
+
+    let loanId = loanIdOf(owner)
+    let debt = Loan(loanId).getDebt()
+    let ir = Loan(loanId).getInterestRate()
+    let lastMs = Loan(loanId).getLastInterestMs()
+
+    if (debt == 0 || nowMs <= lastMs) {
+      return
+    }
+
+    let elapsed = nowMs - lastMs
+    let settledMs = (elapsed / SIX_HOURS_MS) * SIX_HOURS_MS
+    if (settledMs == 0) { return }
+
+    let interest = debt * ir * settledMs * ABD_SCALE / (YEAR_MS * price)
+    if (interest == 0) { return }
+
+    let newLastMs = lastMs + settledMs
+    Loan(loanId).payInterestToManager(interest, newLastMs)
+    totalCollateral = totalCollateral - interest
+
+    emit InterestSettled(owner, interest, newLastMs)
+  }
+}

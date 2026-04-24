@@ -1,0 +1,251 @@
+// Global ABX staking contract.
+//
+// Economics:
+//   - Stakers lock ABX. No ABX is emitted from this contract (rewards are
+//     paid in ALPH, consistent with GitBook §Staking: "Rewards are paid
+//     out in Alph").
+//   - LoanManager, AuctionManager, and AuctionPool deposit ALPH into this
+//     contract via `notifyRewards(amount)` whenever they want to distribute
+//     the staker share of a fee event. Callers provide the ALPH via APS.
+//   - Each staker's accrued ALPH is computed via a reward-index (Liquity
+//     ActivePool pattern). At any snapshot time T:
+//       accrual_at_T = stakedAbx × (rewardIndex − snapshotIndex) / PRECISION
+//     Claim-before-rebase (audit fix M-03/M-05): every stake / requestUnstake
+//     realises the accrual into a `pendingAlph` buffer that the user can
+//     claim at any time, then advances the snapshot to the current index.
+//     This eliminates the earlier `claimedAlph += (total − claimedAlph)`
+//     pattern which silently consumed pending rewards and could underflow.
+//
+// Lifecycle:
+//   stake → requestUnstake → (14-day cooldown) → claimUnstake.
+//   claim() is independent — a staker can claim rewards at any time.
+//   At most one pending unstake per address (concurrent unstakes would
+//   require more state; punted to v2).
+//
+// Access control:
+//   - `notifyRewards` is permissionless: the caller approves ALPH via APS,
+//     the contract pulls it and bumps the index. If there are no stakers,
+//     the ALPH accumulates in the vault as a "donation" and is never
+//     credited to anyone (emit RewardsDonated so off-chain reconciliation
+//     can spot it).
+//   - `admin` can retarget the ABX token id and update the cooldown, both
+//     gated by the Phase 5 part 2 Timelock.
+
+struct StakerState {
+  mut stakedAbx: U256,            // current effective stake
+  mut snapshotIndex: U256,        // rewardIndex at last rebase
+  mut pendingAlph: U256,          // ALPH realised but not yet transferred
+  mut pendingUnstakeAbx: U256,    // awaiting cooldown
+  mut unstakeReadyAtMs: U256      // ms; 0 when no pending unstake
+}
+
+Contract StakeManager(
+  abxTokenId: ByteVec,
+  mut admin: Address,
+  mut totalStakedAbx: U256,
+  mut rewardIndex: U256,          // cumulative ALPH-per-ABX at PRECISION scale
+  mut unstakeCooldownMs: U256     // 14 days by default
+) {
+
+  mapping[Address, StakerState] stakers
+
+  event Staked(staker: Address, amount: U256, newStakedAbx: U256)
+  event UnstakeRequested(
+    staker: Address,
+    amount: U256,
+    readyAtMs: U256
+  )
+  event Unstaked(staker: Address, amount: U256)
+  event RewardsClaimed(staker: Address, alphAmount: U256)
+  event RewardsNotified(fromContract: ByteVec, amount: U256, newIndex: U256)
+  event RewardsDonated(fromContract: ByteVec, amount: U256)
+  event ParametersChanged(unstakeCooldownMs: U256)
+
+  const PRECISION = 1000000000000000000
+  // Fourteen-day cooldown in ms: 1_209_600_000. Deploy scripts pass this as
+  // the initial `unstakeCooldownMs` field.
+
+  enum ErrorCodes {
+    NotAdmin              = 800
+    ZeroAmount            = 801
+    NotStaker             = 802
+    InsufficientStake     = 803
+    NoPendingUnstake      = 804
+    CooldownNotElapsed    = 805
+    PendingUnstakeExists  = 806
+    NothingToClaim        = 807
+    InvalidCooldown       = 808
+  }
+
+  // --- read-only ------------------------------------------------------------
+
+  pub fn getAbxTokenId() -> ByteVec         { return abxTokenId }
+  pub fn getAdmin() -> Address              { return admin }
+  pub fn getTotalStakedAbx() -> U256        { return totalStakedAbx }
+  pub fn getRewardIndex() -> U256           { return rewardIndex }
+  pub fn getUnstakeCooldownMs() -> U256     { return unstakeCooldownMs }
+
+  pub fn isStaker(who: Address) -> Bool {
+    return stakers.contains!(who)
+  }
+
+  pub fn stakeOf(who: Address) -> U256 {
+    if (!stakers.contains!(who)) { return 0 }
+    return stakers[who].stakedAbx
+  }
+
+  // Pending (unclaimed) ALPH rewards for a staker = realised pending buffer
+  // + any new accrual since the last snapshot.
+  pub fn pendingRewardsOf(who: Address) -> U256 {
+    if (!stakers.contains!(who)) { return 0 }
+    let s = stakers[who]
+    return s.pendingAlph + accrualFrom(s.stakedAbx, s.snapshotIndex)
+  }
+
+  fn accrualFrom(stakedAbx: U256, snapshotIndex: U256) -> U256 {
+    if (rewardIndex <= snapshotIndex || stakedAbx == 0) { return 0 }
+    return stakedAbx * (rewardIndex - snapshotIndex) / PRECISION
+  }
+
+  // Returns (pendingAmount, readyAtMs). pendingAmount=0 means no pending.
+  pub fn pendingUnstakeOf(who: Address) -> (U256, U256) {
+    if (!stakers.contains!(who)) { return 0, 0 }
+    let s = stakers[who]
+    return s.pendingUnstakeAbx, s.unstakeReadyAtMs
+  }
+
+  // --- admin ----------------------------------------------------------------
+
+  @using(updateFields = true)
+  pub fn setAdmin(newAdmin: Address) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    admin = newAdmin
+  }
+
+  @using(updateFields = true)
+  pub fn setUnstakeCooldownMs(newCooldown: U256) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    // Refuse nonsensical values: 0 (no cooldown) or > 60 days.
+    assert!(newCooldown > 0 && newCooldown <= 5184000000, ErrorCodes.InvalidCooldown)
+    unstakeCooldownMs = newCooldown
+    emit ParametersChanged(newCooldown)
+  }
+
+  // --- staking lifecycle ----------------------------------------------------
+
+  @using(preapprovedAssets = true, assetsInContract = enforced, updateFields = true, checkExternalCaller = false)
+  pub fn stake(amount: U256) -> () {
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    let user = callerAddress!()
+
+    transferTokenToSelf!(user, abxTokenId, amount)
+
+    if (stakers.contains!(user)) {
+      // Realise accrued rewards into pendingAlph BEFORE moving the snapshot.
+      let s = stakers[user]
+      let accrued = accrualFrom(s.stakedAbx, s.snapshotIndex)
+      stakers[user].pendingAlph = s.pendingAlph + accrued
+      stakers[user].stakedAbx = s.stakedAbx + amount
+      stakers[user].snapshotIndex = rewardIndex
+    } else {
+      let s = StakerState {
+        stakedAbx: amount,
+        snapshotIndex: rewardIndex,
+        pendingAlph: 0,
+        pendingUnstakeAbx: 0,
+        unstakeReadyAtMs: 0
+      }
+      stakers.insert!(user, user, s)
+    }
+
+    totalStakedAbx = totalStakedAbx + amount
+    emit Staked(user, amount, totalStakedAbx)
+  }
+
+  @using(updateFields = true, checkExternalCaller = false)
+  pub fn requestUnstake(amount: U256) -> () {
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    let user = callerAddress!()
+    assert!(stakers.contains!(user), ErrorCodes.NotStaker)
+
+    let s = stakers[user]
+    assert!(amount <= s.stakedAbx, ErrorCodes.InsufficientStake)
+    assert!(s.pendingUnstakeAbx == 0, ErrorCodes.PendingUnstakeExists)
+
+    // Realise accrued rewards into pendingAlph before rebasing the snapshot.
+    let accrued = accrualFrom(s.stakedAbx, s.snapshotIndex)
+    let readyAt = blockTimeStamp!() + unstakeCooldownMs
+    stakers[user].pendingAlph = s.pendingAlph + accrued
+    stakers[user].stakedAbx = s.stakedAbx - amount
+    stakers[user].snapshotIndex = rewardIndex
+    stakers[user].pendingUnstakeAbx = amount
+    stakers[user].unstakeReadyAtMs = readyAt
+
+    totalStakedAbx = totalStakedAbx - amount
+    emit UnstakeRequested(user, amount, readyAt)
+  }
+
+  @using(assetsInContract = true, updateFields = true, checkExternalCaller = false)
+  pub fn claimUnstake() -> () {
+    let user = callerAddress!()
+    assert!(stakers.contains!(user), ErrorCodes.NotStaker)
+
+    let s = stakers[user]
+    assert!(s.pendingUnstakeAbx > 0, ErrorCodes.NoPendingUnstake)
+    assert!(blockTimeStamp!() >= s.unstakeReadyAtMs, ErrorCodes.CooldownNotElapsed)
+
+    let amount = s.pendingUnstakeAbx
+    stakers[user].pendingUnstakeAbx = 0
+    stakers[user].unstakeReadyAtMs = 0
+
+    transferTokenFromSelf!(user, abxTokenId, amount)
+
+    // If the position is fully drained and there are no outstanding
+    // rewards, remove the entry and refund the 0.1 ALPH map-entry deposit.
+    let after = stakers[user]
+    if (
+      after.stakedAbx == 0 &&
+      after.pendingAlph == 0 &&
+      accrualFrom(after.stakedAbx, after.snapshotIndex) == 0
+    ) {
+      stakers.remove!(user, user)
+    }
+
+    emit Unstaked(user, amount)
+  }
+
+  @using(assetsInContract = true, updateFields = true, checkExternalCaller = false)
+  pub fn claim() -> () {
+    let user = callerAddress!()
+    assert!(stakers.contains!(user), ErrorCodes.NotStaker)
+
+    let s = stakers[user]
+    let accrued = accrualFrom(s.stakedAbx, s.snapshotIndex)
+    let claimable = s.pendingAlph + accrued
+    assert!(claimable > 0, ErrorCodes.NothingToClaim)
+
+    stakers[user].pendingAlph = 0
+    stakers[user].snapshotIndex = rewardIndex
+    transferTokenFromSelf!(user, ALPH, claimable)
+
+    emit RewardsClaimed(user, claimable)
+  }
+
+  // Permissionless deposit path. Any caller can push ALPH into this pool;
+  // the reward index updates proportionally to existing stake. If
+  // totalStakedAbx == 0, the ALPH accumulates in the vault but does NOT
+  // bump the index (no recipients). RewardsDonated makes this observable.
+  @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+  pub fn notifyRewards(amount: U256) -> () {
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    let from = callerAddress!()
+    transferTokenToSelf!(from, ALPH, amount)
+
+    if (totalStakedAbx > 0) {
+      rewardIndex = rewardIndex + amount * PRECISION / totalStakedAbx
+      emit RewardsNotified(toByteVec!(from), amount, rewardIndex)
+    } else {
+      emit RewardsDonated(toByteVec!(from), amount)
+    }
+  }
+}

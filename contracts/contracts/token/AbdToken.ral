@@ -1,0 +1,86 @@
+import "std/fungible_token_interface"
+
+// OpenABX stablecoin token. APS-native fungible token implementing IFungibleToken.
+//
+// Supply model: the contract issues U256_MAX at deploy and tracks circulating
+// `totalSupply` explicitly. `mint` moves tokens from the contract vault to a
+// recipient; `burn` pulls tokens from the caller back into the vault. The
+// token id equals the contract id.
+//
+// Only `mintAuthority` (initialised to the deployer, re-pointed to the
+// LoanManager once Phase 3 lands) can mint or burn. The authority is
+// transferable in one step by the current authority.
+
+Contract AbdToken(
+  symbol: ByteVec,
+  name: ByteVec,
+  decimals: U256,
+  mut mintAuthority: Address,
+  mut totalSupply: U256
+) implements IFungibleToken {
+
+  event Minted(to: Address, amount: U256, newTotalSupply: U256)
+  event Burned(from: Address, amount: U256, newTotalSupply: U256)
+  event MintAuthorityTransferred(oldAuthority: Address, newAuthority: Address)
+
+  enum ErrorCodes {
+    NotAuthorized = 100
+    ZeroAmount    = 101
+    InsufficientSupply = 102
+  }
+
+  // --- IFungibleToken impl --------------------------------------------------
+
+  pub fn getSymbol() -> ByteVec {
+    return symbol
+  }
+
+  pub fn getName() -> ByteVec {
+    return name
+  }
+
+  pub fn getDecimals() -> U256 {
+    return decimals
+  }
+
+  pub fn getTotalSupply() -> U256 {
+    return totalSupply
+  }
+
+  // --- read-only helpers ----------------------------------------------------
+
+  pub fn getMintAuthority() -> Address {
+    return mintAuthority
+  }
+
+  // --- mint / burn ----------------------------------------------------------
+
+  @using(assetsInContract = true, updateFields = true)
+  pub fn mint(to: Address, amount: U256) -> () {
+    checkCaller!(callerAddress!() == mintAuthority, ErrorCodes.NotAuthorized)
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    transferTokenFromSelf!(to, selfContractId!(), amount)
+    totalSupply = totalSupply + amount
+    emit Minted(to, amount, totalSupply)
+  }
+
+  @using(preapprovedAssets = true, assetsInContract = true, updateFields = true)
+  pub fn burn(from: Address, amount: U256) -> () {
+    checkCaller!(callerAddress!() == mintAuthority, ErrorCodes.NotAuthorized)
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    assert!(amount <= totalSupply, ErrorCodes.InsufficientSupply)
+    transferTokenToSelf!(from, selfContractId!(), amount)
+    totalSupply = totalSupply - amount
+    emit Burned(from, amount, totalSupply)
+  }
+
+  // --- authority transfer ---------------------------------------------------
+
+  @using(updateFields = true)
+  pub fn transferMintAuthority(newAuthority: Address) -> () {
+    checkCaller!(callerAddress!() == mintAuthority, ErrorCodes.NotAuthorized)
+    let old = mintAuthority
+    mintAuthority = newAuthority
+    emit MintAuthorityTransferred(old, newAuthority)
+  }
+}

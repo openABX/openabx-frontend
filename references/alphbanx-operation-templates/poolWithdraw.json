@@ -1,0 +1,55 @@
+{
+  "operation": "poolWithdraw",
+  "contract": "29YL53teVrvK2o4P2cVej8aCGN7iQS8mE86bgxA2oFWa3",
+  "methodIndex": 41,
+  "txId": "fc9284c71d6fe37812ca0cacb15970bef9d8a3a90219299089627f773ea6f44e",
+  "scriptOpt": "0101030000000713409e130f150024eb76bd68789aa21edf0c962deaf5d7b9eab8697ffef0bf71f0cd3c96445fc70f0c144020dca9e78ff1cc072053af4049ac256ceff313463684917b25088caeeb94f712000129",
+  "contractInputs": [
+    "29YL53teVrvK2o4P2cVej8aCGN7iQS8mE86bgxA2oFWa3",
+    "tpxjsWJSaUh5i7XzNAsTWMRtD9QvDTV9zmMNeHHS6jQB",
+    "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu",
+    "tmuMPx7xgBQpauZQsMQFDD6jspoVpMSidEfnK2wvEm7V",
+    "26kgg4E9wK9nciL8DTKmJBwpLnYckVsLNxFa4rizqzEbq",
+    "288xqicj5pfGWuxJLKYU78Pe55LENz4ndGXRoykz7NL2K"
+  ],
+  "methods": [
+    {
+      "index": 0,
+      "argsLength": 0,
+      "localsLength": 0,
+      "returnLength": 0,
+      "instrs": [
+        {
+          "name": "U256Const",
+          "value": "158"
+        },
+        {
+          "name": "U256Const",
+          "value": "15"
+        },
+        {
+          "name": "AddressConst",
+          "value": {
+            "kind": "P2PKH",
+            "value": "24eb76bd68789aa21edf0c962deaf5d7b9eab8697ffef0bf71f0cd3c96445fc7"
+          }
+        },
+        {
+          "name": "U256Const3"
+        },
+        {
+          "name": "U256Const0"
+        },
+        {
+          "name": "BytesConst",
+          "valueHex": "dca9e78ff1cc072053af4049ac256ceff313463684917b25088caeeb94f71200",
+          "asAddress": "29YL53teVrvK2o4P2cVej8aCGN7iQS8mE86bgxA2oFWa3"
+        },
+        {
+          "name": "CallExternal",
+          "index": 41
+        }
+      ]
+    }
+  ]
+}

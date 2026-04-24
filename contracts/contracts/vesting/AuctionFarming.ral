@@ -1,0 +1,146 @@
+// Earn-pool yield farming contract.
+//
+// Holds the 7,000,000 ABX community-allocated reserve (per GitBook
+// §Tokenomics). When an AuctionPool notifies that a depositor has earned
+// some ABX for a liquidation, AuctionFarming delegates to the Vesting
+// contract to create a 12-month linear schedule for that depositor.
+//
+// The reserve is fixed at deploy time — no additional minting path. When
+// the reserve is depleted, new farming claims revert; governance can
+// refill it by transferring ABX from the treasury and calling `topUp`.
+//
+// Access control:
+//   - `notifier` (a ByteVec contract id) is the only caller allowed to
+//     invoke `creditDepositor`. Initially admin-set; Phase 6 points it at
+//     AuctionManager so the liquidation cascade can emit ABX directly.
+//   - `admin` can retarget the notifier, pause new emissions, and top up
+//     the reserve.
+//   - `claimOnBehalf(beneficiary)` on the underlying Vesting contract is
+//     permissionless (anyone can crank).
+
+Contract AuctionFarming(
+  abxTokenId: ByteVec,
+  vesting: ByteVec,             // Vesting contract id
+  mut admin: Address,
+  mut notifier: ByteVec,        // authorised caller of creditDepositor
+  mut emittedAbx: U256,         // cumulative ABX emitted via creditDepositor
+  mut paused: Bool,
+  mut vestingDurationMs: U256   // 12 months by default
+) {
+
+  event DepositorCredited(beneficiary: Address, abxAmount: U256, scheduleStartMs: U256)
+  event NotifierChanged(oldRef: ByteVec, newRef: ByteVec)
+  event AdminChanged(oldAdmin: Address, newAdmin: Address)
+  event PausedChanged(paused: Bool)
+  event ToppedUp(amount: U256)
+  event VestingDurationChanged(oldMs: U256, newMs: U256)
+
+  const TWELVE_MONTHS_MS = 31536000000
+
+  enum ErrorCodes {
+    NotAdmin       = 1000
+    NotNotifier    = 1001
+    Paused         = 1002
+    ZeroAmount     = 1003
+    InvalidDuration = 1004
+  }
+
+  pub fn getAbxTokenId() -> ByteVec         { return abxTokenId }
+  pub fn getVesting() -> ByteVec            { return vesting }
+  pub fn getAdmin() -> Address              { return admin }
+  pub fn getNotifier() -> ByteVec           { return notifier }
+  pub fn getEmittedAbx() -> U256            { return emittedAbx }
+  pub fn isPaused() -> Bool                 { return paused }
+  pub fn getVestingDurationMs() -> U256     { return vestingDurationMs }
+  pub fn getTwelveMonthsMs() -> U256        { return TWELVE_MONTHS_MS }
+
+  // --- admin ---------------------------------------------------------------
+
+  @using(updateFields = true)
+  pub fn setAdmin(newAdmin: Address) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = admin
+    admin = newAdmin
+    emit AdminChanged(old, newAdmin)
+  }
+
+  @using(updateFields = true)
+  pub fn setNotifier(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = notifier
+    notifier = newRef
+    emit NotifierChanged(old, newRef)
+  }
+
+  @using(updateFields = true)
+  pub fn setPaused(newPaused: Bool) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    paused = newPaused
+    emit PausedChanged(newPaused)
+  }
+
+  @using(updateFields = true)
+  pub fn setVestingDurationMs(newMs: U256) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    assert!(newMs > 0 && newMs <= TWELVE_MONTHS_MS * 10, ErrorCodes.InvalidDuration)
+    let old = vestingDurationMs
+    vestingDurationMs = newMs
+    emit VestingDurationChanged(old, newMs)
+  }
+
+  // Permissionless top-up. Anyone may send ABX into this contract's vault;
+  // the balance counts toward future emissions.
+  @using(preapprovedAssets = true, assetsInContract = true, checkExternalCaller = false)
+  pub fn topUp(amount: U256) -> () {
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    transferTokenToSelf!(callerAddress!(), abxTokenId, amount)
+    emit ToppedUp(amount)
+  }
+
+  // --- notification ---------------------------------------------------------
+  //
+  // Called by AuctionPool / AuctionManager when a depositor earns ABX from
+  // a liquidation. Pulls ABX out of our vault, approves it to Vesting at
+  // call site, and Vesting.createSchedule pulls it in.
+
+  @using(assetsInContract = enforced, updateFields = true, checkExternalCaller = false)
+  pub fn creditDepositor(beneficiary: Address, abxAmount: U256) -> () {
+    checkCaller!(callerContractId!() == notifier, ErrorCodes.NotNotifier)
+    assert!(!paused, ErrorCodes.Paused)
+    assert!(abxAmount > 0, ErrorCodes.ZeroAmount)
+
+    let nowMs = blockTimeStamp!()
+    let selfAddr = contractIdToAddress!(selfContractId!())
+
+    // Opaque source tag identifies the provenance to the off-chain indexer.
+    // "earn-farming" in ASCII = 6561726e2d6661726d696e67.
+    let source = #6561726e2d6661726d696e67
+    // Audit fix H1: approve enough ALPH from this contract's vault to cover
+    // the map-entry deposit inside Vesting.createSchedule. Without this, the
+    // very first schedule for a new beneficiary would revert because the
+    // Vesting map.insert! has no ALPH source for its 0.1-ALPH entry deposit.
+    let mapDeposit = minimalContractDeposit!()
+    Vesting(vesting).createSchedule{
+      selfAddr -> abxTokenId: abxAmount, ALPH: mapDeposit
+    }(
+      beneficiary,
+      abxAmount,
+      nowMs,
+      vestingDurationMs,
+      source
+    )
+
+    emittedAbx = emittedAbx + abxAmount
+    emit DepositorCredited(beneficiary, abxAmount, nowMs)
+  }
+
+  // Permissionless ALPH top-up so `creditDepositor` can fund the Vesting
+  // map-entry deposit. Anyone may send ALPH into this contract's vault;
+  // the balance is drawn down (0.1 ALPH per schedule) as new beneficiaries
+  // are credited. (Audit fix H1.)
+  @using(preapprovedAssets = true, assetsInContract = true, checkExternalCaller = false)
+  pub fn fundAlph(amount: U256) -> () {
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    transferTokenToSelf!(callerAddress!(), ALPH, amount)
+  }
+}

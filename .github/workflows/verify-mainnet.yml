@@ -1,0 +1,62 @@
+name: Verify mainnet addresses
+
+# Runs the mainnet-address watchdog daily. If any baseline codeHash no longer
+# matches, the job fails — the expectation is an operator reviews the
+# upstream change, confirms it's legitimate, and updates BASELINES in
+# scripts/verify-mainnet-addresses.ts before re-running.
+#
+# Also runnable manually via the Actions tab (workflow_dispatch).
+
+on:
+  schedule:
+    # 09:00 UTC daily. Avoid midnight to sidestep batch-scheduler contention.
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # Allow the job to open an Issue on failure so operators are alerted
+  # without configuring a third-party notifier.
+  issues: write
+
+jobs:
+  verify:
+    name: Check AlphBanX codeHash baselines
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Run watchdog
+        id: watchdog
+        run: pnpm exec tsx scripts/verify-mainnet-addresses.ts
+      - name: Open alert issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `verify-mainnet failed on ${new Date().toISOString().slice(0, 10)}`
+            const body = [
+              `The daily mainnet-address watchdog detected a codeHash mismatch.`,
+              ``,
+              `Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              ``,
+              `Action required:`,
+              `1. Review the run logs to see which address drifted.`,
+              `2. Confirm the upstream change is legitimate (check AlphBanX comms).`,
+              `3. If legitimate, update BASELINES in scripts/verify-mainnet-addresses.ts.`,
+              `4. If not, HALT the mainnet frontend until the drift is understood.`,
+            ].join('\n')
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: ['security', 'mainnet-watchdog'],
+            })

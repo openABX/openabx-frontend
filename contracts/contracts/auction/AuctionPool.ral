@@ -1,0 +1,320 @@
+// Single-tier auction pool. Holds ABD deposits; during a liquidation,
+// absorbs debt proportionally and gains discounted ALPH collateral.
+//
+// Accounting: Liquity-style P/S snapshot with epoch counter (audit fix M-02).
+// For each liquidation that consumes fraction `f` of the pool's ABD and
+// yields `alphGained`:
+//
+//   product (P)       ← P × (totalAbd − debtAbsorbed) / totalAbd
+//   alphPerUnit (S)   ← S + (alphGained × P) / totalAbd
+//
+// A depositor with initial deposit `d` and snapshot (P_i, S_i) taken during
+// epoch E_i:
+//
+//   if depositor.epoch != pool.epoch:  currentAbd = 0, claimable = 0
+//                                       (their capital was wiped out in a
+//                                        full-pool liquidation; snapshot is
+//                                        stale and MUST not contribute).
+//   else:
+//     current_abd        = d × P / P_i
+//     claimable_alph     = d × (S − S_i) / P_i   (minus pendingAlph already
+//                                                 paid or credited)
+//
+// Claim-before-rebase (audit fix M-03..M-05): every deposit / withdraw /
+// claim realises any pending ALPH into the user's `pendingAlph` buffer (or
+// directly transfers) BEFORE moving the snapshot. This eliminates the silent
+// zeroing of unclaimed rewards that the earlier P/S rebase exhibited and
+// the U256 underflow that happened when `total < claimedAlph` post-rebase.
+//
+// Scale: P and S are U256 scaled to PRECISION = 10^18.
+//
+// Access control:
+//   - `owner` (contract id of the AuctionManager) is the ONLY caller
+//     allowed to invoke `liquidate(...)`.
+//   - `deposit / withdraw / claim` are called by end users.
+//
+// Fees:
+//   - `bidSuccessFeeBps` (0.5 / 1 / 1.5 / 2 % tiered per spec §2).
+//   - `closeBidFeeBps` (0.5 % flat, charged on user-initiated withdraw).
+
+// Per-depositor state. Mutable to support top-up / withdraw / claim rebase.
+struct DepositState {
+  mut initialAbd: U256,        // effective deposit at snapshot time
+  mut snapshotP: U256,         // P at the time of the snapshot
+  mut snapshotS: U256,         // S at the time of the snapshot
+  mut snapshotEpoch: U256,     // epoch at which the snapshot was taken (audit M-02)
+  mut pendingAlph: U256        // ALPH realised but not yet transferred (audit M-03..M-05)
+}
+
+Contract AuctionPool(
+  abdTokenId: ByteVec,
+  mut owner: ByteVec,            // AuctionManager.contractId — set ONCE post-deploy
+  discountBps: U256,             // 500 = 5%, 1000 = 10%, 1500 = 15%, 2000 = 20%
+  bidSuccessFeeBps: U256,        // 50 / 100 / 150 / 200
+  closeBidFeeBps: U256,          // 50 (0.5%)
+  mut productP: U256,            // P at 1e18 scale; starts at PRECISION
+  mut alphPerUnit: U256,         // S at 1e18 scale; starts at 0
+  mut totalAbd: U256,            // aggregate ABD currently in the pool
+  mut epoch: U256                // incremented on every full wipeout (audit M-02)
+) {
+
+  mapping[Address, DepositState] deposits
+
+  event Deposited(owner: Address, amount: U256, newTotalAbd: U256)
+  event Withdrew(owner: Address, amount: U256, fee: U256, newTotalAbd: U256)
+  event Claimed(owner: Address, alphAmount: U256)
+  event Liquidated(debtAbsorbed: U256, alphGained: U256, newP: U256, newS: U256)
+  event Wipeout(newEpoch: U256)
+
+  const PRECISION = 1000000000000000000
+  const BPS_SCALE = 10000
+
+  enum ErrorCodes {
+    NotOwner               = 600
+    OwnerAlreadySet        = 601
+    DepositDoesNotExist    = 602
+    ZeroAmount             = 603
+    InsufficientDeposit    = 604
+    InsufficientPoolAbd    = 605
+    NothingToClaim         = 606
+  }
+
+  // --- one-shot post-deploy wiring -----------------------------------------
+  //
+  // Fix for audit D-01: at deploy time the AuctionManager doesn't exist yet
+  // (it needs the four pools' ids in its constructor), so `owner` is set to
+  // the empty bytevec. Without this setter, `liquidate`'s
+  // `callerContractId!() == owner` check could never match → every
+  // liquidation reverted forever.
+  //
+  // setOwner is one-shot: callable by anyone exactly once while owner is
+  // empty, then locked. The deploy script's wire step calls it with the
+  // AuctionManager's contract id. After that, even the admin cannot rotate
+  // it — pool deposits depend on a stable owner.
+
+  @using(updateFields = true, checkExternalCaller = false)
+  pub fn setOwner(newOwner: ByteVec) -> () {
+    assert!(size!(owner) == 0, ErrorCodes.OwnerAlreadySet)
+    assert!(size!(newOwner) > 0, ErrorCodes.ZeroAmount)
+    owner = newOwner
+  }
+
+  // --- read-only ------------------------------------------------------------
+
+  pub fn getAbdTokenId() -> ByteVec    { return abdTokenId }
+  pub fn getOwner() -> ByteVec         { return owner }
+  pub fn getDiscountBps() -> U256      { return discountBps }
+  pub fn getBidSuccessFeeBps() -> U256 { return bidSuccessFeeBps }
+  pub fn getCloseBidFeeBps() -> U256   { return closeBidFeeBps }
+  pub fn getProductP() -> U256         { return productP }
+  pub fn getAlphPerUnit() -> U256      { return alphPerUnit }
+  pub fn getTotalAbd() -> U256         { return totalAbd }
+  pub fn getEpoch() -> U256            { return epoch }
+
+  pub fn hasDeposit(who: Address) -> Bool {
+    return deposits.contains!(who)
+  }
+
+  // Depositor's current remaining ABD given their snapshot + the pool's current P.
+  // Returns 0 for stale-epoch (wiped-out) snapshots or missing entries.
+  pub fn currentAbdOf(who: Address) -> U256 {
+    if (!deposits.contains!(who)) { return 0 }
+    let d = deposits[who]
+    if (d.snapshotEpoch != epoch) { return 0 }
+    if (d.snapshotP == 0) { return 0 }
+    return d.initialAbd * productP / d.snapshotP
+  }
+
+  // Depositor's unclaimed ALPH = (accrued from S-delta for the current
+  // epoch) + (already-realised pendingAlph from prior rebases/wipeouts).
+  // Stale-epoch snapshots contribute only their pendingAlph buffer — the
+  // wiped-out stake stops accruing at wipeout time.
+  pub fn claimableAlphOf(who: Address) -> U256 {
+    if (!deposits.contains!(who)) { return 0 }
+    let d = deposits[who]
+    let fromS = accruedAlphFrom(d.initialAbd, d.snapshotP, d.snapshotS, d.snapshotEpoch)
+    return fromS + d.pendingAlph
+  }
+
+  // Internal helper: ALPH accrued from the S-delta for a depositor, 0 if
+  // their snapshot is from a prior epoch (already settled into pendingAlph
+  // at wipeout time).
+  fn accruedAlphFrom(
+    initialAbd: U256,
+    snapshotP: U256,
+    snapshotS: U256,
+    snapshotEpoch: U256
+  ) -> U256 {
+    if (snapshotEpoch != epoch) { return 0 }
+    if (snapshotP == 0) { return 0 }
+    if (alphPerUnit <= snapshotS) { return 0 }
+    let sDelta = alphPerUnit - snapshotS
+    return initialAbd * sDelta / snapshotP
+  }
+
+  pub fn getEpochOf(who: Address) -> U256 {
+    if (!deposits.contains!(who)) { return 0 }
+    return deposits[who].snapshotEpoch
+  }
+
+  pub fn getPendingAlphOf(who: Address) -> U256 {
+    if (!deposits.contains!(who)) { return 0 }
+    return deposits[who].pendingAlph
+  }
+
+  // --- deposit / withdraw / claim -------------------------------------------
+
+  @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+  pub fn deposit(amount: U256) -> () {
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    let user = callerAddress!()
+
+    // Pull ABD from user.
+    transferTokenToSelf!(user, abdTokenId, amount)
+
+    if (deposits.contains!(user)) {
+      // Realise any pending ALPH into the buffer BEFORE moving the snapshot.
+      // This is the claim-before-rebase invariant (audit fix M-04).
+      let d = deposits[user]
+      let pending = accruedAlphFrom(d.initialAbd, d.snapshotP, d.snapshotS, d.snapshotEpoch)
+      let isCurrentEpoch = d.snapshotEpoch == epoch
+      let currentAbd =
+        if (isCurrentEpoch && d.snapshotP > 0)
+          d.initialAbd * productP / d.snapshotP
+        else
+          0
+      deposits[user].pendingAlph = d.pendingAlph + pending
+      deposits[user].initialAbd = currentAbd + amount
+      deposits[user].snapshotP = productP
+      deposits[user].snapshotS = alphPerUnit
+      deposits[user].snapshotEpoch = epoch
+    } else {
+      let d = DepositState {
+        initialAbd: amount,
+        snapshotP: productP,
+        snapshotS: alphPerUnit,
+        snapshotEpoch: epoch,
+        pendingAlph: 0
+      }
+      deposits.insert!(user, user, d)
+    }
+
+    totalAbd = totalAbd + amount
+    emit Deposited(user, amount, totalAbd)
+  }
+
+  @using(assetsInContract = true, updateFields = true, checkExternalCaller = false)
+  pub fn withdraw(amount: U256) -> () {
+    assert!(amount > 0, ErrorCodes.ZeroAmount)
+    let user = callerAddress!()
+    assert!(deposits.contains!(user), ErrorCodes.DepositDoesNotExist)
+
+    let d = deposits[user]
+    let currentAbd = currentAbdOf(user)
+    assert!(amount <= currentAbd, ErrorCodes.InsufficientDeposit)
+    assert!(amount <= totalAbd, ErrorCodes.InsufficientPoolAbd)
+
+    // Realise any pending ALPH into the buffer before rebasing the
+    // snapshot. Audit fix M-03/M-05.
+    let pending = accruedAlphFrom(d.initialAbd, d.snapshotP, d.snapshotS, d.snapshotEpoch)
+    let totalPending = d.pendingAlph + pending
+
+    let feeAbd = amount * closeBidFeeBps / BPS_SCALE
+    let payoutAbd = amount - feeAbd
+
+    let remainingAbd = currentAbd - amount
+    if (remainingAbd == 0) {
+      // Pay out any pending ALPH before destroying the entry — otherwise the
+      // user loses them silently when the map entry is removed.
+      if (totalPending > 0) {
+        transferTokenFromSelf!(user, ALPH, totalPending)
+        emit Claimed(user, totalPending)
+      }
+      deposits.remove!(user, user)
+    } else {
+      deposits[user].pendingAlph = totalPending
+      deposits[user].initialAbd = remainingAbd
+      deposits[user].snapshotP = productP
+      deposits[user].snapshotS = alphPerUnit
+      deposits[user].snapshotEpoch = epoch
+    }
+
+    totalAbd = totalAbd - amount
+
+    // Fee stays in the pool vault; user receives `payoutAbd`.
+    transferTokenFromSelf!(user, abdTokenId, payoutAbd)
+    emit Withdrew(user, amount, feeAbd, totalAbd)
+  }
+
+  @using(assetsInContract = true, updateFields = true, checkExternalCaller = false)
+  pub fn claim() -> () {
+    let user = callerAddress!()
+    assert!(deposits.contains!(user), ErrorCodes.DepositDoesNotExist)
+
+    let d = deposits[user]
+    let accrued = accruedAlphFrom(d.initialAbd, d.snapshotP, d.snapshotS, d.snapshotEpoch)
+    let claimable = d.pendingAlph + accrued
+    assert!(claimable > 0, ErrorCodes.NothingToClaim)
+
+    // Reset pending buffer and advance snapshot.
+    deposits[user].pendingAlph = 0
+    deposits[user].snapshotS = alphPerUnit
+    // Don't change snapshotP / initialAbd — user's ABD position is unaffected.
+
+    transferTokenFromSelf!(user, ALPH, claimable)
+    emit Claimed(user, claimable)
+  }
+
+  // --- liquidation (owner-only) --------------------------------------------
+  //
+  // Called by AuctionManager during the cascade. Consumes `debtAbsorbed` of
+  // this pool's ABD and adds `alphGained` ALPH (already transferred into the
+  // pool's vault by the caller's APS cascade).
+
+  @using(updateFields = true)
+  pub fn liquidate(debtAbsorbed: U256, alphGained: U256) -> () {
+    checkCaller!(callerContractId!() == owner, ErrorCodes.NotOwner)
+    assert!(debtAbsorbed > 0 && alphGained > 0, ErrorCodes.ZeroAmount)
+    assert!(debtAbsorbed <= totalAbd, ErrorCodes.InsufficientPoolAbd)
+
+    let feeAlph = alphGained * bidSuccessFeeBps / BPS_SCALE
+    let netAlph = alphGained - feeAlph
+
+    let previousTotal = totalAbd
+    let previousP = productP
+
+    // S update (uses pre-liquidation P + total).
+    alphPerUnit = alphPerUnit + netAlph * previousP / previousTotal
+
+    // P update + epoch bump on wipeout.
+    if (debtAbsorbed == previousTotal) {
+      productP = PRECISION
+      totalAbd = 0
+      epoch = epoch + 1
+      emit Wipeout(epoch)
+    } else {
+      productP = previousP * (previousTotal - debtAbsorbed) / previousTotal
+      totalAbd = previousTotal - debtAbsorbed
+    }
+
+    emit Liquidated(debtAbsorbed, alphGained, productP, alphPerUnit)
+  }
+
+  // Helper for tests / external readers: returns the post-liquidation
+  // (P, S, totalAbd) WITHOUT mutating state. Safe for any state, including
+  // post-wipeout (audit fix M-3: div-by-zero guard).
+  pub fn previewLiquidate(debtAbsorbed: U256, alphGained: U256) -> (U256, U256, U256) {
+    if (totalAbd == 0) {
+      return PRECISION, alphPerUnit, 0
+    }
+    let feeAlph = alphGained * bidSuccessFeeBps / BPS_SCALE
+    let netAlph = alphGained - feeAlph
+    let newS = alphPerUnit + netAlph * productP / totalAbd
+    if (debtAbsorbed >= totalAbd) {
+      return PRECISION, newS, 0
+    }
+    let newP = productP * (totalAbd - debtAbsorbed) / totalAbd
+    let newTotal = totalAbd - debtAbsorbed
+    return newP, newS, newTotal
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "openabx",
+  "private": true,
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter './web' --filter './indexer' run dev",
+    "dev:devnet": "pnpm -C contracts devnet:start & pnpm -C web dev",
+    "build": "pnpm -r --filter '!./e2e' run build",
+    "lint": "pnpm -r run lint",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r --filter '!./e2e' run test",
+    "e2e:smoke": "pnpm -C e2e run smoke",
+    "contracts:compile": "pnpm -C contracts run compile",
+    "contracts:test": "pnpm -C contracts run test",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md,yml,yaml}\" --ignore-path .gitignore",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,yml,yaml}\" --ignore-path .gitignore",
+    "prepare": "husky || true"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.3.3",
+    "sharp": "^0.34.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "@walletconnect/sign-client": "2.20.3",
+      "@walletconnect/core": "2.20.3",
+      "@walletconnect/types": "2.20.3",
+      "@walletconnect/utils": "2.20.3"
+    }
+  }
+}

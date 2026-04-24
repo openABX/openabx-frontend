@@ -1,0 +1,56 @@
+{
+  "operation": "addCollateral",
+  "contract": "28QGP95rnmZYKRBEsBeGBTdLHetoSE9nxEatVrtuN2bEF",
+  "methodIndex": 8,
+  "txId": "2daf50f97ffaf75540bdd0f7c4bda06568e23affd1641d24d4137d9cfbf124ff",
+  "scriptOpt": "01010300000009b413c50ea300b17a8b780000a213c50ea300b17a8b780000144020331cc0b1b5e23ffd1a3018897de74ffd9d540e1a1388598cf702095a2c0e49000e0c144020cbbd66a6a67863245be61176bf37c7ac2b69e04fc5a9fefec1741dedbcf43a000108",
+  "contractInputs": [
+    "tpxjsWJSaUh5i7XzNAsTWMRtD9QvDTV9zmMNeHHS6jQB",
+    "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu",
+    "29YL53teVrvK2o4P2cVej8aCGN7iQS8mE86bgxA2oFWa3"
+  ],
+  "methods": [
+    {
+      "index": 0,
+      "argsLength": 0,
+      "localsLength": 0,
+      "returnLength": 0,
+      "instrs": [
+        {
+          "name": "CallerAddress"
+        },
+        {
+          "name": "U256Const",
+          "value": "270000000000000000000"
+        },
+        {
+          "name": "ApproveAlph"
+        },
+        {
+          "name": "U256Const",
+          "value": "270000000000000000000"
+        },
+        {
+          "name": "BytesConst",
+          "valueHex": "331cc0b1b5e23ffd1a3018897de74ffd9d540e1a1388598cf702095a2c0e4900",
+          "asAddress": "x8ULLvt7z4aD1AkHUUKZV5NpHyS1PFKkNsjpjBqdHVbV"
+        },
+        {
+          "name": "U256Const2"
+        },
+        {
+          "name": "U256Const0"
+        },
+        {
+          "name": "BytesConst",
+          "valueHex": "cbbd66a6a67863245be61176bf37c7ac2b69e04fc5a9fefec1741dedbcf43a00",
+          "asAddress": "28QGP95rnmZYKRBEsBeGBTdLHetoSE9nxEatVrtuN2bEF"
+        },
+        {
+          "name": "CallExternal",
+          "index": 8
+        }
+      ]
+    }
+  ]
+}

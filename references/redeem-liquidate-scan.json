@@ -1,0 +1,3158 @@
+[
+  {
+    "txId": "d25391bf5169be50e7e6cd92c9213b6a2c62c121678bda5ab1915697d823488b",
+    "signer": "13V7vWNA48SkN1j6TqZXmqHhcXd1TsokFjtBgpGHN3Biv",
+    "mi": 0,
+    "classification": "redeem (cross-loan)",
+    "delta": {
+      "abd": "-1000000000",
+      "alph": "18217730707348726471"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "b025a121fb22de9387aa0a7e4ece8111ddf9386e3d59604d84a3a3461f69e000"
+  },
+  {
+    "txId": "620a0b3cf21bb5961e2a4c044fade8d6b601f4d681a9d9b1d96c8f8e26ecd0e6",
+    "signer": "18SC9nEZKUZkWuf95zY2fu1v4ZupdYRv1rbsPqD8qX5uL",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-10851671760600000000000"
+    },
+    "targetedLoanId": "c8cf98ade4fa5b4957c5d4f656686e39d595313ed2b45dcb813ef824d165ab00",
+    "signersOwnLoanId": "b6067e9338e24f503d4a09cc4728b2df52df5dc35874d916552f49c1b2e49400"
+  },
+  {
+    "txId": "ece4e81bebb25c8c6c667e85c5fc2ef756c5fcca4e1d59977f8f30854e986ad3",
+    "signer": "18SC9nEZKUZkWuf95zY2fu1v4ZupdYRv1rbsPqD8qX5uL",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "23490778541214203841405"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "b6067e9338e24f503d4a09cc4728b2df52df5dc35874d916552f49c1b2e49400"
+  },
+  {
+    "txId": "52010d92479a636731221efb43835472c2b64d6a68fcea019239add49e9f24ed",
+    "signer": "17dPqgBrTAJH31LWr5CpP8eu86ci8SSfGUw5Hf2tHJQbe",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-2984602702",
+      "alph": "-26121100000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fd19b0efe9a7d63d29a5bafa2d6d9e975243102db7c3f920637becc296091c00"
+  },
+  {
+    "txId": "2daf50f97ffaf75540bdd0f7c4bda06568e23affd1641d24d4137d9cfbf124ff",
+    "signer": "17dPqgBrTAJH31LWr5CpP8eu86ci8SSfGUw5Hf2tHJQbe",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-270022063700000000000"
+    },
+    "targetedLoanId": "331cc0b1b5e23ffd1a3018897de74ffd9d540e1a1388598cf702095a2c0e4900",
+    "signersOwnLoanId": "fd19b0efe9a7d63d29a5bafa2d6d9e975243102db7c3f920637becc296091c00"
+  },
+  {
+    "txId": "40f811416ce6f237826501e0b2791bfde6bf11ea3347e7e686e3335192f3b5a0",
+    "signer": "17dPqgBrTAJH31LWr5CpP8eu86ci8SSfGUw5Hf2tHJQbe",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-370024174100000000000"
+    },
+    "targetedLoanId": "5df80cfa395351b047a7ac48b47967ad376c654253cc0b9eed5e612b96685500",
+    "signersOwnLoanId": "fd19b0efe9a7d63d29a5bafa2d6d9e975243102db7c3f920637becc296091c00"
+  },
+  {
+    "txId": "dbb2cbfad961ef1fe87f947d475730d2ad3c35af81f07e1276ae67d06da1aa9f",
+    "signer": "17dPqgBrTAJH31LWr5CpP8eu86ci8SSfGUw5Hf2tHJQbe",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-1730363487800000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fd19b0efe9a7d63d29a5bafa2d6d9e975243102db7c3f920637becc296091c00"
+  },
+  {
+    "txId": "575dd5410d83233d04fada2d9083c3d870081a508bcc85ecf2d69717cbabfccf",
+    "signer": "17dPqgBrTAJH31LWr5CpP8eu86ci8SSfGUw5Hf2tHJQbe",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1731269609180449051470"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fd19b0efe9a7d63d29a5bafa2d6d9e975243102db7c3f920637becc296091c00"
+  },
+  {
+    "txId": "07a7691212fe0793c94f98667dd5dd844e07df816ab1c4afa1c4e266b9dfa281",
+    "signer": "17dPqgBrTAJH31LWr5CpP8eu86ci8SSfGUw5Hf2tHJQbe",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-145158974900000000000"
+    },
+    "targetedLoanId": "e8451a69d328854580b9719176303e4e7cd528533c4550c9b0869634bef00300",
+    "signersOwnLoanId": "fd19b0efe9a7d63d29a5bafa2d6d9e975243102db7c3f920637becc296091c00"
+  },
+  {
+    "txId": "98e15dfe5a152545ed21d6e20661bc8a5d3441f2c8b763be7d2c26e949c38819",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-3300021831800000000000"
+    },
+    "targetedLoanId": "27c3437dc4b48291e9f873c0bfadd623643e3cb071d53c261d8e298e0ee34e00",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "6cfa4c0c1feb1331e55629d6ea62e632e23c5d52681dae15615f3fd7d81b8544",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-100019126200000000000"
+    },
+    "targetedLoanId": "1faa5f6f50ded450e58cff519acec019f1e9dd7dd23b7cd2b3af36411b701300",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "ebdbaa45cbaa7c96bd45edb5a7f99ad6c61bf91809c8d458da3109a05a588e12",
+    "signer": "13V7vWNA48SkN1j6TqZXmqHhcXd1TsokFjtBgpGHN3Biv",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "99875662435740444789"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "b025a121fb22de9387aa0a7e4ece8111ddf9386e3d59604d84a3a3461f69e000"
+  },
+  {
+    "txId": "9b684793ad47d7ef0b2d3049081cbbd16274ae251d6be5dd1f5e9aaf1eb79d39",
+    "signer": "13V7vWNA48SkN1j6TqZXmqHhcXd1TsokFjtBgpGHN3Biv",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-2000000000",
+      "alph": "-122022500000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "b025a121fb22de9387aa0a7e4ece8111ddf9386e3d59604d84a3a3461f69e000"
+  },
+  {
+    "txId": "964aaad68d82a9c26075307fda0977f6413d68450974f60aa7981fd0a4c76565",
+    "signer": "13V7vWNA48SkN1j6TqZXmqHhcXd1TsokFjtBgpGHN3Biv",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-100364043000000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "b025a121fb22de9387aa0a7e4ece8111ddf9386e3d59604d84a3a3461f69e000"
+  },
+  {
+    "txId": "3270114501a42c9e0e1fd0e5f1e9fe35cba820c734629a55a9ce71392895894e",
+    "signer": "1AHwFCsovDreveYKTdhyvUYJY3rdRv1kcLj54bj69RCtk",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-352026261400000000000"
+    },
+    "targetedLoanId": "56f6a57e383102816be6512e756874a9a6c751ac0d54ba9056231e276a6eb200",
+    "signersOwnLoanId": "bb99a8756a5928aa442915ec7d3d819aeb6e38fb5c70e791aba7763e2f1c8b00"
+  },
+  {
+    "txId": "3fe6e08f0a0ac58d93bd2ab970000cda8de1617c8d4e2e5c821c26f81c4947e5",
+    "signer": "1HbeiSMZs1cFK4qGGojqnmaNFCedHpvKPYq3UfhrKKLGC",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-50000023829400000000000"
+    },
+    "targetedLoanId": "280f7715ce323c36fba2bf6ad8b2960c1a0a13715bca7e5453035c620a819f00",
+    "signersOwnLoanId": "8e6b428000485d39df8ec69b996a93293de5d102d3f2bb2c8dbdf1147ad90000"
+  },
+  {
+    "txId": "2fa7ce2f67803873fef2a9d4b56df0231e54930978eb3be8135b7ac1d2683b55",
+    "signer": "1DZjPvmV5xLX9xAXMYV5EmJxd26Cv9JEx99jirZNuBRRD",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-200019169200000000000"
+    },
+    "targetedLoanId": "d93ad24b8a608ac4541125bcc14ed3fbd41fb35d86256dedf92d05a4856d0b00",
+    "signersOwnLoanId": "a9ffcef7a40fe5d0efcc1e8fb753cbd06c8c84f7cd82a26342dfc4e5b01ed700"
+  },
+  {
+    "txId": "62aef01f49e6c96b0b5ef398013b894337316f59ce6d4b54645c5eed8d84e960",
+    "signer": "1EPT9Zc4o9abNs9rD2fZveiWubKe3pAXZk24cPu8QMAHn",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-4896390902000000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "c1797577759781f49be191335a4c65f887fadd4c6967be0eac5ee5b7d16ef900"
+  },
+  {
+    "txId": "5ef140dd1e362cbce99b619759c70a0e9caed8725597c8a8adba88d9b9a0c123",
+    "signer": "159sakgja8zAMohGvgsRZXNZ1SKieHB73VuFe2imtfAef",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-3490019140400000000000"
+    },
+    "targetedLoanId": "c8cf98ade4fa5b4957c5d4f656686e39d595313ed2b45dcb813ef824d165ab00",
+    "signersOwnLoanId": "b850a8b7d19e96bcd40a0edb5dcae151f8092cfc7c93466c62a82f7217e39b00"
+  },
+  {
+    "txId": "fb54c5dcfbe931af1bbf9e75d618d5cde86dd0e0a9293e4bc5d7b058a2831514",
+    "signer": "1DZjPvmV5xLX9xAXMYV5EmJxd26Cv9JEx99jirZNuBRRD",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-420024983100000000000"
+    },
+    "targetedLoanId": "c8cf98ade4fa5b4957c5d4f656686e39d595313ed2b45dcb813ef824d165ab00",
+    "signersOwnLoanId": "a9ffcef7a40fe5d0efcc1e8fb753cbd06c8c84f7cd82a26342dfc4e5b01ed700"
+  },
+  {
+    "txId": "229e355317d2472d8e813afdb7271fcd845d5a92459df7c92360eaf6f9def4a5",
+    "signer": "1EPT9Zc4o9abNs9rD2fZveiWubKe3pAXZk24cPu8QMAHn",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-5282019069000000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "c1797577759781f49be191335a4c65f887fadd4c6967be0eac5ee5b7d16ef900"
+  },
+  {
+    "txId": "9be7c0f0d3cab734419f5727ed8cd28bff3bb86defda795e7993dc6c28feb051",
+    "signer": "1EPT9Zc4o9abNs9rD2fZveiWubKe3pAXZk24cPu8QMAHn",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-5394021249400000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "c1797577759781f49be191335a4c65f887fadd4c6967be0eac5ee5b7d16ef900"
+  },
+  {
+    "txId": "9d9cca9873cc4c80b5a38807705150fe779bd2b25dcf6286202c6707b77abe14",
+    "signer": "17B2TQGxL4P9GRXbXBYkyrSvm2a6XvuWmd5rGGL9mnKZr",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-405000021250800000000000"
+    },
+    "targetedLoanId": "63f58728681bb45990c146fb68efb8c290b82016f133cb66ab7f5d6bce318d00",
+    "signersOwnLoanId": "7d15b356567390d4c45744ac145d965c7fb40a983649e5178d876f772f084f00"
+  },
+  {
+    "txId": "5bf7c2e0d8fb7ed2bedac834b7cd87c0b6e64293a02cb19e87454184c16c3728",
+    "signer": "14YwhGe89SFsiyip9PpH12U2xjaUhAfLi2FZj4U7QNYa4",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1557755560289534430477"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "42c8a75c4694447af7d630171a977c4343ce84b1f76aeede2eb5363ace2be500"
+  },
+  {
+    "txId": "0b47d7e13b76fd031702be7190ccb278c73319d1152f679810392d9c020a55d4",
+    "signer": "14YwhGe89SFsiyip9PpH12U2xjaUhAfLi2FZj4U7QNYa4",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-34716085852",
+      "alph": "-25568900000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "42c8a75c4694447af7d630171a977c4343ce84b1f76aeede2eb5363ace2be500"
+  },
+  {
+    "txId": "cb4a8773de2ec111c6b533518fa4b19175fb3946afc0a9912807d67729aed98d",
+    "signer": "14YwhGe89SFsiyip9PpH12U2xjaUhAfLi2FZj4U7QNYa4",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-800907169400000000000"
+    },
+    "targetedLoanId": "b7d3b790c276641de13044931acbeac4107080ae4e6eed76ebb278cae4d55800",
+    "signersOwnLoanId": "42c8a75c4694447af7d630171a977c4343ce84b1f76aeede2eb5363ace2be500"
+  },
+  {
+    "txId": "5fc3c0434cc1d841ff92311e24ed2e9fda6cdcac7c15ba7e67ea28afcad0875a",
+    "signer": "14YwhGe89SFsiyip9PpH12U2xjaUhAfLi2FZj4U7QNYa4",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-316711308600000000000"
+    },
+    "targetedLoanId": "b7d3b790c276641de13044931acbeac4107080ae4e6eed76ebb278cae4d55800",
+    "signersOwnLoanId": "42c8a75c4694447af7d630171a977c4343ce84b1f76aeede2eb5363ace2be500"
+  },
+  {
+    "txId": "161b512bebba95f6730abe7134b41ed840ba89b517297014cb7d0b20fd3cb176",
+    "signer": "17B2TQGxL4P9GRXbXBYkyrSvm2a6XvuWmd5rGGL9mnKZr",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "199999972250700000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "7d15b356567390d4c45744ac145d965c7fb40a983649e5178d876f772f084f00"
+  },
+  {
+    "txId": "90a6c0197e03c1995b9dde4b9b6a77116c929285f6d3170d8eeca55fb2b48e7d",
+    "signer": "13V7vWNA48SkN1j6TqZXmqHhcXd1TsokFjtBgpGHN3Biv",
+    "mi": 0,
+    "classification": "redeem (cross-loan)",
+    "delta": {
+      "abd": "-1000000000",
+      "alph": "18695555320227445841"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "b025a121fb22de9387aa0a7e4ece8111ddf9386e3d59604d84a3a3461f69e000"
+  },
+  {
+    "txId": "2bf570eb55ed5d67c808f0faecf42a461deb7a5085a37beb095b3593daff417c",
+    "signer": "18SC9nEZKUZkWuf95zY2fu1v4ZupdYRv1rbsPqD8qX5uL",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-5600022093100000000000"
+    },
+    "targetedLoanId": "280f7715ce323c36fba2bf6ad8b2960c1a0a13715bca7e5453035c620a819f00",
+    "signersOwnLoanId": "b6067e9338e24f503d4a09cc4728b2df52df5dc35874d916552f49c1b2e49400"
+  },
+  {
+    "txId": "5a346a59fee3f32dbbdfa6f2b632dcffeaa2a246ca04fee1a4cf2d35bd74ae4d",
+    "signer": "18SC9nEZKUZkWuf95zY2fu1v4ZupdYRv1rbsPqD8qX5uL",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-32959960094700000000000"
+    },
+    "targetedLoanId": "280f7715ce323c36fba2bf6ad8b2960c1a0a13715bca7e5453035c620a819f00",
+    "signersOwnLoanId": "b6067e9338e24f503d4a09cc4728b2df52df5dc35874d916552f49c1b2e49400"
+  },
+  {
+    "txId": "be290311accc16ae5a87cb49f32283f780086851c3e3bad0aa94233a4d35be55",
+    "signer": "1JP2R65s2WZiSqkuRjDYoiXyx2EyPLdXkm5sHwFFKNhJ",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1999979939600000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "4b8e583d13f56ede8aebcd6d4dac56c7279948d32eac6da2d7ca0796f4defa00"
+  },
+  {
+    "txId": "4626d6e26a5a76d84afb1d277f93eb4da9c1b23f2659bdb456cb31995f7e796c",
+    "signer": "1JP2R65s2WZiSqkuRjDYoiXyx2EyPLdXkm5sHwFFKNhJ",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2999977829200000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "4b8e583d13f56ede8aebcd6d4dac56c7279948d32eac6da2d7ca0796f4defa00"
+  },
+  {
+    "txId": "2c0c123c00510705b66baa439cf781098b478c0e0aea455d33f2b42e2496c7cd",
+    "signer": "1JP2R65s2WZiSqkuRjDYoiXyx2EyPLdXkm5sHwFFKNhJ",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-5000021231600000000000"
+    },
+    "targetedLoanId": "331cc0b1b5e23ffd1a3018897de74ffd9d540e1a1388598cf702095a2c0e4900",
+    "signersOwnLoanId": "4b8e583d13f56ede8aebcd6d4dac56c7279948d32eac6da2d7ca0796f4defa00"
+  },
+  {
+    "txId": "e7e972cfdac93f8a5c57b2def48f2865be52305ee9de55cc8b67dfa2c83ffb4e",
+    "signer": "1JP2R65s2WZiSqkuRjDYoiXyx2EyPLdXkm5sHwFFKNhJ",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-6360021251000000000000"
+    },
+    "targetedLoanId": "e3dbbaa8fd914e5cfb23d8990c703c961a62d47fa0f1b92b31e336e0c75a8900",
+    "signersOwnLoanId": "4b8e583d13f56ede8aebcd6d4dac56c7279948d32eac6da2d7ca0796f4defa00"
+  },
+  {
+    "txId": "562c831346bd3bea088b68abbd01dddfde1e27865ac920e7848b8db34b4e79b3",
+    "signer": "1GJbeYZmPUUezMXzpBNQK5zdWbH4eXpP3UpnMKik1vwjS",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-20149387100000000000"
+    },
+    "targetedLoanId": "e8451a69d328854580b9719176303e4e7cd528533c4550c9b0869634bef00300",
+    "signersOwnLoanId": "538de42032c0ba806c7fe2f85927eb71443c312e1563359bdba0a3097e06a000"
+  },
+  {
+    "txId": "7466ad763059753e92cfa6e31fb21d378261c4778549c540930672d114614f94",
+    "signer": "1GJbeYZmPUUezMXzpBNQK5zdWbH4eXpP3UpnMKik1vwjS",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-15149907200000000000"
+    },
+    "targetedLoanId": "e8451a69d328854580b9719176303e4e7cd528533c4550c9b0869634bef00300",
+    "signersOwnLoanId": "538de42032c0ba806c7fe2f85927eb71443c312e1563359bdba0a3097e06a000"
+  },
+  {
+    "txId": "3d712513c666e3e65c3be871318b72b2d750bb11be4836764a3ae506d6b2bac7",
+    "signer": "1AHwFCsovDreveYKTdhyvUYJY3rdRv1kcLj54bj69RCtk",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-999926261400000000000"
+    },
+    "targetedLoanId": "ce8ed1ce554f48b777f38194eb20a30e13626637ede08b8a6aa1289a17ceb900",
+    "signersOwnLoanId": "bb99a8756a5928aa442915ec7d3d819aeb6e38fb5c70e791aba7763e2f1c8b00"
+  },
+  {
+    "txId": "c8471af945fc68f862d129e6d3236fc9da7d52d6a82b3260e3d3761d97ec49ed",
+    "signer": "15x1tdrhRVBt1boPSm4yjEQd56GkyePLYCQFAnMNEJy8b",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "17777060623900000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "0679fd59830a41d16f325df8b24297d99df16c78ceace993bfd763556bda5900"
+  },
+  {
+    "txId": "8bc5a04fd46fdd17c09dce71f1c1ec9123071df009297a0938fe623930fb92a2",
+    "signer": "1AHwFCsovDreveYKTdhyvUYJY3rdRv1kcLj54bj69RCtk",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-21323593685",
+      "alph": "-26247800000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "bb99a8756a5928aa442915ec7d3d819aeb6e38fb5c70e791aba7763e2f1c8b00"
+  },
+  {
+    "txId": "bd1dd7f5b835ec03c2faefd8f1cfe3a51f958f179745905531bc987e2174d7a3",
+    "signer": "17B2TQGxL4P9GRXbXBYkyrSvm2a6XvuWmd5rGGL9mnKZr",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-150000021832200000000000"
+    },
+    "targetedLoanId": "27c3437dc4b48291e9f873c0bfadd623643e3cb071d53c261d8e298e0ee34e00",
+    "signersOwnLoanId": "7d15b356567390d4c45744ac145d965c7fb40a983649e5178d876f772f084f00"
+  },
+  {
+    "txId": "26354491db4cf745d2216de23b907fd105f650f74c2a6357d3bd18f3a5b95bbd",
+    "signer": "17B2TQGxL4P9GRXbXBYkyrSvm2a6XvuWmd5rGGL9mnKZr",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-75000024940900000000000"
+    },
+    "targetedLoanId": "1faa5f6f50ded450e58cff519acec019f1e9dd7dd23b7cd2b3af36411b701300",
+    "signersOwnLoanId": "7d15b356567390d4c45744ac145d965c7fb40a983649e5178d876f772f084f00"
+  },
+  {
+    "txId": "6351bb87dd4a71ae51fd4e5cdfacb49334c1f9939b3a4524c4705d111f112e5e",
+    "signer": "1Bevk11XN4ucr9xhSs8VdVnUf6mPVMYwMUBNca5CE9FuX",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-385019140200000000000"
+    },
+    "targetedLoanId": "27c3437dc4b48291e9f873c0bfadd623643e3cb071d53c261d8e298e0ee34e00",
+    "signersOwnLoanId": "7174edac43410ee144bc85e7e755fb7cb7d232a9b3e7a75dae4454909ecb5e00"
+  },
+  {
+    "txId": "5697c3f3fdd7f54e065f716422ca49a23d9e81be5d85c351f707863e2f937d38",
+    "signer": "1DZjPvmV5xLX9xAXMYV5EmJxd26Cv9JEx99jirZNuBRRD",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-30019169600000000000"
+    },
+    "targetedLoanId": "c8cf98ade4fa5b4957c5d4f656686e39d595313ed2b45dcb813ef824d165ab00",
+    "signersOwnLoanId": "a9ffcef7a40fe5d0efcc1e8fb753cbd06c8c84f7cd82a26342dfc4e5b01ed700"
+  },
+  {
+    "txId": "03e73219cc42293dab76edf912ce7cba4d37c189be2709cffdeeb54b67cdc7de",
+    "signer": "1EPT9Zc4o9abNs9rD2fZveiWubKe3pAXZk24cPu8QMAHn",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "999979982200000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "c1797577759781f49be191335a4c65f887fadd4c6967be0eac5ee5b7d16ef900"
+  },
+  {
+    "txId": "64ef5ef0c9b38a59e228034b14ef3d5ced187a6359f3320ea1d5919ed948d114",
+    "signer": "1EPT9Zc4o9abNs9rD2fZveiWubKe3pAXZk24cPu8QMAHn",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "999979982200000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "c1797577759781f49be191335a4c65f887fadd4c6967be0eac5ee5b7d16ef900"
+  },
+  {
+    "txId": "4750500b8e3ca8ad2a13833ae2b607e39d77854b9e11859e02d1cc9dfbd187cd",
+    "signer": "1EPT9Zc4o9abNs9rD2fZveiWubKe3pAXZk24cPu8QMAHn",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "3999974389600000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "c1797577759781f49be191335a4c65f887fadd4c6967be0eac5ee5b7d16ef900"
+  },
+  {
+    "txId": "f14918641ff806d4d310fd47ab91f523b38c24babca2753a7c609a881e317edb",
+    "signer": "1JP2R65s2WZiSqkuRjDYoiXyx2EyPLdXkm5sHwFFKNhJ",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1999977842800000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "4b8e583d13f56ede8aebcd6d4dac56c7279948d32eac6da2d7ca0796f4defa00"
+  },
+  {
+    "txId": "486ce1fe20d68725d69106dca4e1c7c44724922f6c0f98410d2644dee8af3520",
+    "signer": "1DZjPvmV5xLX9xAXMYV5EmJxd26Cv9JEx99jirZNuBRRD",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-340019169600000000000"
+    },
+    "targetedLoanId": "c8cf98ade4fa5b4957c5d4f656686e39d595313ed2b45dcb813ef824d165ab00",
+    "signersOwnLoanId": "a9ffcef7a40fe5d0efcc1e8fb753cbd06c8c84f7cd82a26342dfc4e5b01ed700"
+  },
+  {
+    "txId": "c9b6421e7cae37ef17773693d551100d0ed67d458f0eff733d21af5e07414ef5",
+    "signer": "1AHwFCsovDreveYKTdhyvUYJY3rdRv1kcLj54bj69RCtk",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-386320447700000000000"
+    },
+    "targetedLoanId": "ce8ed1ce554f48b777f38194eb20a30e13626637ede08b8a6aa1289a17ceb900",
+    "signersOwnLoanId": "bb99a8756a5928aa442915ec7d3d819aeb6e38fb5c70e791aba7763e2f1c8b00"
+  },
+  {
+    "txId": "e1be0edd749806183f42a0ae2e98553fa9a91f7c0e0902a4e208c5f007007bfe",
+    "signer": "13dRnFYYDn3d43mbgMxZntZpYu3GHeMAxqQqGLzXjqEr8",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-350236079100000000000"
+    },
+    "targetedLoanId": "4e13930b9305296382ad0036fe9428d9d59cb7925964ad9f8eba6f527ba65500",
+    "signersOwnLoanId": "705b44e204af6e212e02a73a24403a8ab634a25930fce6b6ff3f541056cb8b00"
+  },
+  {
+    "txId": "60e58de1d40c3cc6821c9427b58150fa9b535cb61b9c719ead39bc4651964327",
+    "signer": "1jYJZAbU3A4pQixFtcbeJfaVzZVLVGGL3Ev2BBzN77DB",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "218451459035843066741902"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "53f73acac5e93dcb9262c2f8e5b9ff51977979419f6a4ef6df313d9080481e00"
+  },
+  {
+    "txId": "73c7f10b9c567b1590e371f9d6258f9f1159e71fe02b5d0a92d0d18fc1fc7b65",
+    "signer": "159sakgja8zAMohGvgsRZXNZ1SKieHB73VuFe2imtfAef",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-1800019169200000000000"
+    },
+    "targetedLoanId": "1342717ef32765979de459e73bd8aee5b45ee297f145b25be9e4834557e0b700",
+    "signersOwnLoanId": "b850a8b7d19e96bcd40a0edb5dcae151f8092cfc7c93466c62a82f7217e39b00"
+  },
+  {
+    "txId": "d9c031e7a8c2200e16564fdcfdee300680746f9773cb975ae8a27c0165884ec6",
+    "signer": "17Cf96JCpxfyY2EdHSXV88rWLPsMUoCVMxUTMMvmDFwPv",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "39809702770871684961"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "1a123cbcf6696e8ec9de0a31c1ae3e92141c6d37babe8c2fe0a6669d1e4ef800"
+  },
+  {
+    "txId": "c1833cd23efbd83da185be03354491478c1b4ec0c44b29ffac3fbc0e8c42221b",
+    "signer": "17Cf96JCpxfyY2EdHSXV88rWLPsMUoCVMxUTMMvmDFwPv",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-100370967500000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "1a123cbcf6696e8ec9de0a31c1ae3e92141c6d37babe8c2fe0a6669d1e4ef800"
+  },
+  {
+    "txId": "435275e7bb64eafce98e2b54a5e52988efbc64e6db50c5cbd7bac18b58fe3de3",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "19964212704174179146772"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "2f25191c434a68ad3b447b382e0642bdef46f54042c3cab516bccee9ecf2cc13",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-20000369025700000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "a779698cf771d9e833173091ca511d7dbaebff8792bbdcd4b91412d451a5339f",
+    "signer": "1Bevk11XN4ucr9xhSs8VdVnUf6mPVMYwMUBNca5CE9FuX",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-1000021241200000000000"
+    },
+    "targetedLoanId": "63f58728681bb45990c146fb68efb8c290b82016f133cb66ab7f5d6bce318d00",
+    "signersOwnLoanId": "7174edac43410ee144bc85e7e755fb7cb7d232a9b3e7a75dae4454909ecb5e00"
+  },
+  {
+    "txId": "7834d52cecab9965289b3c0f8dc3a668d10287c91537c5b449d9600b7c2f52ff",
+    "signer": "1AHwFCsovDreveYKTdhyvUYJY3rdRv1kcLj54bj69RCtk",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-230226261400000000000"
+    },
+    "targetedLoanId": "ce8ed1ce554f48b777f38194eb20a30e13626637ede08b8a6aa1289a17ceb900",
+    "signersOwnLoanId": "bb99a8756a5928aa442915ec7d3d819aeb6e38fb5c70e791aba7763e2f1c8b00"
+  },
+  {
+    "txId": "2c85428d2cccbaa362e1d79826aca93fb8dc90ebc1b9989db26b6363e3b1523c",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1478299170545407926644"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "a2039832d97c95346cd6c93244ec30454fca6419e4b80eacbf8a52fd1b9fbe63",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2086437531923079455"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "19a1331b1f524429fdb405e60154c3e4b4e2c9a66f66f7986f86d1dc6bce6773",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "15786287712491695364"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "e98e506aa43907f982558a7e442d6012bdb22d6dfaefa780f818cc322c4f00f5",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-22998285167540337"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "a858f07200f809d6b8ac08472327adf746ecda257752668fa6e365d330e57162",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-4000366262500000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "7ddee926ad793d83f6e07addda89c7b36c5f4b072a6bd3e44e8f978bf0abc221",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1706875141950771704040"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "8a9c089e792cb3abf6a0f89317282e6b8bbc0abccfc55d4af56942002d01d806",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 11,
+    "classification": "openLoan",
+    "delta": {
+      "abd": "291545829",
+      "alph": "-25024000000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "b25a05d115d40d6d2ae019bb3482d51cc646165ac158713a63522d44875c25da",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 12,
+    "classification": "openLoan",
+    "delta": {
+      "abd": "121709554895",
+      "alph": "-27727400000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "8fe2d218085019ddf9eb8e73c9f1f2a0c27ae91a3a4556adb38a5ab787e4e8c3",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2000021812800000000000"
+    },
+    "targetedLoanId": "63f58728681bb45990c146fb68efb8c290b82016f133cb66ab7f5d6bce318d00",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "f49d01c43a3e434434ad67943bf8987cfc2733078edf8188b5e9a501adbe2951",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2000024183300000000000"
+    },
+    "targetedLoanId": "27c3437dc4b48291e9f873c0bfadd623643e3cb071d53c261d8e298e0ee34e00",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "7fcb4e5317310a964216a221b20ba63cc46ab50a4b0f682c340449f404867795",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-4000024784300000000000"
+    },
+    "targetedLoanId": "63f58728681bb45990c146fb68efb8c290b82016f133cb66ab7f5d6bce318d00",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "196f2effcefaaf1b325f0b6f65fbac56722a2f2de7e9d853ab2c25960e59c279",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-4000366349100000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "739037d6fd3bbf60402820909a9890fbbb8a8d2266d062473d7b17b9e6532e3a",
+    "signer": "1APLszkZkJS8aStZX6E2CsZYg59cByVAXBjzQ34W9VzGp",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2170561833033842453879"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "1798cd4a999eb9df4dc4821a52aa033565e112380b569d21b6f13803a2702e00"
+  },
+  {
+    "txId": "f188f4e6d94f5e5c204a4220ef55b086361d79ec6e17723000813a8ee822b46b",
+    "signer": "1APLszkZkJS8aStZX6E2CsZYg59cByVAXBjzQ34W9VzGp",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "567074681448665106742"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "1798cd4a999eb9df4dc4821a52aa033565e112380b569d21b6f13803a2702e00"
+  },
+  {
+    "txId": "a5458599b9592d080888889b819922acb64a11a82638d149ea55a4c5dc75bbab",
+    "signer": "1APLszkZkJS8aStZX6E2CsZYg59cByVAXBjzQ34W9VzGp",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "6472659158691669067077"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "1798cd4a999eb9df4dc4821a52aa033565e112380b569d21b6f13803a2702e00"
+  },
+  {
+    "txId": "b120b7affa950ca2d1165857602bb15f50bc88e3a8e4df182453163df705b8c8",
+    "signer": "1APLszkZkJS8aStZX6E2CsZYg59cByVAXBjzQ34W9VzGp",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "5391413058096506351314"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "1798cd4a999eb9df4dc4821a52aa033565e112380b569d21b6f13803a2702e00"
+  },
+  {
+    "txId": "aab554b46c6c7f40b8396b5d55f333519d6aebd275e3171eb06047b5dff31855",
+    "signer": "1APLszkZkJS8aStZX6E2CsZYg59cByVAXBjzQ34W9VzGp",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "4109708327638797452173"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "1798cd4a999eb9df4dc4821a52aa033565e112380b569d21b6f13803a2702e00"
+  },
+  {
+    "txId": "0e995e50846a5ccf0eb19b9a8a1d567b4bb1c6d2563a0f87e54b7f755bd02a72",
+    "signer": "1APLszkZkJS8aStZX6E2CsZYg59cByVAXBjzQ34W9VzGp",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2851322876800401778147"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "1798cd4a999eb9df4dc4821a52aa033565e112380b569d21b6f13803a2702e00"
+  },
+  {
+    "txId": "1faf29b5c079a48f7409d253200dbe9ed4ef9b73b6b4efc4de8f1233aaa35292",
+    "signer": "1APLszkZkJS8aStZX6E2CsZYg59cByVAXBjzQ34W9VzGp",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1992565250571922716833"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "1798cd4a999eb9df4dc4821a52aa033565e112380b569d21b6f13803a2702e00"
+  },
+  {
+    "txId": "c074b4dfbde83ba3ab51a98dcfe39c6ecb9784febf90b90e8004072d46be08d8",
+    "signer": "17B2TQGxL4P9GRXbXBYkyrSvm2a6XvuWmd5rGGL9mnKZr",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-10000019111600000000000"
+    },
+    "targetedLoanId": "27c3437dc4b48291e9f873c0bfadd623643e3cb071d53c261d8e298e0ee34e00",
+    "signersOwnLoanId": "7d15b356567390d4c45744ac145d965c7fb40a983649e5178d876f772f084f00"
+  },
+  {
+    "txId": "4107913df444fccbf82af633f3eab5855638f67097719d175442c1ed9d67412a",
+    "signer": "17B2TQGxL4P9GRXbXBYkyrSvm2a6XvuWmd5rGGL9mnKZr",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-10000019111600000000000"
+    },
+    "targetedLoanId": "27c3437dc4b48291e9f873c0bfadd623643e3cb071d53c261d8e298e0ee34e00",
+    "signersOwnLoanId": "7d15b356567390d4c45744ac145d965c7fb40a983649e5178d876f772f084f00"
+  },
+  {
+    "txId": "fcf618f1d23009178bfe3d1b40c326a5e39c6b67d5a13426e6803f53a6f39858",
+    "signer": "17B2TQGxL4P9GRXbXBYkyrSvm2a6XvuWmd5rGGL9mnKZr",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-50000019112400000000000"
+    },
+    "targetedLoanId": "27c3437dc4b48291e9f873c0bfadd623643e3cb071d53c261d8e298e0ee34e00",
+    "signersOwnLoanId": "7d15b356567390d4c45744ac145d965c7fb40a983649e5178d876f772f084f00"
+  },
+  {
+    "txId": "17ff72d25d6cc3e1f99b401348c9df294b971d7a1b4ba545cb27bf393e4afbc7",
+    "signer": "159sakgja8zAMohGvgsRZXNZ1SKieHB73VuFe2imtfAef",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2999019140400000000000"
+    },
+    "targetedLoanId": "1342717ef32765979de459e73bd8aee5b45ee297f145b25be9e4834557e0b700",
+    "signersOwnLoanId": "b850a8b7d19e96bcd40a0edb5dcae151f8092cfc7c93466c62a82f7217e39b00"
+  },
+  {
+    "txId": "2050aa7754b7aa23e4acfff7be41b2576c4b375ebf162e7fe3bf59e1a3c9e8a9",
+    "signer": "1JP2R65s2WZiSqkuRjDYoiXyx2EyPLdXkm5sHwFFKNhJ",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-1329021241200000000000"
+    },
+    "targetedLoanId": "e3dbbaa8fd914e5cfb23d8990c703c961a62d47fa0f1b92b31e336e0c75a8900",
+    "signersOwnLoanId": "4b8e583d13f56ede8aebcd6d4dac56c7279948d32eac6da2d7ca0796f4defa00"
+  },
+  {
+    "txId": "b75a1745db0aae19e9f04b890a4b56fa3030ad2aa0c1491ef2a3128ed90bcbe7",
+    "signer": "1EPT9Zc4o9abNs9rD2fZveiWubKe3pAXZk24cPu8QMAHn",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-4140019255000000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "c1797577759781f49be191335a4c65f887fadd4c6967be0eac5ee5b7d16ef900"
+  },
+  {
+    "txId": "ca300eb4f8d2ffafcdb376b000036f8d0986210878ba308901135af17268b0b4",
+    "signer": "123qBBCTy4DrMYqsZJbAYDTvHRsu2A4bjEJuc5SnF8Jpu",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "119799564573474329500"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "8ee37e7e3226379c52e91674cb7cf08e3d9faf7ec56ec36a5621de5bf6cc6700"
+  },
+  {
+    "txId": "e9ef5ba6c371b6c0987da194bcd32819c7ce0fc8fe1153ce923d6ec260f15cea",
+    "signer": "123qBBCTy4DrMYqsZJbAYDTvHRsu2A4bjEJuc5SnF8Jpu",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-3024220000",
+      "alph": "-144196600000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "8ee37e7e3226379c52e91674cb7cf08e3d9faf7ec56ec36a5621de5bf6cc6700"
+  },
+  {
+    "txId": "f02d84cb645a5dfc32e82b2af589566309e140691078b7c2771173c7eb9e405d",
+    "signer": "123qBBCTy4DrMYqsZJbAYDTvHRsu2A4bjEJuc5SnF8Jpu",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-120368949300000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "8ee37e7e3226379c52e91674cb7cf08e3d9faf7ec56ec36a5621de5bf6cc6700"
+  },
+  {
+    "txId": "86daf2fdd506562cb97e2d4cac0b32aa02e247e655c2e2279c06a523eed8e2e1",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "7951908987130013835395"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "e8749edb56c51dc76b52f11bd554f980ffb813ffd0f08b4c42c945ccab41b13f",
+    "signer": "1GboQZ6JxPqgrLHB9QBu1wfp9MPUYWvxvCMD6y3UfES25",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "100062542900000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "11676db046ef2683a3bc7cdbfff22ff6c7733ed735d8e9b4cc6813e8a4f13b00"
+  },
+  {
+    "txId": "ae842dbc88d066ca7a3defd697156167da652b4cc770cc653d8980dd74cac2c1",
+    "signer": "1GboQZ6JxPqgrLHB9QBu1wfp9MPUYWvxvCMD6y3UfES25",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-100366189900000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "11676db046ef2683a3bc7cdbfff22ff6c7733ed735d8e9b4cc6813e8a4f13b00"
+  },
+  {
+    "txId": "666419eb2c8730553b7ac80205cb847644ed5a9be741cfc3931c254b7d7382a0",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "7300775952486576648394"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "a49ce8dae6b7a5a3c67937c92e2cf3a953c3bc0500751e5da3bac913a2c82a40",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "4511025580052943657490"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "0443b1f04d24e9b6e82a82786919e72d027000d91c640eda28805238c51a1639",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "3591122945893638349889"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "a6137bd495395ce366a2bbd0919236e914ea58c6f14efa7454042d10dd40631a",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2877873839449669026479"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "41d2683fba9c02e01f7fde303bb76dc61f4fb59c1a44dff7be2f5f35a0d41d1c",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1526805078058009372070"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "bfcff45b09e6e70db4a6d560b34a1fdffc06ca22c82cfb0c32636aa52822b6e7",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "6328911280077157051361"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "f2857e918e906aa181533a7a533863cad6075d11f656c528a1f6102688121534",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "5604377791764412684785"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "fd5e0b6a054c396f6b05a958987ccfc9ded9b6ee64e200d43a5350c6e6474e25",
+    "signer": "1GJbeYZmPUUezMXzpBNQK5zdWbH4eXpP3UpnMKik1vwjS",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-20366599300000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "538de42032c0ba806c7fe2f85927eb71443c312e1563359bdba0a3097e06a000"
+  },
+  {
+    "txId": "6a8bbc1df0f4064ba260ea4646998bfdd97d71b733927342557a9fe42f8712bd",
+    "signer": "16JB7b3Pmi9KBcwpyTrBsa7BbR3ZA815EZGn3vsAjxYGD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "4917062408490560815249"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "4b18ab574d20b9394e6b15dae6b36f011e7110e6234e74cdaa581b1e49557100"
+  },
+  {
+    "txId": "775eba3f966607966c94f17f950e894ce98a7cd15ecdcea39870b0b01f573d6b",
+    "signer": "16JB7b3Pmi9KBcwpyTrBsa7BbR3ZA815EZGn3vsAjxYGD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2799736053700000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "4b18ab574d20b9394e6b15dae6b36f011e7110e6234e74cdaa581b1e49557100"
+  },
+  {
+    "txId": "9906a3260d6aa817f1a851c9e7629bf87d1a3ddabf8c0fff8f5fe0316b20c1cd",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "17975532533814242642016"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "74f6f2e9b7579399e46aae36fc5f9bb857575551b77a3b4a598f49a2abdfe1dc",
+    "signer": "16JB7b3Pmi9KBcwpyTrBsa7BbR3ZA815EZGn3vsAjxYGD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2499736776400000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "4b18ab574d20b9394e6b15dae6b36f011e7110e6234e74cdaa581b1e49557100"
+  },
+  {
+    "txId": "5fe4c16db172bca0705b11292373aaf513279eb761b047c3e9cd96e7ae79fe5e",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-104053141203",
+      "alph": "-26240100000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "f141ec53fc3ff31f4f4f45dd38ae5f5d79a3201ce645008cfe1575d1efa5d7b7",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "6999979996900000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "6ef72b9d37275050ef2d6f87bd492ef546b5471b21ca6daf1bf888120d1ee1cb",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "4999979996700000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "591d90428db1eabc3a0c109c2d935e1eb3fec3a1c0290263aa3ae8e96d0a1a97",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-171557366446",
+      "alph": "-28546900000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "5a0d83ea4fc08e79a5e18c2839313bcba1dfa0bbaed43e1fad12ae1f869e8ed0",
+    "signer": "13dRnFYYDn3d43mbgMxZntZpYu3GHeMAxqQqGLzXjqEr8",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-1292355488500000000000"
+    },
+    "targetedLoanId": "4e13930b9305296382ad0036fe9428d9d59cb7925964ad9f8eba6f527ba65500",
+    "signersOwnLoanId": "705b44e204af6e212e02a73a24403a8ab634a25930fce6b6ff3f541056cb8b00"
+  },
+  {
+    "txId": "bde51b953ceecedce1317457c277bf095406752153e5f7c69785f58c8e82d116",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "4396979996800000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "adf3775f70753daa7278c6a1ac6b545d2fe5c483f76b09275b1c40a077c5ba63",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-220667611751",
+      "alph": "-26240100000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "2b124fa16790dcc527f859ad5c9263f0b164942ff2e3f1a3eaadf8757db62d25",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-58194006480",
+      "alph": "-26233700000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "2ba3863c7511d7049cbbdc86374680309d0ef616a1df9ef5e1fa2cee196293c9",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "5999977880700000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "0624317a3af3caf893fbcd9b16214d2e7c0bb40c4563d85de9f60d88ab87e84a",
+    "signer": "16JB7b3Pmi9KBcwpyTrBsa7BbR3ZA815EZGn3vsAjxYGD",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-306430436700000000000"
+    },
+    "targetedLoanId": "be0c4b7b3f958fa6318cceb64bb355631a9602a2c92c74b80b89a295ee0d1200",
+    "signersOwnLoanId": "4b18ab574d20b9394e6b15dae6b36f011e7110e6234e74cdaa581b1e49557100"
+  },
+  {
+    "txId": "9df560390b137033dc101e32f4138a158734aed7ac4f84a730be69f749102b77",
+    "signer": "16JB7b3Pmi9KBcwpyTrBsa7BbR3ZA815EZGn3vsAjxYGD",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-658270274799999900000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "4b18ab574d20b9394e6b15dae6b36f011e7110e6234e74cdaa581b1e49557100"
+  },
+  {
+    "txId": "8a7b0beae78ce3deaa252a8d4c3ab238cd855e7d2ac6c85a42279eede5275b66",
+    "signer": "16JB7b3Pmi9KBcwpyTrBsa7BbR3ZA815EZGn3vsAjxYGD",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-436780360599999960000"
+    },
+    "targetedLoanId": "0dcb48280f68a75a6c57dc681aa1acff48a08ee427c3e3a51b2c8cff23468b00",
+    "signersOwnLoanId": "4b18ab574d20b9394e6b15dae6b36f011e7110e6234e74cdaa581b1e49557100"
+  },
+  {
+    "txId": "22fec58753d30d9e05e1813b0f5ff3cc69f598755f5c5a00f11d7e3623fe0431",
+    "signer": "16JB7b3Pmi9KBcwpyTrBsa7BbR3ZA815EZGn3vsAjxYGD",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2354709737500000000000"
+    },
+    "targetedLoanId": "be0c4b7b3f958fa6318cceb64bb355631a9602a2c92c74b80b89a295ee0d1200",
+    "signersOwnLoanId": "4b18ab574d20b9394e6b15dae6b36f011e7110e6234e74cdaa581b1e49557100"
+  },
+  {
+    "txId": "4412ab9de6524da2ae2c887acb52eb95ab9fb93ee4c840cd01034ec61a371914",
+    "signer": "16JB7b3Pmi9KBcwpyTrBsa7BbR3ZA815EZGn3vsAjxYGD",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-6480140153600000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "4b18ab574d20b9394e6b15dae6b36f011e7110e6234e74cdaa581b1e49557100"
+  },
+  {
+    "txId": "3d700ca112ad6b3b3cc1aa3ffd48439f664039e89493c13d9109333905170f1d",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-10000265964400000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "17f346c7bde983a83d96a5f042a4af2333f6e639222502009be7a55daad2d403",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 11,
+    "classification": "openLoan",
+    "delta": {
+      "abd": "100000000000",
+      "alph": "-268209900000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "8dcd417c10373f88078024adcb16bf051c227521ad8a97cceeba9e99df09fc8c",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2394027064500000000000"
+    },
+    "targetedLoanId": "331cc0b1b5e23ffd1a3018897de74ffd9d540e1a1388598cf702095a2c0e4900",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "3ace5b0f75709940937078d801abecea0be6fd92703aae0d14ce36ae6081f73e",
+    "signer": "1Bevk11XN4ucr9xhSs8VdVnUf6mPVMYwMUBNca5CE9FuX",
+    "mi": 11,
+    "classification": "openLoan",
+    "delta": {
+      "abd": "40000000000",
+      "alph": "-27707500000000000"
+    },
+    "targetedLoanId": "63f58728681bb45990c146fb68efb8c290b82016f133cb66ab7f5d6bce318d00",
+    "signersOwnLoanId": "7174edac43410ee144bc85e7e755fb7cb7d232a9b3e7a75dae4454909ecb5e00"
+  },
+  {
+    "txId": "a51c4090f367efffa44bacc3c4324d8568cd34d4173a19fa11fd980ec42ccf33",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-200000000000",
+      "alph": "-266543800000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "0082b83e03c8b04522ad6e5404870846d95d8591cdb874696729f97ece83291a",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-9000021066500000000000"
+    },
+    "targetedLoanId": "0dcb48280f68a75a6c57dc681aa1acff48a08ee427c3e3a51b2c8cff23468b00",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "3387b30a9840b3aa676bc0f65ba9c0b6dda4206f12bb5727e127803862aa7936",
+    "signer": "15x1tdrhRVBt1boPSm4yjEQd56GkyePLYCQFAnMNEJy8b",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-17777368178800000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "0679fd59830a41d16f325df8b24297d99df16c78ceace993bfd763556bda5900"
+  },
+  {
+    "txId": "3f55718aab659d6eb3b41bc31decf333e808b442a0f2818891344a84e499c54d",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2000263867100000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "662caab40e8b8549f92c94b783fd1eac4c56b5c08694e4d581c6e37ad16074b9",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-6000021037300000000000"
+    },
+    "targetedLoanId": "0dcb48280f68a75a6c57dc681aa1acff48a08ee427c3e3a51b2c8cff23468b00",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "449f45dfb8c86fe6cc355ec8ef65968814f0b3f0f8205af88489794ad186896a",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-10000160534100000000000"
+    },
+    "targetedLoanId": "e8451a69d328854580b9719176303e4e7cd528533c4550c9b0869634bef00300",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "99647ac24f642cd9c2c81c0a9cec48607ea222ddaf8f6584077d6e67e367a74a",
+    "signer": "1Bh9dHctQZwErBn6X2Tbb6AitsVvC7LeRPwVWfjBK3pLn",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "27967843663328738730051"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "71b14c430d5d9aa2773a9d9ffe0cf4e075500955f216b33efde3e57e2fe41c00"
+  },
+  {
+    "txId": "e88c63cef85915eb8293dd2a3431279f05d2fffa6077075461a8b81c47326c3c",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-3500367596100000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "15812b1718e3e2240211dcf11ebb40d556c77fc6284106821e6e3bfb51ca473d",
+    "signer": "1AHwFCsovDreveYKTdhyvUYJY3rdRv1kcLj54bj69RCtk",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-1473620428500000000000"
+    },
+    "targetedLoanId": "ce8ed1ce554f48b777f38194eb20a30e13626637ede08b8a6aa1289a17ceb900",
+    "signersOwnLoanId": "bb99a8756a5928aa442915ec7d3d819aeb6e38fb5c70e791aba7763e2f1c8b00"
+  },
+  {
+    "txId": "6b28567536b3ccb2f27ec2eaa3b3a097e79e707b5e6d3fe63d3a73238bb99f91",
+    "signer": "17B2TQGxL4P9GRXbXBYkyrSvm2a6XvuWmd5rGGL9mnKZr",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-120000021813400000000000"
+    },
+    "targetedLoanId": "27c3437dc4b48291e9f873c0bfadd623643e3cb071d53c261d8e298e0ee34e00",
+    "signersOwnLoanId": "7d15b356567390d4c45744ac145d965c7fb40a983649e5178d876f772f084f00"
+  },
+  {
+    "txId": "9dbe124117a58bccbf21324a70c9e0f3e2624904c388e00cf6fe947499cacd13",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1499979939400000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "a21bf251cc1f14d210e7a65b0ad8d34cff3c6270e37755519c47999806e33601",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1499977843200000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "128cf303a8a2d16c54a5d8627e1bd66c09564a8b2e5c11c74018a04e97f05fa6",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "999979953400000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "dac3197ce7f32f15d5e9697e686012556d66c60f69bee1b8a0710389269bd8fa",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "999979953400000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "266fe954b5a8e64a081f450c838893b8c9a5a6e369130b7fa8ca5960e181afa2",
+    "signer": "15x1tdrhRVBt1boPSm4yjEQd56GkyePLYCQFAnMNEJy8b",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "20244844055966189320850"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "0679fd59830a41d16f325df8b24297d99df16c78ceace993bfd763556bda5900"
+  },
+  {
+    "txId": "ad4695d68c966b1b4d9503a274357dd9bf16e2a311045eddb6e0b3be373511e0",
+    "signer": "1DALgQ8P1zv49oR2D58brUUPC51uXR49C7cQEGVZJgQ1q",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "3301644515936078790329"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "ccce2e68de539b2cc6ac4f8cdd0eeb9d7daaafdecfac2208ff8c0032186d4300"
+  },
+  {
+    "txId": "23541c84be629092ee8e60f19bf5e0da3d1efdcee2cbdc514447ea59234f1eb6",
+    "signer": "1AHwFCsovDreveYKTdhyvUYJY3rdRv1kcLj54bj69RCtk",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-913020428500000000000"
+    },
+    "targetedLoanId": "b7d3b790c276641de13044931acbeac4107080ae4e6eed76ebb278cae4d55800",
+    "signersOwnLoanId": "bb99a8756a5928aa442915ec7d3d819aeb6e38fb5c70e791aba7763e2f1c8b00"
+  },
+  {
+    "txId": "3bdd1580c808c3891a1eefbfd198d227428eeab58b90b682a9e82c8b8eca3ab7",
+    "signer": "1AHwFCsovDreveYKTdhyvUYJY3rdRv1kcLj54bj69RCtk",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-942019077500000000000"
+    },
+    "targetedLoanId": "b7d3b790c276641de13044931acbeac4107080ae4e6eed76ebb278cae4d55800",
+    "signersOwnLoanId": "bb99a8756a5928aa442915ec7d3d819aeb6e38fb5c70e791aba7763e2f1c8b00"
+  },
+  {
+    "txId": "ee2364c54c97d167189ddc53d87f8e4115f4df225b1db2dd35869f99c40fa22c",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "3221400251176079284708"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "b3563de411260cffd6f94ff5320b854b86fe7a22b6c64be311dd1bd3c9c54eb5",
+    "signer": "17B2TQGxL4P9GRXbXBYkyrSvm2a6XvuWmd5rGGL9mnKZr",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-140000021222200000000000"
+    },
+    "targetedLoanId": "6283cda40e2ed84260cbba73313f7668b1159e360200338a3916d21f0c5e7d00",
+    "signersOwnLoanId": "7d15b356567390d4c45744ac145d965c7fb40a983649e5178d876f772f084f00"
+  },
+  {
+    "txId": "f9b82d7dca1cff6353c6249516e3adf4d37a622181eef24eecbae3a2b6d06146",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2651485021572379810899"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "9def18b748f276eb3ef66e53d733e0f251fa44738bc86e3eb7e74cab01502fe6",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1631765580388205876842"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "e8e5b7df8c6cd045a7b09db2683ba4cbb7d9d5ec90f51de2e66ab766561e7b43",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "751031823507733175292"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "f988e1f24a0a30b284cb76004d2fef76731e1b7377eec23d592ea633f41bf2f2",
+    "signer": "1HkoycXm6Mkpu3Y2HbG2GHAzEBeVbd3dYD2m865K4MEtY",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "39816052459536251919907"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "399090ed0814441b8965ed48276fa28ae2de6df29647b7b2dfbe93667315e500"
+  },
+  {
+    "txId": "4a8b12dc046cfa3541e2d8be3cc247fa466d32f492c941d8023fe7012c0c5919",
+    "signer": "159sakgja8zAMohGvgsRZXNZ1SKieHB73VuFe2imtfAef",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-3460021260200000000000"
+    },
+    "targetedLoanId": "1342717ef32765979de459e73bd8aee5b45ee297f145b25be9e4834557e0b700",
+    "signersOwnLoanId": "b850a8b7d19e96bcd40a0edb5dcae151f8092cfc7c93466c62a82f7217e39b00"
+  },
+  {
+    "txId": "9d4762dc8f9f97e2fa673b7a2cdd1be53f8cfd2ce217930e54396bdb6aaac2f4",
+    "signer": "159sakgja8zAMohGvgsRZXNZ1SKieHB73VuFe2imtfAef",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2370022092500000000000"
+    },
+    "targetedLoanId": "fb00eb5faf8f98092709bbec251fe7b7cce699e07c1b77e4b11aeb4d186aa100",
+    "signersOwnLoanId": "b850a8b7d19e96bcd40a0edb5dcae151f8092cfc7c93466c62a82f7217e39b00"
+  },
+  {
+    "txId": "b2832f1b236fabd4d667fd4b8c72ae309c68bf427a072d386e8b1117adc255aa",
+    "signer": "159sakgja8zAMohGvgsRZXNZ1SKieHB73VuFe2imtfAef",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-3030019169400000000000"
+    },
+    "targetedLoanId": "fb00eb5faf8f98092709bbec251fe7b7cce699e07c1b77e4b11aeb4d186aa100",
+    "signersOwnLoanId": "b850a8b7d19e96bcd40a0edb5dcae151f8092cfc7c93466c62a82f7217e39b00"
+  },
+  {
+    "txId": "92a89c9787c166647fbdce5413c8b12dae271ce6dcc197bdc6040696bce24fdb",
+    "signer": "1AHwFCsovDreveYKTdhyvUYJY3rdRv1kcLj54bj69RCtk",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-289276261400000000000"
+    },
+    "targetedLoanId": "b7d3b790c276641de13044931acbeac4107080ae4e6eed76ebb278cae4d55800",
+    "signersOwnLoanId": "bb99a8756a5928aa442915ec7d3d819aeb6e38fb5c70e791aba7763e2f1c8b00"
+  },
+  {
+    "txId": "a80718ecc35e8936f2e8107d7e26815240352304509552ebf4abd433c7d6ed09",
+    "signer": "1APLszkZkJS8aStZX6E2CsZYg59cByVAXBjzQ34W9VzGp",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-3806156621300000000000"
+    },
+    "targetedLoanId": "128d88c32a23fe8f4623d7a60d248801877c6a3713054ac91db29e7a9cc0b500",
+    "signersOwnLoanId": "1798cd4a999eb9df4dc4821a52aa033565e112380b569d21b6f13803a2702e00"
+  },
+  {
+    "txId": "11b2e3b3c8df96b7e8a3557460fa73b49aebc67bfe3483540381a4b8e3ffb469",
+    "signer": "1APLszkZkJS8aStZX6E2CsZYg59cByVAXBjzQ34W9VzGp",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-5877167551900000000000"
+    },
+    "targetedLoanId": "b7d3b790c276641de13044931acbeac4107080ae4e6eed76ebb278cae4d55800",
+    "signersOwnLoanId": "1798cd4a999eb9df4dc4821a52aa033565e112380b569d21b6f13803a2702e00"
+  },
+  {
+    "txId": "ea000f85264c2f97be97501fc0d552b70bd94dd8e1cdf1f18193675d351a8298",
+    "signer": "17RnYNTDAWJumGJJhiKdmByC2nXVynBrkrmg25FYTAVpB",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "10174181849796278767879"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "58e726898533e8c0bb09461bc30cb1e2e5f11a31f4298b3387a901ecc6f4b900"
+  },
+  {
+    "txId": "15910a3e21a16d939c4e178d899837533b6ff6c72d7f39d6a2507ca81ef28cbe",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2448288898087947807624"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "a1e2737e9f98854554af21dd5ec5aba54d48ddcecf1b65ebe7a0e1c9f4c6d01c",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2054868558373103610973"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "27b39e79fa1ef6b2fdc72c451daf509b50d837400a05fab312f4f6cbb4f345b6",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "799895303168808482622"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "199f23f66712d67be7c2fa4825606571a85c766850b0512d13da94926cf0792a",
+    "signer": "159sakgja8zAMohGvgsRZXNZ1SKieHB73VuFe2imtfAef",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-6200021280000000000000"
+    },
+    "targetedLoanId": "fb00eb5faf8f98092709bbec251fe7b7cce699e07c1b77e4b11aeb4d186aa100",
+    "signersOwnLoanId": "b850a8b7d19e96bcd40a0edb5dcae151f8092cfc7c93466c62a82f7217e39b00"
+  },
+  {
+    "txId": "0a73fc2e45c3c5f7f3597f538751211f0085c1c37bb2b8d8fe653fd25c5b7310",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "3499974270900000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "782d6a0a0f5fc25b19fe68ce46110bc13af2f1254582554a0893792a654a44ce",
+    "signer": "1DZjPvmV5xLX9xAXMYV5EmJxd26Cv9JEx99jirZNuBRRD",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-1310021871000000000000"
+    },
+    "targetedLoanId": "c8cf98ade4fa5b4957c5d4f656686e39d595313ed2b45dcb813ef824d165ab00",
+    "signersOwnLoanId": "a9ffcef7a40fe5d0efcc1e8fb753cbd06c8c84f7cd82a26342dfc4e5b01ed700"
+  },
+  {
+    "txId": "685a4f510f64552d058c4bacf7238a3b309d48ce9ee1e066a31379f4d0165a5b",
+    "signer": "18avXzQFDWcCtn9WAhsvC13kn8asFpG3JDKhoL8XoM9Ee",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-110000000000",
+      "alph": "-30823600000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "b167f57a33349734e72f8f17be5845e1a7cd62aa7ae9d9c75c36f3afd367cd00"
+  },
+  {
+    "txId": "ef476b836db5359cb5695269707576dbf37aa86983e472327cf00e5fb905159a",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-118044503200000000000"
+    },
+    "targetedLoanId": "9569e53b9709e0712a4b30846bed5bc6a85130ec468f80c8c9e6484a49874000",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "83f66205a95b184c8fd71963d0e6c916718a6eda681a0527d597bf42aafbe2c1",
+    "signer": "1AexfNpNuS6yNfp9ihiz5Bh6bdxZ579oLAWVJPz2TcAGS",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-256019150200000000000"
+    },
+    "targetedLoanId": "fb00eb5faf8f98092709bbec251fe7b7cce699e07c1b77e4b11aeb4d186aa100",
+    "signersOwnLoanId": "e31562779defe1f5f4038d9524bee2d76cb394c8f48d90437326655b8ad82200"
+  },
+  {
+    "txId": "6fcdde6382db5d227d253a74a2f5238e3b9546a29ba5d4f4d61d18e15f5dd20a",
+    "signer": "1DZjPvmV5xLX9xAXMYV5EmJxd26Cv9JEx99jirZNuBRRD",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-500019326200000000000"
+    },
+    "targetedLoanId": "1342717ef32765979de459e73bd8aee5b45ee297f145b25be9e4834557e0b700",
+    "signersOwnLoanId": "a9ffcef7a40fe5d0efcc1e8fb753cbd06c8c84f7cd82a26342dfc4e5b01ed700"
+  },
+  {
+    "txId": "dd4145bff622e3f0d49a84675f55e0fb98ee4375b495cf82509819879e5e9a92",
+    "signer": "159sakgja8zAMohGvgsRZXNZ1SKieHB73VuFe2imtfAef",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-3880021870600000000000"
+    },
+    "targetedLoanId": "84760a7aa1ee449a8ec3485bea139f1529aae8aa92e458c652b1166bcf1f2400",
+    "signersOwnLoanId": "b850a8b7d19e96bcd40a0edb5dcae151f8092cfc7c93466c62a82f7217e39b00"
+  },
+  {
+    "txId": "ab585c093dba1e78dd79bfe98d2d1622eab39a460c1cf796aeeb9a20195c7a90",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-4298104850600000000000"
+    },
+    "targetedLoanId": "9569e53b9709e0712a4b30846bed5bc6a85130ec468f80c8c9e6484a49874000",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "05e8e5604cd4f2acb6d80a7789a578791fa690da9529e570943a4130522badf2",
+    "signer": "1EPT9Zc4o9abNs9rD2fZveiWubKe3pAXZk24cPu8QMAHn",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-197495772737",
+      "alph": "-26622200000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "c1797577759781f49be191335a4c65f887fadd4c6967be0eac5ee5b7d16ef900"
+  },
+  {
+    "txId": "ecdacec89dcae65e878cd3f1378169faff7842cc93cefc0a3477c375a86bbb79",
+    "signer": "1EKsNY6uUsnzuw4EUpAGuGWjCdxnsAbzgmtJqkmeDqrcp",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-25375843300000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "407f55f4fefe6ab26fb9d0144014ef00ec39ac4b53076bb6bc04ec1ceeb07d00"
+  },
+  {
+    "txId": "fed88dc712314c21554174b4f806ae810b8fc3f5637f0a0047d4203ea9066109",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-109037496200000000000"
+    },
+    "targetedLoanId": "9569e53b9709e0712a4b30846bed5bc6a85130ec468f80c8c9e6484a49874000",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "e6b34ae0fbd0972def02fa00c2e8091cc0e51c1bbdd299a985893170081099f1",
+    "signer": "1JP2R65s2WZiSqkuRjDYoiXyx2EyPLdXkm5sHwFFKNhJ",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "4979939500000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "4b8e583d13f56ede8aebcd6d4dac56c7279948d32eac6da2d7ca0796f4defa00"
+  },
+  {
+    "txId": "6f4dc0485d6c828927e1fadd65e8a4a9313807167291f89a6f0fbc5ae0d3cca2",
+    "signer": "1JP2R65s2WZiSqkuRjDYoiXyx2EyPLdXkm5sHwFFKNhJ",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "3999979939000000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "4b8e583d13f56ede8aebcd6d4dac56c7279948d32eac6da2d7ca0796f4defa00"
+  },
+  {
+    "txId": "ece6bd37013c10183a630e13f0fbbdc6ef62bab608eb9a40bf84604c0de94d77",
+    "signer": "1DALgQ8P1zv49oR2D58brUUPC51uXR49C7cQEGVZJgQ1q",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-3305387509600000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "ccce2e68de539b2cc6ac4f8cdd0eeb9d7daaafdecfac2208ff8c0032186d4300"
+  },
+  {
+    "txId": "46c978ca8cfc0c0824cbdd9a116fb252ff84df73e7af0379d0978e3b714c0225",
+    "signer": "17dPqgBrTAJH31LWr5CpP8eu86ci8SSfGUw5Hf2tHJQbe",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-21669140400000000000"
+    },
+    "targetedLoanId": "6283cda40e2ed84260cbba73313f7668b1159e360200338a3916d21f0c5e7d00",
+    "signersOwnLoanId": "fd19b0efe9a7d63d29a5bafa2d6d9e975243102db7c3f920637becc296091c00"
+  },
+  {
+    "txId": "6902c95d981399689c9e58080e86c50763ae6bc935b3d491f5001788632750f6",
+    "signer": "1AHwFCsovDreveYKTdhyvUYJY3rdRv1kcLj54bj69RCtk",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-247926771100000000000"
+    },
+    "targetedLoanId": "1e311d12e8ff243b19cd4a3db8bca1377a6988fcd7ad2dbb4b77bf9487d60700",
+    "signersOwnLoanId": "bb99a8756a5928aa442915ec7d3d819aeb6e38fb5c70e791aba7763e2f1c8b00"
+  },
+  {
+    "txId": "75089c62f011266bcf9e58eef2e37d52a59ee5de388caa2869d5ac8ac540c73e",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-89028506600000000000"
+    },
+    "targetedLoanId": "9569e53b9709e0712a4b30846bed5bc6a85130ec468f80c8c9e6484a49874000",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "6c6cce387c33da8056472213d60124c9fb49f4abac869e6397fbeb8e46f8e0c1",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-225048065700000000000"
+    },
+    "targetedLoanId": "9569e53b9709e0712a4b30846bed5bc6a85130ec468f80c8c9e6484a49874000",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "3eb2004e32a50548bd7054c1b2aa0dd20f32d330f8ebd5ce8f485c451825a0a1",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 11,
+    "classification": "openLoan",
+    "delta": {
+      "abd": "144576000000",
+      "alph": "-30782000000000000"
+    },
+    "targetedLoanId": "22ab9dcabdbcee2962628a8e4d36c0f1ac60c5fc9d40d8f791ecf567901fe100",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "35bba65de30852ab821fc444a6a25c5a4a8a836257028ce4635e6e936839ad48",
+    "signer": "1AHwFCsovDreveYKTdhyvUYJY3rdRv1kcLj54bj69RCtk",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-324726771300000000000"
+    },
+    "targetedLoanId": "1e311d12e8ff243b19cd4a3db8bca1377a6988fcd7ad2dbb4b77bf9487d60700",
+    "signersOwnLoanId": "bb99a8756a5928aa442915ec7d3d819aeb6e38fb5c70e791aba7763e2f1c8b00"
+  },
+  {
+    "txId": "a359452ca84e3b0118ab8c965cb7924b89d00c84a4300a7f9c50b57e90b990d0",
+    "signer": "1GXwU1gFwk3HVToVegqsTCGGD82HnvZssWTikaFiLcRGW",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "500410809770087585697"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "39d8182c45bf4f3196e57db1059474cac8131f7803a964e51f3bff95be49c900"
+  },
+  {
+    "txId": "746aef1f7f337627081057ed813f3806756816b5f08f628d98412b47efce3f35",
+    "signer": "1GXwU1gFwk3HVToVegqsTCGGD82HnvZssWTikaFiLcRGW",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-457219500400000000000"
+    },
+    "targetedLoanId": "c8cf98ade4fa5b4957c5d4f656686e39d595313ed2b45dcb813ef824d165ab00",
+    "signersOwnLoanId": "39d8182c45bf4f3196e57db1059474cac8131f7803a964e51f3bff95be49c900"
+  },
+  {
+    "txId": "505bc4ee52e70bbd4856b4c7cef9ca056a0b7142b51251658e557f9f981313ea",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-216051510200000000000"
+    },
+    "targetedLoanId": "9569e53b9709e0712a4b30846bed5bc6a85130ec468f80c8c9e6484a49874000",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "874e12eb4484e3ba42ff9b4c5e29635d7b65cf21ab45a28d854c1c24dd72b91c",
+    "signer": "1EPT9Zc4o9abNs9rD2fZveiWubKe3pAXZk24cPu8QMAHn",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-300000000000",
+      "alph": "-23358500000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "c1797577759781f49be191335a4c65f887fadd4c6967be0eac5ee5b7d16ef900"
+  },
+  {
+    "txId": "964b287d215df7ef733fb3cf9bdea701577c94c3fea14f54bf39a4679ea67f98",
+    "signer": "1JP2R65s2WZiSqkuRjDYoiXyx2EyPLdXkm5sHwFFKNhJ",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "19999977829300000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "4b8e583d13f56ede8aebcd6d4dac56c7279948d32eac6da2d7ca0796f4defa00"
+  },
+  {
+    "txId": "7bf9562c265d6968422bbb53f5538f0c1e912ace3f99a61ecc096ee6b706daf9",
+    "signer": "1JP2R65s2WZiSqkuRjDYoiXyx2EyPLdXkm5sHwFFKNhJ",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "9999979939500000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "4b8e583d13f56ede8aebcd6d4dac56c7279948d32eac6da2d7ca0796f4defa00"
+  },
+  {
+    "txId": "164e0f483cc11b2d2af22a7f01082bd911a86b371b9ae9eda2e99e1cacfc68da",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "33159720971705620503626"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "ec6140d21f7f305aa9626155eafcf4629d8805e6b6a22f9068ce75cdcaac95f8",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-1020345049083",
+      "alph": "-169791000000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "37ada0e98d0dcf5443e6cf4b24cbd88b7c2f346dc13ec8ab4e56e95b84f0cc69",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "39999977862300000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "669eba474ac0459a9754e9136c244d9b8be35834e7db3eb9078a2bcec0609fad",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-1579654950917",
+      "alph": "-31155200000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "74bb5748a89f4ecd05107120839b0ab4b5611cd7bb85ed267800128874953488",
+    "signer": "15eMtbZVStL1RTz1cXaMMyuwXMQ2hdxAZ94yyWQUE4NsW",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-147063322000000000000"
+    },
+    "targetedLoanId": "9569e53b9709e0712a4b30846bed5bc6a85130ec468f80c8c9e6484a49874000",
+    "signersOwnLoanId": "57f70100671338bf303e38eee8977518110cd4866439dad49c37f86472a8d500"
+  },
+  {
+    "txId": "9f30b848aa5401b5339e24c61e2a5080a0cce304f38a88afe36fcc414d91e69e",
+    "signer": "13fV32zuHerqZTkcadgAx1pxpMK6syWDUFgWWaPLd5GJs",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "75247662343901742572"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "1e7a23e2a75ef0d6ed4bff2901dd9c7b69541d0d6a42f7058633edd48a810900"
+  },
+  {
+    "txId": "abeb3b7ea9ab4d62e13db7d38e9aab8b90218711cde313702de0ce7810ec8cec",
+    "signer": "1AHwFCsovDreveYKTdhyvUYJY3rdRv1kcLj54bj69RCtk",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-226020584300000000000"
+    },
+    "targetedLoanId": "1e311d12e8ff243b19cd4a3db8bca1377a6988fcd7ad2dbb4b77bf9487d60700",
+    "signersOwnLoanId": "bb99a8756a5928aa442915ec7d3d819aeb6e38fb5c70e791aba7763e2f1c8b00"
+  },
+  {
+    "txId": "514cc0814b627abb6e338fc4cc1693f055dcafc538191a058422f33b62c09aa7",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2000019225800000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "17d6b8d324dd57bd5492c6137fd7b82a08ee3d105143d7c4f95a5730ad9154fe",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-1350019069000000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "952900d133cd9a833035e5e01c352151a7eb89b2b8466f9788e465c168087d5a",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-1000022020900000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "da9f5e89cb70c90e579a184d97747d0a7e23d1bd2fd1432cfc39fa59fefc56e1",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-5000022021700000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "005ef0c2a7ebd3dd4f19ec61e45425734f290fa747eb6bbdba2066f5aab0ddb8",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-4000019097800000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "8ffe3306bd02a1de86d4281c352f921dbf33382fdc37443fefe64e5980e1d430",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-30000021213400000000000"
+    },
+    "targetedLoanId": "1faa5f6f50ded450e58cff519acec019f1e9dd7dd23b7cd2b3af36411b701300",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "b75a493c1326ad85432aa3c6f1c4c3d4f2ac32e4cbe975c5d4e265b5572dbf4a",
+    "signer": "17dPqgBrTAJH31LWr5CpP8eu86ci8SSfGUw5Hf2tHJQbe",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-10019140400000000000"
+    },
+    "targetedLoanId": "22ab9dcabdbcee2962628a8e4d36c0f1ac60c5fc9d40d8f791ecf567901fe100",
+    "signersOwnLoanId": "fd19b0efe9a7d63d29a5bafa2d6d9e975243102db7c3f920637becc296091c00"
+  },
+  {
+    "txId": "523ae88dddea2dbd52cd9d62983727d083bfd5b6612ce0c92c04a664ed8fca4e",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-100000000000",
+      "alph": "-23808300000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "71380279ee385c48be3fdddc6a615a9044a0e721bda7503d17cbfdf07a4a051e",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-15000024302700000000000"
+    },
+    "targetedLoanId": "1faa5f6f50ded450e58cff519acec019f1e9dd7dd23b7cd2b3af36411b701300",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "996f126ddb0410673c58c7e321b8acaa3321dd96cffb7c4d210e8835d6ecedb3",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-15000381067700000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "48f25bd594affe20c509b89da0f85d5fcbd8140fb525d0001231b35017f5ab90",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "31545659387622294750284"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "63103bf4a4307ea025587634c2fba19c4d90cb86fd4f95433f07f54e0e16c4ee",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-3500022020900000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "d47135fa1c68b73f78ec15394e312e62c4dc78b04608537ba99d445968007610",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-3500019069200000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "eeea87ac3d602a78c1a1d23b0c459f7f7c030d281b24256eba20e9e0f5568cd6",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-4000022035900000000000"
+    },
+    "targetedLoanId": "1faa5f6f50ded450e58cff519acec019f1e9dd7dd23b7cd2b3af36411b701300",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "3a18b3b08b5ec8182679241658cd573450ae3f586f0d78599dece38e34cac5fc",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 11,
+    "classification": "openLoan",
+    "delta": {
+      "abd": "100000000000",
+      "alph": "-25038600000000000"
+    },
+    "targetedLoanId": "1faa5f6f50ded450e58cff519acec019f1e9dd7dd23b7cd2b3af36411b701300",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "571d59e402672282911efcb0841e6508e24093525b53feb93a660b2dd857b630",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "-535298004596",
+      "alph": "-28746400000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "9add5a71f3c5cf73b246c80e36b4df0047a9504c0aac993a84eda0412445de43",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-753022021100000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "4e2f2ddcabb8527642b8aa20603602a682240a48143c56e8ae8dba6e23fc172e",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-1400022020900000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "fa93f795839ac74fed479b34beba3da348fe17ea3018551a07480401484dc39d",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-1500022020900000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "d07777d161eb5b42abcdf8784c34e9d4cef2a74364f869cecee1d4520fe457a8",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-7000024156100000000000"
+    },
+    "targetedLoanId": "1faa5f6f50ded450e58cff519acec019f1e9dd7dd23b7cd2b3af36411b701300",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "ab64f954e32d6f547253d2894672316ae7b57b8504eef741a2b8a6d20a379301",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-10000380922400000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "c189efb7aa122ea665ce9b6e5a0a48f67577086b346622ce8c3770ac6b42ddfb",
+    "signer": "1AexfNpNuS6yNfp9ihiz5Bh6bdxZ579oLAWVJPz2TcAGS",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-260021250800000000000"
+    },
+    "targetedLoanId": "fb00eb5faf8f98092709bbec251fe7b7cce699e07c1b77e4b11aeb4d186aa100",
+    "signersOwnLoanId": "e31562779defe1f5f4038d9524bee2d76cb394c8f48d90437326655b8ad82200"
+  },
+  {
+    "txId": "b5fd0f33488138d40b7680785c5d00b8b1a02a5fddd17d20273d73bdee5a97ac",
+    "signer": "18kP2dtXAcrPw5L5BSdtTnppjeX5ZHiegF5M6W9x5B7RV",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "100047819300000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "9620fe676d6482487e8896782aea0b9c1fb885d18c96a45bb1e8af635b7e6000"
+  },
+  {
+    "txId": "e058daaf85bb3b69243478edd0ad2ef0273545757b54f51843fca5f459bc31ae",
+    "signer": "18kP2dtXAcrPw5L5BSdtTnppjeX5ZHiegF5M6W9x5B7RV",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-100386077100000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "9620fe676d6482487e8896782aea0b9c1fb885d18c96a45bb1e8af635b7e6000"
+  },
+  {
+    "txId": "204f69fdfa809c818806c91cf1673c1f067ddeda255d781d3c6fe588b51b2f60",
+    "signer": "1DALgQ8P1zv49oR2D58brUUPC51uXR49C7cQEGVZJgQ1q",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "3270922218393870177423"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "ccce2e68de539b2cc6ac4f8cdd0eeb9d7daaafdecfac2208ff8c0032186d4300"
+  },
+  {
+    "txId": "7ecacca4083e11d6bec51565efd3b12e552e0b5130ceaefefcc36eca9855e3af",
+    "signer": "15x1tdrhRVBt1boPSm4yjEQd56GkyePLYCQFAnMNEJy8b",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2000019169400000000000"
+    },
+    "targetedLoanId": "a827f5b02335f633ed02b370e6e3ddf2318e60a9d13c486e1b2e9594890b0700",
+    "signersOwnLoanId": "0679fd59830a41d16f325df8b24297d99df16c78ceace993bfd763556bda5900"
+  },
+  {
+    "txId": "2d1d8959f80df31b05c20c939157ad16c2255e8bff002b9e851ec8895a4a0ef6",
+    "signer": "1jYJZAbU3A4pQixFtcbeJfaVzZVLVGGL3Ev2BBzN77DB",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-60000027609700000000000"
+    },
+    "targetedLoanId": "6f78b2925e4363adbfbf017a0f7c23ca7502428453e516cafead8b8f6c04e000",
+    "signersOwnLoanId": "53f73acac5e93dcb9262c2f8e5b9ff51977979419f6a4ef6df313d9080481e00"
+  },
+  {
+    "txId": "1fe1c0750bf0cead06494199d0ba34a12a12ed259653158659a426f69e001389",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "99752158882519273085220"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "a6402c0b3062882c949a29b4deaaecf8218d48948e9f0e7d28c1a0d19b8f39e3",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "9999979967900000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "4ef49935b2e885a83e04c2cba614d0f8efe6e905ccaf916b768e618d1ea70cd8",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-3000022021100000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "a9014d193e66570c0d8c3d025dcd42f3fac67961cccea46bb34a45986bc3645f",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-6000025284600000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "cabd3599dcb25835be3fba654b7c73d7cbac2f845d338ab4f15b20b322def28a",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-4000022020900000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "3b7e86363463d81ff8bd9af79f2ea2768ec56da349b79995484879d79236edc7",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2000022021100000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "22c645c258fa8be456529cc82a9bbae82e41ed397b0d92a32e27bd9bc02b1e2e",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-3000022021300000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "9b1da055cfb2ba0214911d93eb0f5e11af0f7d9e801104bf84bea01d99889707",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 11,
+    "classification": "openLoan",
+    "delta": {
+      "abd": "100000000000",
+      "alph": "-25053000000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "06fede0a161af0016d7f5ce6762d96d7509e4effc6e87605def56d327c23ff3a",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-10000022021100000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "ec1dd4b90d96aa82fc2e9c33d3404423bbb3e703b288620968d7020e0d567d13",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-40000024155900000000000"
+    },
+    "targetedLoanId": "1faa5f6f50ded450e58cff519acec019f1e9dd7dd23b7cd2b3af36411b701300",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "2010399fe971cba4f7c724558a194f7b827ee24de4f08464947ea6bd1b549221",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-7000019098600000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "3d758056500db6a1bc65b7c3630aa58416e85d80e15ebb2bcad8f0562e4e0d29",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-10000025704100000000000"
+    },
+    "targetedLoanId": "1faa5f6f50ded450e58cff519acec019f1e9dd7dd23b7cd2b3af36411b701300",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "769237db8b6afeece578449b68269f544c7f29d6c5c24f2efd66ea3717f97c61",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-5000024145700000000000"
+    },
+    "targetedLoanId": "1faa5f6f50ded450e58cff519acec019f1e9dd7dd23b7cd2b3af36411b701300",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "0d90abf4e08d14c25b8bbe25d4ed8616b2683221895b97169afe033adad3c641",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-5000024145900000000000"
+    },
+    "targetedLoanId": "1faa5f6f50ded450e58cff519acec019f1e9dd7dd23b7cd2b3af36411b701300",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "1ade2feabde1f2c19e962255360be4c06b4a1acde8c859a1770e56fd57a0aaf6",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-5000024146300000000000"
+    },
+    "targetedLoanId": "1faa5f6f50ded450e58cff519acec019f1e9dd7dd23b7cd2b3af36411b701300",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "96eb7cf444d8581c694be84cb1aab8bdd7e3a6c2181240a1a3a994e3a5bf4c32",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 3,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-10000382224900000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "a1637defe3cfce70d515adeaba097cb2ad434da988ae117dc459b8fe4a74c2bf",
+    "signer": "1EPT9Zc4o9abNs9rD2fZveiWubKe3pAXZk24cPu8QMAHn",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2795019069400000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "c1797577759781f49be191335a4c65f887fadd4c6967be0eac5ee5b7d16ef900"
+  },
+  {
+    "txId": "2f7ace5fc143c5129dd889a766d2aaaa659fd5ea3189a5b7471bbf88ddf4fa8d",
+    "signer": "13Hkj4J7BLKRN5E1PAGLi9C12UZEm9xN2mrVuKc9F6ano",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "4586770249798656448710"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "a1c28f15e7ce7e2984c64264c1f5872e05925ec67e69a54c3e205b8b255fba00"
+  },
+  {
+    "txId": "c9497557203325c8fef6e75f23dcd097ea8f29a1f42bf075fcaa2fa6622cbe9a",
+    "signer": "15HH3CkSWzLiuC7BEcmTqx1Q69CRgaSAEeKgGcCU3NpnR",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1946555634700000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "db473284b6e452c4ab3cbd1d74003323e7b131e6adbb0742eec7c329229c2200"
+  },
+  {
+    "txId": "d17169ce9798ec5cb963e46c982dc9de4c3c6bbfc6105b2d871b1f53a37ca416",
+    "signer": "15HH3CkSWzLiuC7BEcmTqx1Q69CRgaSAEeKgGcCU3NpnR",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "99979997600000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "db473284b6e452c4ab3cbd1d74003323e7b131e6adbb0742eec7c329229c2200"
+  },
+  {
+    "txId": "2602205c98401f87c2141db8b246eca6821eb860a9cd8fa67866f97d985a424f",
+    "signer": "15HH3CkSWzLiuC7BEcmTqx1Q69CRgaSAEeKgGcCU3NpnR",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "299979997600000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "db473284b6e452c4ab3cbd1d74003323e7b131e6adbb0742eec7c329229c2200"
+  },
+  {
+    "txId": "c18a39d5504d0112742d8313f4725bb723605c654ce21298c64f621952b3aa21",
+    "signer": "15HH3CkSWzLiuC7BEcmTqx1Q69CRgaSAEeKgGcCU3NpnR",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "536977890600000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "db473284b6e452c4ab3cbd1d74003323e7b131e6adbb0742eec7c329229c2200"
+  },
+  {
+    "txId": "34a2c4bd9bb9ea62eeb89f4e9d9773bb40badf75c053e2af90809646d15d429c",
+    "signer": "15HH3CkSWzLiuC7BEcmTqx1Q69CRgaSAEeKgGcCU3NpnR",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2999979997000000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "db473284b6e452c4ab3cbd1d74003323e7b131e6adbb0742eec7c329229c2200"
+  },
+  {
+    "txId": "d45b89eb2ed967080c1e4ee1ae8a7d5fcdb14bb2feb17d81480f1fb8d23549d0",
+    "signer": "15HH3CkSWzLiuC7BEcmTqx1Q69CRgaSAEeKgGcCU3NpnR",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "199979997600000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "db473284b6e452c4ab3cbd1d74003323e7b131e6adbb0742eec7c329229c2200"
+  },
+  {
+    "txId": "eb5ae9a7ad00db32dd1150256607d67dc14b6d6201c60cb7bca43b8e71dd8f0c",
+    "signer": "15HH3CkSWzLiuC7BEcmTqx1Q69CRgaSAEeKgGcCU3NpnR",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "499979997600000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "db473284b6e452c4ab3cbd1d74003323e7b131e6adbb0742eec7c329229c2200"
+  },
+  {
+    "txId": "b736f807cee4bcdee99f1b01c01dbc9ddfd8c32fe8cf8fa1ba131d6ea9992856",
+    "signer": "15HH3CkSWzLiuC7BEcmTqx1Q69CRgaSAEeKgGcCU3NpnR",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "999977890600000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "db473284b6e452c4ab3cbd1d74003323e7b131e6adbb0742eec7c329229c2200"
+  },
+  {
+    "txId": "2a4728bba087a95322faed37ddba9667ec265419fb15400a89ac7721c8aa57ff",
+    "signer": "15HH3CkSWzLiuC7BEcmTqx1Q69CRgaSAEeKgGcCU3NpnR",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "999979997200000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "db473284b6e452c4ab3cbd1d74003323e7b131e6adbb0742eec7c329229c2200"
+  },
+  {
+    "txId": "13726aede1646c5762593faf80106844d92c7dc3745f52ddb0d26750eb0d9830",
+    "signer": "15HH3CkSWzLiuC7BEcmTqx1Q69CRgaSAEeKgGcCU3NpnR",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "999979997000000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "db473284b6e452c4ab3cbd1d74003323e7b131e6adbb0742eec7c329229c2200"
+  },
+  {
+    "txId": "c2f17b211e54261e61b06c4cadf806a7dff30b4be7f33a118bcc8c425ca0586e",
+    "signer": "15HH3CkSWzLiuC7BEcmTqx1Q69CRgaSAEeKgGcCU3NpnR",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "199979997600000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "db473284b6e452c4ab3cbd1d74003323e7b131e6adbb0742eec7c329229c2200"
+  },
+  {
+    "txId": "2418567e82a7503017c73c3f7a2a9eba0e10e02ba11131d975e7792fb8de0fae",
+    "signer": "15HH3CkSWzLiuC7BEcmTqx1Q69CRgaSAEeKgGcCU3NpnR",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "199977045500000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "db473284b6e452c4ab3cbd1d74003323e7b131e6adbb0742eec7c329229c2200"
+  },
+  {
+    "txId": "9224fb5b9bcb5f41fbde9fe3c809afc0469bbe3a9fb9b5d09779f9670bf335b8",
+    "signer": "15HH3CkSWzLiuC7BEcmTqx1Q69CRgaSAEeKgGcCU3NpnR",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-10000150528600000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "db473284b6e452c4ab3cbd1d74003323e7b131e6adbb0742eec7c329229c2200"
+  },
+  {
+    "txId": "7f1b1e4ab0720360f3e8ed93138a1780c60985180fa135e905075d8dfcd35849",
+    "signer": "159sakgja8zAMohGvgsRZXNZ1SKieHB73VuFe2imtfAef",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-1370019140400000000000"
+    },
+    "targetedLoanId": "de0d14d2011b7e53612f4428f9b77c498e58689b78b582e8253d222df3a80300",
+    "signersOwnLoanId": "b850a8b7d19e96bcd40a0edb5dcae151f8092cfc7c93466c62a82f7217e39b00"
+  },
+  {
+    "txId": "ad3a96c5ecb2ad2c45173e7ca4f5979df41d0c0acf406af16344e17dbbc59133",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1102479463554961013136"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "62bacdaff089b747db152a7c721cfdf3da59e62109547573e7a88a4e9d9e24a9",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "3507930829420331695222"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "3c5d86097fc1e27ec151033eb3fa6fd41c5319d6d7e245daa998a80b2b05394b",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2116163902748700995947"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "a1c9c94749a35523d008c59ab260aaabfae493e9d4a62f6b35ba3f7f1e09ed53",
+    "signer": "159sakgja8zAMohGvgsRZXNZ1SKieHB73VuFe2imtfAef",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2418021279400000000000"
+    },
+    "targetedLoanId": "de0d14d2011b7e53612f4428f9b77c498e58689b78b582e8253d222df3a80300",
+    "signersOwnLoanId": "b850a8b7d19e96bcd40a0edb5dcae151f8092cfc7c93466c62a82f7217e39b00"
+  },
+  {
+    "txId": "05019829dae9915776ca270d438bfcda4d33ab50647e6da6779677350b6c5f30",
+    "signer": "19DqVbFBV8aCB5EPdJEsMWJVo2zZhhC9tWV3DAPnqVJKD",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "858975777012817387903"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "fe9a551c1ec8725e28a7292d892e237bfec6fec0bf513e391ecbd6f4c47de400"
+  },
+  {
+    "txId": "77457f0d9869acc227cd433b3b0840d2413e627ef8950dbb54bce91d1069f4b9",
+    "signer": "1EHRocJoXL1ZQQJ26Eq4LhAbs3MfrDNQf5qNeEn8FmCEZ",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "5665235935997527427600"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "0aaab773aa4e843b3393d61448d6438a263bf54066febc6ffc7502af9bdcc100"
+  },
+  {
+    "txId": "d34c569f99c96eeddef191c6526c5695e2deee681566dc571d2c5f1ebe7a30e0",
+    "signer": "1EHRocJoXL1ZQQJ26Eq4LhAbs3MfrDNQf5qNeEn8FmCEZ",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2655884857170300081355"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "0aaab773aa4e843b3393d61448d6438a263bf54066febc6ffc7502af9bdcc100"
+  },
+  {
+    "txId": "921881e44484aab46abc2b3f650fc8f445203b7b5d9cb19bd400cd04608769c2",
+    "signer": "1EPT9Zc4o9abNs9rD2fZveiWubKe3pAXZk24cPu8QMAHn",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-4045022050100000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "c1797577759781f49be191335a4c65f887fadd4c6967be0eac5ee5b7d16ef900"
+  },
+  {
+    "txId": "2e2c44a7fac3a2e93e9b6bad65a3366d1658c50a13aa89538c2e09f744ee1604",
+    "signer": "1EHRocJoXL1ZQQJ26Eq4LhAbs3MfrDNQf5qNeEn8FmCEZ",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "2005755533083344641974"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "0aaab773aa4e843b3393d61448d6438a263bf54066febc6ffc7502af9bdcc100"
+  },
+  {
+    "txId": "922a89affe627747554fa18ba82c7a607c9dca4817c8a52c1e8fa139557c9bce",
+    "signer": "1EHRocJoXL1ZQQJ26Eq4LhAbs3MfrDNQf5qNeEn8FmCEZ",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "1056941379061111557091"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "0aaab773aa4e843b3393d61448d6438a263bf54066febc6ffc7502af9bdcc100"
+  },
+  {
+    "txId": "97075409c003c1528375291ad3aca552e68095504968f38b568261f40343c0b2",
+    "signer": "1EHRocJoXL1ZQQJ26Eq4LhAbs3MfrDNQf5qNeEn8FmCEZ",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "999980136200000000000"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "0aaab773aa4e843b3393d61448d6438a263bf54066febc6ffc7502af9bdcc100"
+  },
+  {
+    "txId": "e6365a6f544749209821696aaf8716442c3b4444e10e56e6251e55a9ca1572bc",
+    "signer": "1AHwFCsovDreveYKTdhyvUYJY3rdRv1kcLj54bj69RCtk",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-231420584300000000000"
+    },
+    "targetedLoanId": "1e311d12e8ff243b19cd4a3db8bca1377a6988fcd7ad2dbb4b77bf9487d60700",
+    "signersOwnLoanId": "bb99a8756a5928aa442915ec7d3d819aeb6e38fb5c70e791aba7763e2f1c8b00"
+  },
+  {
+    "txId": "a50791300ea02a89ce35316a260de5c7313a37dc11195fca05779f068e7b4cfe",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 0,
+    "classification": "unknown",
+    "delta": {
+      "abd": "0",
+      "alph": "23839625620255667097743"
+    },
+    "targetedLoanId": "none",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "0a6f116d6149fae74aca859cbff4ec1b6c117997835e32a0000c1c72ee15d0b3",
+    "signer": "1TY6YgzcZ9nRE3i5Xj37Lw55xK4yMPoTmyiFYwEXXBxh",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2640025284600000000000"
+    },
+    "targetedLoanId": "6290026c14f8a8c310790ce564cc9f361e57c1d0913e38bb559d1db60a164200",
+    "signersOwnLoanId": "85ac2a64246e826dbfe9fa6dc58bfb895ccb73c62fbaf0fbf176957d18f26400"
+  },
+  {
+    "txId": "5eb1de3367809c54926debfce38009ef04c537eef5beb0e17bd2faaf764c99ba",
+    "signer": "1EPT9Zc4o9abNs9rD2fZveiWubKe3pAXZk24cPu8QMAHn",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-2125019083200000000000"
+    },
+    "targetedLoanId": "be0c4b7b3f958fa6318cceb64bb355631a9602a2c92c74b80b89a295ee0d1200",
+    "signersOwnLoanId": "c1797577759781f49be191335a4c65f887fadd4c6967be0eac5ee5b7d16ef900"
+  },
+  {
+    "txId": "f347d9853c66230b4cc32cf7aac8a23200d0a19c02de7988125b22dda4a423e6",
+    "signer": "1EPT9Zc4o9abNs9rD2fZveiWubKe3pAXZk24cPu8QMAHn",
+    "mi": 8,
+    "classification": "liquidate?",
+    "delta": {
+      "abd": "0",
+      "alph": "-1890019092800000000000"
+    },
+    "targetedLoanId": "be0c4b7b3f958fa6318cceb64bb355631a9602a2c92c74b80b89a295ee0d1200",
+    "signersOwnLoanId": "c1797577759781f49be191335a4c65f887fadd4c6967be0eac5ee5b7d16ef900"
+  }
+]

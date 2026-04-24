@@ -1,0 +1,28 @@
+// Dev-only mock of the DIA xMarket registry. MUST NEVER be deployed to
+// testnet or mainnet — setValue has no access control so anyone can
+// manipulate the "price" it reports. Lives under contracts/dev/ and is
+// excluded from the testnet/mainnet deploy scripts.
+//
+// Use cases:
+//   - Local devnet integration tests for the CR / liquidation path.
+//   - The /dev/tokens frontend page's price-feed preview.
+
+Contract MockDiaRegistry(
+  mut price: U256,
+  mut timestamp: U256
+) implements IOracleRegistry {
+
+  event ValueSet(caller: Address, price: U256, timestamp: U256)
+
+  pub fn getValue(key: ByteVec) -> (U256, U256) {
+    let _ = key  // mock ignores the feed key — price applies to any key
+    return price, timestamp
+  }
+
+  @using(updateFields = true, checkExternalCaller = false)
+  pub fn setValue(newPrice: U256, newTimestamp: U256) -> () {
+    price = newPrice
+    timestamp = newTimestamp
+    emit ValueSet(callerAddress!(), newPrice, newTimestamp)
+  }
+}

@@ -1,0 +1,16 @@
+// Minimum viable interface for a DIA-xMarket-compatible oracle registry.
+//
+// DIA xMarket exposes an on-chain registry contract that maps a feed key
+// (e.g., blake2b("ALPH/USD")) to `(price: U256, timestamp: U256)`. Our
+// DiaAlphPriceAdapter calls through this interface so the adapter itself
+// never hardcodes DIA-specific bytecode and can be retargeted to any
+// registry that conforms.
+//
+// @using(methodSelector = false) matches DIA's convention of using integer
+// method indices rather than hash selectors.
+
+@std(id = #000A)
+@using(methodSelector = false)
+Interface IOracleRegistry {
+  pub fn getValue(key: ByteVec) -> (U256, U256)
+}

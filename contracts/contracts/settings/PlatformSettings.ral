@@ -1,0 +1,157 @@
+// Central address registry + admin role.
+//
+// Every OpenABX contract that needs the address of another contract reads it
+// from PlatformSettings. This keeps the rest of the protocol's state layout
+// free of cross-contract address fields, and lets governance rotate e.g.
+// the DIA adapter or CircuitBreaker without redeploying LoanManager.
+//
+// All setters are admin-gated. Admin transfer is single-step for v1; Phase 5
+// wraps this behind a 24-hour Timelock.
+//
+// Fields store contract IDs (ByteVec) rather than addresses so that callers
+// can instantiate typed contract proxies via `SomeContract(id)`. The tokens
+// are stored as IDs because they are also token ids.
+
+Contract PlatformSettings(
+  mut admin: Address,
+  mut abdToken: ByteVec,
+  mut abxToken: ByteVec,
+  mut loanManager: ByteVec,
+  mut borrowerOperations: ByteVec,
+  mut auctionManager: ByteVec,
+  mut stakeManager: ByteVec,
+  mut vesting: ByteVec,
+  mut diaAlphPriceAdapter: ByteVec,
+  mut abdPriceOracle: ByteVec,
+  mut circuitBreaker: ByteVec
+) {
+
+  event AdminChanged(oldAdmin: Address, newAdmin: Address)
+  event ContractRefChanged(role: U256, oldRef: ByteVec, newRef: ByteVec)
+
+  enum Roles {
+    AbdToken             = 1
+    AbxToken             = 2
+    LoanManager          = 3
+    BorrowerOperations   = 4
+    AuctionManager       = 5
+    StakeManager         = 6
+    Vesting              = 7
+    DiaAlphPriceAdapter  = 8
+    AbdPriceOracle       = 9
+    CircuitBreaker       = 10
+  }
+
+  enum ErrorCodes {
+    NotAdmin = 100
+  }
+
+  // --- read-only helpers ----------------------------------------------------
+
+  pub fn getAdmin() -> Address { return admin }
+  pub fn getAbdToken() -> ByteVec { return abdToken }
+  pub fn getAbxToken() -> ByteVec { return abxToken }
+  pub fn getLoanManager() -> ByteVec { return loanManager }
+  pub fn getBorrowerOperations() -> ByteVec { return borrowerOperations }
+  pub fn getAuctionManager() -> ByteVec { return auctionManager }
+  pub fn getStakeManager() -> ByteVec { return stakeManager }
+  pub fn getVesting() -> ByteVec { return vesting }
+  pub fn getDiaAlphPriceAdapter() -> ByteVec { return diaAlphPriceAdapter }
+  pub fn getAbdPriceOracle() -> ByteVec { return abdPriceOracle }
+  pub fn getCircuitBreaker() -> ByteVec { return circuitBreaker }
+
+  // --- admin-only setters ---------------------------------------------------
+  //
+  // We inline `checkCaller!(callerAddress!() == admin, ...)` in every setter
+  // rather than extracting to a helper. Ralph's external-caller-check analyser
+  // in the observed @alephium/cli v3.0.3 does not follow through private-fn
+  // callees, so inlining keeps the check visible.
+
+  @using(updateFields = true)
+  pub fn setAdmin(newAdmin: Address) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = admin
+    admin = newAdmin
+    emit AdminChanged(old, newAdmin)
+  }
+
+  @using(updateFields = true)
+  pub fn setAbdToken(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = abdToken
+    abdToken = newRef
+    emit ContractRefChanged(Roles.AbdToken, old, newRef)
+  }
+
+  @using(updateFields = true)
+  pub fn setAbxToken(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = abxToken
+    abxToken = newRef
+    emit ContractRefChanged(Roles.AbxToken, old, newRef)
+  }
+
+  @using(updateFields = true)
+  pub fn setLoanManager(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = loanManager
+    loanManager = newRef
+    emit ContractRefChanged(Roles.LoanManager, old, newRef)
+  }
+
+  @using(updateFields = true)
+  pub fn setBorrowerOperations(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = borrowerOperations
+    borrowerOperations = newRef
+    emit ContractRefChanged(Roles.BorrowerOperations, old, newRef)
+  }
+
+  @using(updateFields = true)
+  pub fn setAuctionManager(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = auctionManager
+    auctionManager = newRef
+    emit ContractRefChanged(Roles.AuctionManager, old, newRef)
+  }
+
+  @using(updateFields = true)
+  pub fn setStakeManager(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = stakeManager
+    stakeManager = newRef
+    emit ContractRefChanged(Roles.StakeManager, old, newRef)
+  }
+
+  @using(updateFields = true)
+  pub fn setVesting(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = vesting
+    vesting = newRef
+    emit ContractRefChanged(Roles.Vesting, old, newRef)
+  }
+
+  @using(updateFields = true)
+  pub fn setDiaAlphPriceAdapter(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = diaAlphPriceAdapter
+    diaAlphPriceAdapter = newRef
+    emit ContractRefChanged(Roles.DiaAlphPriceAdapter, old, newRef)
+  }
+
+  @using(updateFields = true)
+  pub fn setAbdPriceOracle(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = abdPriceOracle
+    abdPriceOracle = newRef
+    emit ContractRefChanged(Roles.AbdPriceOracle, old, newRef)
+  }
+
+  @using(updateFields = true)
+  pub fn setCircuitBreaker(newRef: ByteVec) -> () {
+    checkCaller!(callerAddress!() == admin, ErrorCodes.NotAdmin)
+    let old = circuitBreaker
+    circuitBreaker = newRef
+    emit ContractRefChanged(Roles.CircuitBreaker, old, newRef)
+  }
+}

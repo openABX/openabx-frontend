@@ -1,0 +1,54 @@
+// Doubly-linked node used by SortedList. Each node is a subcontract of
+// its parent SortedList and can only be mutated/destroyed by that parent.
+//
+// `payload` is an opaque ByteVec — callers interpret it (typically as a
+// contract id of some related subcontract, e.g. a Loan).
+//
+// `key` is the sort key. SortedList traverses nodes in ascending key order.
+// Within equal keys, insertion FIFO is maintained by the caller's hint
+// choice (new insertion goes after any existing equal-key nodes if the
+// caller supplies prevHint = that last equal-key node).
+
+Contract ListNode(
+  parent: ByteVec,
+  key: U256,
+  payload: ByteVec,
+  mut prevId: ByteVec,
+  mut nextId: ByteVec
+) {
+
+  event Relinked(prevId: ByteVec, nextId: ByteVec)
+
+  enum ErrorCodes {
+    NotParent = 400
+  }
+
+  pub fn getParent() -> ByteVec     { return parent }
+  pub fn getKey() -> U256            { return key }
+  pub fn getPayload() -> ByteVec     { return payload }
+  pub fn getPrevId() -> ByteVec      { return prevId }
+  pub fn getNextId() -> ByteVec      { return nextId }
+
+  @using(updateFields = true)
+  pub fn setPrevId(newPrev: ByteVec) -> () {
+    checkCaller!(callerContractId!() == parent, ErrorCodes.NotParent)
+    // Emit the PRE-mutation link pair so off-chain indexers can reconstruct
+    // the transition (old, new). Previously emitted post-mutation values,
+    // which confused parsers that expected old-then-new semantics.
+    emit Relinked(prevId, nextId)
+    prevId = newPrev
+  }
+
+  @using(updateFields = true)
+  pub fn setNextId(newNext: ByteVec) -> () {
+    checkCaller!(callerContractId!() == parent, ErrorCodes.NotParent)
+    emit Relinked(prevId, nextId)
+    nextId = newNext
+  }
+
+  @using(assetsInContract = true)
+  pub fn destroy(refundTo: Address) -> () {
+    checkCaller!(callerContractId!() == parent, ErrorCodes.NotParent)
+    destroySelf!(refundTo)
+  }
+}

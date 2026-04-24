@@ -1,0 +1,43 @@
+{
+  "name": "@openabx/contracts",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./artifacts/ts/index.ts",
+  "types": "./artifacts/ts/index.ts",
+  "exports": {
+    ".": {
+      "types": "./artifacts/ts/index.ts",
+      "default": "./artifacts/ts/index.ts"
+    }
+  },
+  "files": [
+    "artifacts/",
+    "contracts/"
+  ],
+  "scripts": {
+    "compile": "cli compile --network testnet",
+    "compile:devnet": "cli compile --network devnet",
+    "test": "cli test --runInBand",
+    "test:parallel": "cli test",
+    "devnet:start": "cli devnet start",
+    "devnet:stop": "cli devnet stop",
+    "deploy:devnet": "cli deploy --network devnet",
+    "deploy:testnet": "cli deploy --network testnet",
+    "wire:check:devnet": "cli deploy --network devnet --files scripts/1_wire.ts",
+    "wire:check:testnet": "cli deploy --network testnet --files scripts/1_wire.ts",
+    "lint": "echo 'contracts lint: nothing to check yet'",
+    "typecheck": "pnpm compile && tsc --noEmit",
+    "prebuild": "cli compile --network testnet",
+    "build": "echo 'contracts build: compile only'"
+  },
+  "dependencies": {
+    "@alephium/cli": "3.0.3",
+    "@alephium/web3": "3.0.3",
+    "@alephium/web3-test": "3.0.3",
+    "@alephium/web3-wallet": "3.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vitest": "^3.2.4"
+  }
+}
