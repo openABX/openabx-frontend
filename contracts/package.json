@@ -27,8 +27,7 @@
     "wire:check:testnet": "cli deploy --network testnet --files scripts/1_wire.ts",
     "lint": "echo 'contracts lint: nothing to check yet'",
     "typecheck": "pnpm compile && tsc --noEmit",
-    "prebuild": "cli compile --network testnet",
-    "build": "echo 'contracts build: compile only'"
+    "build": "cli compile --network testnet"
   },
   "dependencies": {
     "@alephium/cli": "3.0.3",

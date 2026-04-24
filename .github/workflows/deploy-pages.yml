@@ -44,7 +44,13 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      # The live production site reads AlphBanX's mainnet contracts.
+      # web/ imports @openabx/contracts via workspace:*; the package's main
+      # entry points at artifacts/ts/ which Ralph codegen populates. Compile
+      # contracts first so those files exist when Next resolves imports.
+      - name: Compile Ralph contracts (generates TS artifacts)
+        run: pnpm -C contracts run compile
+      - name: Build SDK
+        run: pnpm -C sdk run build
       - name: Next.js static export
         env:
           NEXT_PUBLIC_NETWORK: mainnet
