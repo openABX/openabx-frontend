@@ -65,6 +65,49 @@ const BASELINES: Baseline[] = [
     codeHash:
       "5392a356e4966c757cb7a1b8de71fd7640cd0149f24261863220b49c93921ba4",
   },
+  // Addresses below were added to the frontend's address book after the
+  // Phase-0 baselines were cut (2026-04-23 for BorrowerOperations +
+  // StakeManager, 2026-04-24 for the 4 AuctionPool tiers). Baseline hashes
+  // captured 2026-04-24 directly from node.mainnet.alephium.org state.
+  {
+    address: "28QGP95rnmZYKRBEsBeGBTdLHetoSE9nxEatVrtuN2bEF",
+    role: "BorrowerOperations",
+    codeHash:
+      "34a2014ecdbe4da3de6709f7116a7036828d7695642154f6d34703d8deb14039",
+  },
+  {
+    address: "28Mhs2tczfKJDUq7seTzaRctZXUhqkMzikrehxAHy2kVu",
+    role: "StakeManager",
+    codeHash:
+      "6500451ab252f75b315d2ed050c99c5f074c2150ced8620a51bccc179fbb01df",
+  },
+  // All four AuctionPool tier sub-contracts share one codeHash — confirmed
+  // on snapshot day. A drift on any tier but not the others would itself be
+  // informative (partial upgrade? pool-specific patch?).
+  {
+    address: "2ACCN5Tctta3CADpZxuVd2eV8iV7tUoNTX3uzw31gGbuh",
+    role: "AuctionPool5",
+    codeHash:
+      "b394ebd905023e62b51e71333fe4ee6179f743f0bfed43814b808583b6768469",
+  },
+  {
+    address: "2BSx7P6xZug8JsjmjCKPdiSowZQWapAktHn8a3VFoAPuR",
+    role: "AuctionPool10",
+    codeHash:
+      "b394ebd905023e62b51e71333fe4ee6179f743f0bfed43814b808583b6768469",
+  },
+  {
+    address: "28BeXPu7nTUgriWSHbN1NkGG9Zm3xmyZqfKWZkLXi79dy",
+    role: "AuctionPool15",
+    codeHash:
+      "b394ebd905023e62b51e71333fe4ee6179f743f0bfed43814b808583b6768469",
+  },
+  {
+    address: "vLsZf6pkDAUkmvrViDtZJqKCPNAnXKZ1Uwo6cAqNijjV",
+    role: "AuctionPool20",
+    codeHash:
+      "b394ebd905023e62b51e71333fe4ee6179f743f0bfed43814b808583b6768469",
+  },
 ];
 
 interface ContractState {
