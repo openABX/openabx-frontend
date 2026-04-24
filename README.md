@@ -37,12 +37,14 @@ Two artefacts:
 | ------------------------------------------------ | ------------------------------------------------------- |
 | Borrow / repay / close / add+withdraw collateral | ✅ wired, simulation-gated                              |
 | Redeem (unified with closeLoan, mi=19)           | ✅ wired                                                |
-| Stake / unstake / claim rewards                  | ✅ wired                                                |
+| Stake / unstake / claim rewards                  | ✅ wired, full drain per claim (see note below)         |
 | Auction pool deposit / withdraw / claim          | ✅ wired                                                |
 | Liquidate                                        | ⏳ keeper-only — no live sample tx to template from yet |
 | Vesting claim                                    | ⏳ AlphBanX hasn't activated Vesting on mainnet         |
 
 13 of 14 operations are live, simulation-verified end-to-end. A daily GitHub Actions cron re-hashes every AlphBanX mainnet contract and auto-opens an incident issue on drift.
+
+**Claim-rewards correctness (2026-04-24).** The AlphBanX `StakeManager.claim` method takes its U256 arg as a hard cap (`transferred = min(arg, realPending)`), not as an ignored hint — confirmed via live simulation-diff against tx `bc74392f…a3a6c`. Earlier OpenABX builds baked the sample-tx value of 5.386 ALPH into the script, silently short-paying any user with more pending than that. Both the displayed pending (now read via a claim-simulation probe) and the claim tx itself (now sends an oversized arg so the contract caps at actual pending) drain fully in one click. Users short-paid by the prior version can simply click Claim again to recover the stuck remainder; no on-chain migration required.
 
 ## Pre-audit status
 

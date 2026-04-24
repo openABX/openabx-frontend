@@ -77,8 +77,14 @@ const ABX_TOKEN_ID =
 // against (see scripts/fetch-operation-templates.ts).
 const T = {
   stakeAbx: 4719437185717n,
-  // claimRewards ignores its baked U256 (the contract recomputes claim
-  // amount internally) — leave unchanged. Simulation 2026-04-23: succeeded.
+  // claimRewards: the baked U256 IS the claim amount passed to method 33.
+  // 2026-04-24 simulation-diff against tx bc74392f…a3a6c proved this —
+  // changing the arg changes the transferred amount 1:1 up to the user's
+  // real pending, where the contract caps at min(arg, pending). So the
+  // template literal is a hard cap: leaving it at 5.386 ALPH silently
+  // short-paid every user with more than that pending. Must substitute
+  // with the user's real pending (from fetchMainnetStakePosition).
+  claimRewardsAmount: 5386884103532206000n,
   requestUnstakeAbx: 250000000101087n,
   // claimUnstake has a U256 (150000000000000) that's probably rewards-claim
   // estimate — but simulation proved leaving it unchanged works; same
@@ -137,20 +143,29 @@ export function buildStake(amountAbxAtto: bigint): PreparedTx {
 }
 
 /**
- * Claim accumulated ALPH rewards. Verified against live simulation: gasUsed
- * ≈ 122k, returns 5.386 ALPH to caller in the sample.
+ * Claim accumulated ALPH rewards. The contract method caps the transfer at
+ * `min(claimAmountAtto, realPending)`; pass the user's full real pending
+ * (from `fetchMainnetStakePosition().pendingRewardsAlphAtto`) to drain.
+ * Passing more than real pending is safe — it just caps.
  */
-export function buildClaimRewards(signerAddress: string): PreparedTx {
+export function buildClaimRewards(
+  signerAddress: string,
+  claimAmountAtto: bigint,
+): PreparedTx {
   assertValidAssetAddress(signerAddress, "signerAddress");
+  if (claimAmountAtto <= 0n) {
+    throw new Error("buildClaimRewards: claimAmountAtto must be > 0");
+  }
   const tmpl = t<TemplateFile>(claimRewards);
   const bytecode = applyTemplate(tmpl, {
     replaceSignerAddress: signerAddress,
+    replaceU256: [{ from: T.claimRewardsAmount, to: claimAmountAtto }],
   });
   return {
     bytecode,
     attoAlphAmount: DUST,
     tokens: [],
-    label: "Claim staking rewards",
+    label: `Claim ${claimAmountAtto} atto-ALPH rewards`,
   };
 }
 

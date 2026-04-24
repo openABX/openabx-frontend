@@ -8,6 +8,8 @@
 
 import { getNetworkConfig, type Network } from "../networks";
 import { resolveAddress } from "../addresses";
+import { buildClaimRewards } from "./index";
+import { simulateScript } from "./template";
 
 interface NodeCallResponse {
   type: string;
@@ -150,11 +152,12 @@ export interface MainnetStakePosition {
   pendingUnstakeAbxAtto: bigint;
   unstakeReadyAtMs: bigint;
   snapshotIndex: bigint;
-  /** Approximate pending ALPH rewards. Uses the Liquity-style reward-index
-   * formula: `staked * (globalIndex - snapshotIndex) / PRECISION_1e36`. If
-   * AlphBanX's exact formula differs (e.g., subtracts an already-claimed
-   * counter), this will over-report slightly; simulation-before-sign still
-   * prevents any bad tx. */
+  /** Exact pending ALPH rewards — the amount the contract would transfer
+   * RIGHT NOW if the user claimed. Obtained by simulating a claim with an
+   * oversized arg and reading the capped `txOutputs[0].attoAlphAmount`
+   * minus the attached DUST. Reliable because the AlphBanX StakeManager
+   * caps the payout at `min(arg, realPending)` (verified 2026-04-24 via
+   * simulation-diff against tx bc74392f…a3a6c). */
   pendingRewardsAlphAtto: bigint;
 }
 
@@ -218,6 +221,84 @@ function decodeU256(slot: { type: string; value: string } | undefined): bigint {
   }
 }
 
+// 0.1 ALPH — the attoAlphAmount buildClaimRewards attaches, returned to the
+// user as part of their asset output (not reward).
+const CLAIM_ATTACHED_DUST_ATTO = 100_000_000_000_000_000n;
+
+// 1,000,000 ALPH — effectively unbounded. The StakeManager claim caps at
+// min(arg, realPending) (verified 2026-04-24 simulation-diff), so a probe
+// arg this large lets the contract tell us realPending via the txOutputs.
+// Any realistic user has < 1M ALPH in pending so the cap is always tight.
+const CLAIM_PROBE_ATTO = 1_000_000_000_000_000_000_000_000n;
+
+function isProbeOutput(
+  x: unknown,
+): x is { type: string; address: string; attoAlphAmount: string } {
+  if (typeof x !== "object" || x === null) return false;
+  const e = x as Record<string, unknown>;
+  return (
+    typeof e["type"] === "string" &&
+    typeof e["address"] === "string" &&
+    typeof e["attoAlphAmount"] === "string"
+  );
+}
+
+/**
+ * Probe the user's real pending ALPH rewards by simulating a claim with an
+ * oversized arg. AlphBanX's StakeManager caps the transfer at
+ * `min(arg, realPending)`, so `txOutputs[*].attoAlphAmount - DUST` summed
+ * over asset outputs back to the user equals realPending. Returns 0n if
+ * the user has nothing to claim (simulation reverts).
+ *
+ * Verified 2026-04-24 against wallet 18NS5h8W… (tx bc74392f…a3a6c):
+ *   probe=15 ALPH → output 13.954 ALPH  (= 13.854 reward + 0.1 DUST)
+ *   probe=18 ALPH → output 13.954 ALPH  (same cap confirms real pending)
+ *   probe=1 ALPH  → output 1.1 ALPH     (arg < pending, no cap)
+ */
+async function probeMainnetClaimableRewards(
+  network: Network,
+  userAddress: string,
+): Promise<bigint> {
+  let bytecode: string;
+  let attoAlphAmount: bigint;
+  try {
+    const built = buildClaimRewards(userAddress, CLAIM_PROBE_ATTO);
+    bytecode = built.bytecode;
+    attoAlphAmount = built.attoAlphAmount;
+  } catch (err) {
+    console.warn("[openabx] claim-probe: failed to build bytecode:", err);
+    return 0n;
+  }
+  const nodeUrl = getNetworkConfig(network).nodeUrl;
+  const sim = await simulateScript(nodeUrl, bytecode, userAddress, {
+    attoAlphAmount,
+  });
+  if (!sim.ok) {
+    // A revert means "no pending to claim" (or the contract rejected the
+    // arg for some other reason). Distinguish a genuine empty state from a
+    // network failure so the UI can show "0" confidently vs degrading.
+    console.info(
+      `[openabx] claim-probe: simulation did not succeed for ${userAddress}: ${sim.error ?? "unknown"}`,
+    );
+    return 0n;
+  }
+  const result = sim.result as { txOutputs?: unknown } | null | undefined;
+  const rawOutputs = Array.isArray(result?.txOutputs) ? result!.txOutputs : [];
+  let total = 0n;
+  for (const o of rawOutputs) {
+    if (!isProbeOutput(o)) continue;
+    if (o.type !== "AssetOutput" || o.address !== userAddress) continue;
+    try {
+      total += BigInt(o.attoAlphAmount);
+    } catch {
+      /* skip malformed entry */
+    }
+  }
+  return total > CLAIM_ATTACHED_DUST_ATTO
+    ? total - CLAIM_ATTACHED_DUST_ATTO
+    : 0n;
+}
+
 /**
  * Reads the user's live stake position from AlphBanX's mainnet
  * StakeManager.
@@ -227,8 +308,10 @@ function decodeU256(slot: { type: string; value: string } | undefined): bigint {
  *        mut[0] snapshotIndex, mut[1] stakedAbxAtto,
  *        mut[2] pendingUnstakeAbxAtto, mut[3] unstakeReadyAtMs
  *      (layout confirmed 2026-04-23 against wallet 18NS5h8W…)
- *   3. `StakeManager.mi=17()`            → current global reward index
- *   4. Compute approximate pending-rewards on the client.
+ *   3. Simulate claimRewards with a huge arg → real pending is the
+ *      contract-capped transfer minus attached DUST. Replaces the earlier
+ *      `(staked × delta) / 1e36` formula, which under-reported by ~1.6×
+ *      for wallet 18NS5h8W… (shown 12 ALPH vs real 19.24 ALPH, 2026-04-24).
  */
 export async function fetchMainnetStakePosition(
   network: Network,
@@ -262,23 +345,11 @@ export async function fetchMainnetStakePosition(
     const pendingUnstakeAbxAtto = decodeU256(state.mutFields[2]);
     const unstakeReadyAtMs = decodeU256(state.mutFields[3]);
 
-    // 3. current global index
-    const globalRes = await call(nodeUrl, sm, 17, []);
-    const globalIndex =
-      globalRes.type === "CallContractSucceeded" &&
-      globalRes.returns?.[0]?.type === "U256"
-        ? BigInt(globalRes.returns[0].value)
-        : 0n;
-
-    // 4. pending rewards. The contract uses a 1e36-scaled reward index
-    // (StakeManager.mi=15 returned 1000000000000000000000000000000000000).
-    const PRECISION = 1_000_000_000_000_000_000_000_000_000_000_000_000n;
-    const delta =
-      globalIndex > snapshotIndex ? globalIndex - snapshotIndex : 0n;
-    const pendingRewardsAlphAtto =
-      stakedAbxAtto > 0n && delta > 0n
-        ? (stakedAbxAtto * delta) / PRECISION
-        : 0n;
+    // 3. exact pending rewards via claim-simulation probe
+    const pendingRewardsAlphAtto = await probeMainnetClaimableRewards(
+      network,
+      userAddress,
+    );
 
     return {
       stakedAbxAtto,

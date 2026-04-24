@@ -32,6 +32,7 @@ import {
   buildStake as mnBuildStake,
   buildWithdrawCollateral as mnBuildWithdrawCollateral,
   canMainnetWrite,
+  fetchMainnetStakePosition,
   getNetworkConfig,
   resolveAddress,
   simulateScript,
@@ -467,10 +468,22 @@ export async function claimStakingRewards(
   requireSigner(signer);
   if (network === "mainnet") {
     const account = await signer.getSelectedAccount();
+    // Read real pending only to decide whether the claim is worth submitting.
+    // We DON'T pass `pos.pendingRewardsAlphAtto` as the claim arg: rewards
+    // accrue continuously, so by the time the signed tx lands on-chain the
+    // true pending is slightly higher than what we probed. Instead pass an
+    // oversized arg (1M ALPH) — the StakeManager caps at min(arg, pending)
+    // so the user drains whatever is actually available at tx-inclusion
+    // time. This is the same arg shape used by the read-side probe.
+    const pos = await fetchMainnetStakePosition(network, account.address);
+    if (pos.pendingRewardsAlphAtto <= 0n) {
+      throw new Error("No claimable ALPH rewards");
+    }
+    const OVERSIZED_CLAIM_ATTO = 1_000_000_000_000_000_000_000_000n; // 1M ALPH
     return submitPrepared(
       network,
       signer,
-      mnBuildClaimRewards(account.address),
+      mnBuildClaimRewards(account.address, OVERSIZED_CLAIM_ATTO),
     );
   }
   const sm = StakeManager.at(requireAddress(network, "stakeManager"));
