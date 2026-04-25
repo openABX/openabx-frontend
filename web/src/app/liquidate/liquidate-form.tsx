@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useWallet } from "@alephium/web3-react";
 import { NETWORK } from "@/lib/env";
-import { canTransact, liquidate } from "@/lib/tx";
+import { canTransactOp, liquidate } from "@/lib/tx";
 import { useProtocolGlobals } from "@/lib/hooks";
 import { useLoanScan } from "@/lib/hooks/use-loan-scan";
 import { useTxRunner } from "@/lib/hooks/use-tx-runner";
@@ -21,7 +21,7 @@ export function LiquidateForm() {
   const { data: loans, isFetching: scanning } = useLoanScan(30);
 
   const isConnected = wallet.connectionStatus === "connected";
-  const writesAllowed = canTransact(NETWORK);
+  const writesAllowed = canTransactOp(NETWORK, "liquidate");
   const isBusy =
     submit.kind === "awaitingSign" ||
     submit.kind === "submitted" ||

@@ -62,7 +62,13 @@ export function AuctionActions() {
     if (!isConnected || !wallet.signer) return;
     if (action === "claim") {
       const pos = pools?.find((p) => p.discountBps === bps);
-      const claim = pos?.claimableAlphAtto ?? 1n;
+      const claim = pos?.claimableAlphAtto ?? 0n;
+      // Guard at the call site: the SDK throws on <= 0n, but bouncing here
+      // means the user gets the explanatory tx-error toast instead of an
+      // exception with no recovery. The UI also only renders the Claim
+      // button when claimable > 0, so this should be unreachable in
+      // practice; left as defence-in-depth.
+      if (claim <= 0n) return;
       await runTx(() => claimFromPool(NETWORK, wallet.signer!, bps, claim));
       return;
     }

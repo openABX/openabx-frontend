@@ -2,7 +2,7 @@
 
 import { useWallet } from "@alephium/web3-react";
 import { NETWORK } from "@/lib/env";
-import { canTransact, claimVesting } from "@/lib/tx";
+import { canTransactOp, claimVesting } from "@/lib/tx";
 import { useVestingPosition } from "@/lib/hooks";
 import { useTxRunner } from "@/lib/hooks/use-tx-runner";
 import { bigintToNumber, formatAmount } from "@/lib/format";
@@ -14,7 +14,7 @@ export function VestingActions() {
   const { data: vesting } = useVestingPosition();
   const { state: submit, runTx } = useTxRunner();
 
-  const writesAllowed = canTransact(NETWORK);
+  const writesAllowed = canTransactOp(NETWORK, "vesting");
   const isConnected = wallet.connectionStatus === "connected";
   const address =
     wallet.connectionStatus === "connected" ? wallet.account.address : null;

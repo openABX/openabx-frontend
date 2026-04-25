@@ -96,9 +96,20 @@ const T = {
   // claimRewards: caller passes pendingUnstakeAbxAtto from the reader.
   claimUnstakeAmount: 150000000000000n,
   poolDepositAbd: 1396000000000n,
-  // Note poolWithdraw has two U256s: 158 (likely pool tier bps / 100 ? NO
-  // since 158 isn't 5/10/15/20; could be a user-specific flag) and 15 (which
-  // matches the 15% pool tier bps/100). Second identified as pool index.
+  // poolWithdraw has two U256s in its sample-tx bytecode: `158n` and `15n`.
+  // `15n` matches the 15% pool tier (the tier the sample tx targeted), so
+  // it's substituted for the user's tier in `buildPoolWithdraw`. The
+  // semantics of `158n` have NOT been positively identified — it is small
+  // enough that interpreting it as atto-ABD would mean a 158-attoABD
+  // withdraw, which is below any plausible minimum. It might be a partial-
+  // withdraw flag, a max-iterations limit, or something else entirely.
+  // We currently substitute it with the user's atto-ABD amount on the
+  // assumption that it is the withdraw amount; the simulation gate in
+  // `submitPrepared` plus the post-simulation amount check in
+  // `withdrawFromPool` (web/src/lib/tx.ts) guards against the worst case
+  // (user signs a tx that transfers a different amount than they asked
+  // for). Until a side-by-side simulation of two `158`-vs-X withdrawals
+  // confirms the slot, treat poolWithdraw as best-effort.
   poolWithdrawAbd: 158n,
   poolWithdrawPoolIdx: 15n,
   // poolClaim: has a U256 (1321402644729719000000 for mi=42, 10 for mi=40)
@@ -285,15 +296,19 @@ export function buildPoolWithdraw(
 export function buildPoolClaim(
   tierBps: 500 | 1000 | 1500 | 2000,
   signerAddress: string,
-  amountAlphAtto: bigint = 1n,
+  amountAlphAtto: bigint,
 ): PreparedTx {
   // Two observed variants — mi=40 and mi=42. mi=42 is more common (787
-  // samples). The template's U256 is the claim amount. Caller should pass
+  // samples). The template's U256 is the claim amount. Caller MUST pass
   // the user's current claimable balance; passing a larger value will
   // underflow inside the pool contract, passing smaller just leaves some
-  // unclaimed. The web layer's usePoolPositions hook should fetch the
-  // current claimable and pass it here.
+  // unclaimed. There is no safe default — the prior `= 1n` default
+  // caused any caller that lacked an up-to-date claimable read to attempt
+  // a 1 atto-ALPH claim (effectively a no-op).
   assertValidAssetAddress(signerAddress, "signerAddress");
+  if (amountAlphAtto <= 0n) {
+    throw new Error("buildPoolClaim: amountAlphAtto must be > 0");
+  }
   const tmpl = t<TemplateFile>(poolClaim42);
   const bytecode = applyTemplate(tmpl, {
     replaceU256: [{ from: 1321402644729719000000n, to: amountAlphAtto }],
@@ -316,17 +331,18 @@ export function buildPoolClaim(
  * Open a loan. Collateral comes from attoAlphAmount (APS-approved ALPH);
  * borrow amount is the user's desired ABD. Template is openLoan11.
  *
- * IMPORTANT: The openLoan templates bake in a referrer address and a
- * sorted-loans hint (specific Loan subcontract ID). We leave these
- * unchanged — the referrer mechanism charges the original baked-in
- * referrer even if that's not your own referrer, and the sorted-list
- * hint gives the contract a starting point; if wrong, the contract
- * falls back to a linear search. The protocol accepts both cases.
+ * IMPORTANT: The openLoan templates bake in a referrer address, a
+ * sorted-loans hint (specific Loan subcontract ID), AND the interest
+ * rate. The rate slot in the template hex has not yet been decoded —
+ * both observed sample txs (openLoan11/openLoan12) carry the same
+ * U256 value for this slot — so the rate cannot be substituted yet.
+ * Whatever rate the template encodes is what every loan opened via
+ * OpenABX gets. The borrow form documents this; users who need a
+ * different tier should use AlphBanX's official UI.
  */
 export function buildOpenLoan(
   collateralAlphAtto: bigint,
   borrowAbdAtto: bigint,
-  _interestRate1e18: bigint,
 ): PreparedTx {
   const tmpl = t<TemplateFile>(openLoan11);
   const bytecode = applyTemplate(tmpl, {
@@ -449,7 +465,10 @@ export type MainnetOperation =
   | "addCollateral"
   | "withdrawCollateral"
   | "closeLoan"
-  | "redeem";
+  | "redeem"
+  | "borrowMore"
+  | "liquidate"
+  | "vesting";
 
 /**
  * Operations that have been live-simulated successfully via

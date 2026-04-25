@@ -12,9 +12,6 @@ import { TxStatusLine } from "@/components/tx-status-line";
 import { cn } from "@/lib/utils";
 
 // Parameters mirror docs/00-protocol-spec.md §2.
-const INTEREST_TIERS = [1, 3, 5, 10, 15, 20, 25, 30] as const;
-type InterestTier = (typeof INTEREST_TIERS)[number];
-
 const MINTING_FEE = 0.005;
 const MCR = 2.0;
 const MIN_LOAN_ABD = 100;
@@ -147,22 +144,9 @@ function useAlphPrice(refreshMs = 30_000): PriceState {
   return state;
 }
 
-// Map the eight UI tiers to their 1e18-scaled on-chain values (per spec §2).
-const TIER_TO_RATE_1E18: Record<InterestTier, bigint> = {
-  1: 10_000_000_000_000_000n,
-  3: 30_000_000_000_000_000n,
-  5: 50_000_000_000_000_000n,
-  10: 100_000_000_000_000_000n,
-  15: 150_000_000_000_000_000n,
-  20: 200_000_000_000_000_000n,
-  25: 250_000_000_000_000_000n,
-  30: 300_000_000_000_000_000n,
-};
-
 export function BorrowForm() {
   const [collateralAlph, setCollateralAlph] = useState<string>("1000");
   const [borrowAbd, setBorrowAbd] = useState<string>("100");
-  const [tier, setTier] = useState<InterestTier>(5);
   const [maxHint, setMaxHint] = useState<string | null>(null);
   const { state: submit, runTx } = useTxRunner();
 
@@ -274,7 +258,6 @@ export function BorrowForm() {
       openLoan(NETWORK, wallet.signer!, {
         collateralAlphAtto: collAtto,
         borrowAbdAtto: debtAtto,
-        interestRate1e18: TIER_TO_RATE_1E18[tier],
       }),
     );
   }
@@ -340,30 +323,30 @@ export function BorrowForm() {
           {maxHint && <p className="text-xs text-warning">{maxHint}</p>}
         </div>
 
-        <fieldset className="space-y-3">
+        <fieldset className="space-y-2">
           <legend className="text-sm font-medium">Interest rate</legend>
-          <div className="grid grid-cols-4 gap-2">
-            {INTEREST_TIERS.map((t) => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setTier(t)}
-                className={cn(
-                  "rounded-md border px-3 py-2 text-center text-sm font-medium transition-colors",
-                  tier === t
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border bg-background text-foreground hover:border-primary/60",
-                )}
+          <div className="rounded-md border border-warning/40 bg-warning/10 p-3 text-xs text-warning">
+            <p className="font-medium">
+              Rate is set by the operation template, not selectable here.
+            </p>
+            <p className="mt-1 text-warning/90">
+              The mainnet openLoan bytecode OpenABX submits has the interest
+              rate baked in by the sample tx the template was built from. Until
+              the rate slot is decoded, every loan opened through this UI uses
+              that template-encoded rate. To choose a specific 1–30% tier, use
+              AlphBanX&rsquo;s official UI at{" "}
+              <a
+                href="https://app.alphbanx.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono underline-offset-2 hover:underline"
               >
-                {t}%
-              </button>
-            ))}
+                app.alphbanx.com
+              </a>
+              ; this UI will gain rate selection once the substitution slot is
+              identified.
+            </p>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Lower rates are redeemed first when ABD holders redeem against the
-            protocol. Higher rates reduce your exposure to forced redemption but
-            cost more over time.
-          </p>
         </fieldset>
 
         {writesAllowed && (
@@ -501,9 +484,8 @@ export function BorrowForm() {
                 <span className="text-muted-foreground">/ ALPH</span>
               </dd>
               <dt className="text-muted-foreground">Tier interest / yr</dt>
-              <dd className="font-mono">
-                {tier}% ({((Number(borrowAbd) || 0) * (tier / 100)).toFixed(2)}{" "}
-                ABD / year){" "}
+              <dd className="font-mono text-muted-foreground">
+                set by template
               </dd>
             </dl>
             {!metrics.valid && (

@@ -167,20 +167,24 @@ export function LoanManage() {
       <button
         type="button"
         onClick={runClose}
-        disabled={loan.debtAtto > 0n || isBusy}
+        disabled={isBusy}
         className={cn(
           "rounded-md border px-3 py-2 text-xs",
-          loan.debtAtto === 0n && !isBusy
+          !isBusy
             ? "border-destructive/60 text-destructive hover:bg-destructive/5"
             : "cursor-not-allowed border-border text-muted-foreground",
         )}
         title={
           loan.debtAtto > 0n
-            ? "Repay the full debt before closing"
+            ? `Burn ${formatAmount(loan.debtAtto, 9, 2)} ABD and withdraw all collateral`
             : "Close loan and withdraw all collateral"
         }
       >
-        {isBusy ? "Signing…" : "Close loan"}
+        {isBusy
+          ? "Signing…"
+          : loan.debtAtto > 0n
+            ? `Close loan (burn ${formatAmount(loan.debtAtto, 9, 2)} ABD)`
+            : "Close loan"}
       </button>
 
       <TxStatusLine state={submit} />

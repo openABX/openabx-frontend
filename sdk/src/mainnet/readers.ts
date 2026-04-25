@@ -459,6 +459,36 @@ export const EMPTY_MAINNET_POOL_POSITIONS: MainnetPoolPosition[] = [
  * per-tier breakdown. Per-tier TVL is still shown on /auction from
  * AuctionManager state.
  */
+// Per-tier auction-pool contract ids derived from the address book
+// (binToHex(contractIdFromAddress(...))). Used to detect the user's actual
+// tier by matching the per-user pool subcontract's parent — the parent's
+// contract id appears as a 32-byte ByteVec in the sub's immFields.
+const POOL_CONTRACT_IDS: Record<500 | 1000 | 1500 | 2000, string> = {
+  500: "e65d42f7fd1999dd11f05e842f538392d218299c82d897fcf8492d43edb16d00",
+  1000: "f9008b58440650458419983902bddd6ca6836a85055fdb37d3ff93488bd4bf00",
+  1500: "c881e30a9763deaee43fd96388202e0dab52fbeae372ca8f7098c90801f53300",
+  2000: "18929d423ec181eb01a486b7160064b859fcabf966bfec775fb9d33703828b00",
+};
+
+function detectPoolTier(
+  state: ContractStateResponse,
+): 500 | 1000 | 1500 | 2000 | null {
+  // Walk both immFields and mutFields. Any ByteVec slot whose lowercase
+  // value matches one of the four pool contract ids identifies the tier.
+  // This is robust to slot reordering across protocol upgrades — we
+  // search by content, not by index.
+  for (const slot of [...state.immFields, ...state.mutFields]) {
+    if (slot.type !== "ByteVec") continue;
+    const v = slot.value.toLowerCase();
+    for (const [bps, id] of Object.entries(POOL_CONTRACT_IDS)) {
+      if (v === id) {
+        return Number(bps) as 500 | 1000 | 1500 | 2000;
+      }
+    }
+  }
+  return null;
+}
+
 export async function fetchMainnetPoolPositions(
   network: Network,
   userAddress: string,
@@ -501,19 +531,28 @@ export async function fetchMainnetPoolPositions(
       /* ignore — show 0 */
     }
 
-    // If user has no deposit, return empty. Otherwise we don't know which
-    // tier; report the deposit under the 15% slot (most popular from
-    // observation), leave others at zero. UI on /auction shows a
-    // "position" summary that's tier-agnostic.
     if (deposited === 0n) return EMPTY_MAINNET_POOL_POSITIONS;
+
+    // Identify the user's actual tier from the sub's parent contract id.
+    // Falling back to "report under tier 15" (the prior behavior) was
+    // wrong: it caused claim / withdraw to fire against the wrong pool
+    // and hid 5/10/20% positions entirely. If we can't detect the tier,
+    // return empty and let the UI render a "position present, tier
+    // undetermined — use AlphBanX's UI" state rather than mis-route.
+    const detectedTier = detectPoolTier(state);
+    if (detectedTier === null) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[openabx] pool position detected at ${subAddr} (deposited=${deposited}) ` +
+          `but the pool tier could not be decoded from the sub's state. ` +
+          `Showing no position; please use AlphBanX's UI to manage this deposit.`,
+      );
+    }
     const tiers: Array<500 | 1000 | 1500 | 2000> = [500, 1000, 1500, 2000];
     return tiers.map((tier) => ({
       tierBps: tier,
-      // Only report on one tier so we don't quadruple-count. The 15% tier
-      // is AlphBanX's default deposit target per their UI; users can still
-      // claim / withdraw via /auction.
-      depositedAbdAtto: tier === 1500 ? deposited : 0n,
-      claimableAlphAtto: tier === 1500 ? claimable : 0n,
+      depositedAbdAtto: tier === detectedTier ? deposited : 0n,
+      claimableAlphAtto: tier === detectedTier ? claimable : 0n,
       subAddress: subAddr,
     }));
   } catch {

@@ -43,10 +43,15 @@ export function canTransactOp(
   return canMainnetWrite(op);
 }
 
+interface SimResultLike {
+  result?: unknown;
+}
+
 async function submitPrepared(
   network: Network,
   signer: SignerProvider,
   prepared: PreparedTx,
+  verifyOutputs?: (sim: SimResultLike, signerAddress: string) => void,
 ): Promise<TxResult> {
   const account = await signer.getSelectedAccount();
   const signerAddress = account.address;
@@ -63,6 +68,10 @@ async function submitPrepared(
   if (!sim.ok) {
     throw new Error(`Simulation failed (would revert on-chain): ${sim.error}`);
   }
+  if (verifyOutputs) {
+    // Throws on a mismatch — caller's responsibility to provide a clear msg.
+    verifyOutputs(sim, signerAddress);
+  }
   const res = await signer.signAndSubmitExecuteScriptTx({
     signerAddress,
     bytecode: prepared.bytecode,
@@ -74,6 +83,11 @@ async function submitPrepared(
   });
   return { txId: res.txId };
 }
+
+// ABD token id (mainnet) — used to identify ABD outputs in simulation
+// results when sanity-checking pool-withdraw amounts.
+const ABD_TOKEN_ID_HEX =
+  "c7d1dab489ee40ca4e6554efc64a64e73a9f0ddfdec9e544c82c1c6742ccc500";
 
 function requireSigner(signer: SignerProvider | undefined): SignerProvider {
   if (!signer) throw new Error("Wallet not connected");
@@ -89,7 +103,6 @@ export interface TxResult {
 export interface OpenLoanParams {
   collateralAlphAtto: bigint; // ALPH collateral (1e18)
   borrowAbdAtto: bigint; // ABD debt (1e9)
-  interestRate1e18: bigint; // one of 8 tier values
 }
 
 export async function openLoan(
@@ -101,7 +114,6 @@ export async function openLoan(
   const prepared = mnBuildOpenLoan(
     params.collateralAlphAtto,
     params.borrowAbdAtto,
-    params.interestRate1e18,
   );
   return submitPrepared(network, signer, prepared);
 }
@@ -239,10 +251,57 @@ export async function withdrawFromPool(
 ): Promise<TxResult> {
   requireSigner(signer);
   const account = await signer.getSelectedAccount();
+  // Post-simulation sanity check: the poolWithdraw template substitutes
+  // the user's atto-ABD amount into a U256 slot whose semantics aren't
+  // 100% pinned (see SDK comment on T.poolWithdrawAbd). If the slot is
+  // not the withdraw amount, the simulation would still pass but the
+  // user would receive a different amount than they asked for. Verify
+  // that the simulated tx outputs include an ABD token output back to
+  // the signer roughly equal to amountAbdAtto. If not, throw before
+  // signing so the user never confirms a mis-encoded withdraw.
   return submitPrepared(
     network,
     signer,
     mnBuildPoolWithdraw(tier, amountAbdAtto, account.address),
+    (sim, signerAddress) => {
+      const result = sim.result as { txOutputs?: unknown } | null | undefined;
+      const outputs = Array.isArray(result?.txOutputs) ? result!.txOutputs : [];
+      let abdReceived = 0n;
+      for (const o of outputs) {
+        if (typeof o !== "object" || o === null) continue;
+        const out = o as {
+          type?: string;
+          address?: string;
+          tokens?: Array<{ id?: string; amount?: string }>;
+        };
+        if (out.type !== "AssetOutput" || out.address !== signerAddress) {
+          continue;
+        }
+        for (const t of out.tokens ?? []) {
+          if (t.id?.toLowerCase() === ABD_TOKEN_ID_HEX) {
+            try {
+              abdReceived += BigInt(t.amount ?? "0");
+            } catch {
+              /* skip malformed */
+            }
+          }
+        }
+      }
+      // Allow a small tolerance — the contract may take a fee or round.
+      // Mismatch by more than 5% (or any negative delta) is treated as a
+      // misencoded withdraw amount and aborted.
+      const lower = (amountAbdAtto * 95n) / 100n;
+      const upper = (amountAbdAtto * 105n) / 100n;
+      if (abdReceived < lower || abdReceived > upper) {
+        throw new Error(
+          `Pool-withdraw simulation returned ${abdReceived} atto-ABD to ` +
+            `your wallet but you asked for ${amountAbdAtto}. The withdraw-` +
+            `amount slot in the operation template may be misencoded — ` +
+            `please use AlphBanX's official UI for this withdraw and file ` +
+            `an issue at github.com/openABX/openABX-frontend/issues.`,
+        );
+      }
+    },
   );
 }
 
@@ -250,9 +309,15 @@ export async function claimFromPool(
   network: Network,
   signer: SignerProvider,
   tier: PoolTier,
-  claimableAlphAtto: bigint = 1n,
+  claimableAlphAtto: bigint,
 ): Promise<TxResult> {
   requireSigner(signer);
+  if (claimableAlphAtto <= 0n) {
+    throw new Error(
+      "claimFromPool: claimable amount must be > 0 — read the user's " +
+        "current claimable from fetchMainnetPoolPositions before calling.",
+    );
+  }
   const account = await signer.getSelectedAccount();
   return submitPrepared(
     network,
