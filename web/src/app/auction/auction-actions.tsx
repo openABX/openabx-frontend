@@ -106,8 +106,8 @@ export function AuctionActions() {
             tier from on-chain state.
           </p>
           <p className="mt-1 text-warning/90">
-            OpenABX will not route deposit / withdraw / claim against an
-            unknown tier — please manage this position from{" "}
+            OpenABX will not route deposit / withdraw / claim against an unknown
+            tier — please manage this position from{" "}
             <a
               href="https://app.alphbanx.com"
               target="_blank"

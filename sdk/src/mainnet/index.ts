@@ -311,7 +311,12 @@ export function buildPoolClaim(
   if (amountAlphAtto <= 0n) {
     throw new Error("buildPoolClaim: amountAlphAtto must be > 0");
   }
-  if (tierBps !== 500 && tierBps !== 1000 && tierBps !== 1500 && tierBps !== 2000) {
+  if (
+    tierBps !== 500 &&
+    tierBps !== 1000 &&
+    tierBps !== 1500 &&
+    tierBps !== 2000
+  ) {
     throw new Error(
       `buildPoolClaim: tierBps must be 500/1000/1500/2000, got ${tierBps}`,
     );

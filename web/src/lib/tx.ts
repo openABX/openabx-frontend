@@ -210,8 +210,7 @@ export async function closeLoan(
   // 0.1 % at a 30 % APR is roughly one day of interest, comfortably
   // above any plausible mempool inclusion window.
   const APPROVAL_BUFFER_BPS = 10n;
-  const debtAtto =
-    (fresh.debtAtto * (10_000n + APPROVAL_BUFFER_BPS)) / 10_000n;
+  const debtAtto = (fresh.debtAtto * (10_000n + APPROVAL_BUFFER_BPS)) / 10_000n;
 
   return submitPrepared(
     network,

@@ -173,8 +173,7 @@ export function BorrowForm() {
     const t = setInterval(() => setNow(Date.now()), 5_000);
     return () => clearInterval(t);
   }, []);
-  const isPriceStale =
-    lastUpdatedMs != null && now - lastUpdatedMs > 60_000;
+  const isPriceStale = lastUpdatedMs != null && now - lastUpdatedMs > 60_000;
 
   const metrics = useMemo(() => {
     const collNum = Number(collateralAlph) || 0;
